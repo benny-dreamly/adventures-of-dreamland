@@ -9,6 +9,38 @@ FIRST_LOCATION = 1
 SECOND_LOCATION = 2
 THIRD_LOCATION = 3
 FOURTH_LOCATION = 4
+FIFTH_LOCATION = 5
+SIXTH_LOCATION = 6
+SEVENTH_LOCATION = 7
+EIGHTH_LOCATION = 8
+NINTH_LOCATION = 9
+TENTH_LOCATION = 10
+ELEVENTH_LOCATION = 11
+TWELFTH_LOCATION = 12
+THIRTEENTH_LOCATION = 13
+FOURTEENTH_LOCATION = 14
+FIFTEENTH_LOCATION = 15
+SIXTEENTH_LOCATION = 16
+SEVENTEENTH_LOCATION = 17
+EIGHTEENTH_LOCATION = 18
+NINETEENTH_LOCATION = 19
+TWENTIETH_LOCATION = 20
+TWENTY_FIRST_LOCATION = 21
+TWENTY_SECOND_LOCATION = 22
+TWENTY_THIRD_LOCATION = 23
+TWENTY_FOURTH_LOCATION = 24
+TWENTY_FIFTH_LOCATION = 25
+TWENTY_SIXTH_LOCATION = 26
+TWENTY_SEVENTH_LOCATION = 27
+TWENTY_EIGHTH_LOCATION = 28
+TWENTY_NINTH_LOCATION = 29
+THIRTIETH_LOCATION = 30
+THIRTY_FIRST_LOCATION = 31
+THIRTY_SECOND_LOCATION = 32
+THIRTY_THIRD_LOCATION = 33
+THIRTY_FOURTH_LOCATION = 34
+THIRTY_FIFTH_LOCATION = 35
+THIRTY_SIXTH_LOCATION = 36
 
 command_widget = None
 image_label = None
@@ -43,9 +75,7 @@ def perform_command(verb, noun):
     elif (verb == "PUT"):
         perform_put_command(noun)
     elif (verb == "LOOK"):
-        perform_look_command(noun)        
-    elif (verb == "KILL"):
-        perform_kill_command(noun)        
+        perform_look_command(noun)
     elif (verb == "READ"):
         perform_read_command(noun)        
     elif (verb == "OPEN"):
@@ -148,19 +178,6 @@ def perform_look_command(object_name):
             #not visible recognized
             print_to_description("You can't see one of those!")
 
-def perform_kill_command(object_name):
-
-    game_object = get_game_object(object_name)
- 
-    if not (game_object is None):
-        if (False):
-            print_to_description("special condition")
-        else:
-            print_to_description("You can't kill inanimate objects, silly!")
-    else:
-        #not visible recognized
-        print_to_description("You can't kill what you can't see")
-
 def perform_read_command(object_name):
 
     game_object = get_game_object(object_name)
@@ -189,13 +206,31 @@ def perform_open_command(object_name):
 def describe_current_location():
         
     if (current_location == FIRST_LOCATION):
-        print_to_description("location 1")
+        print_to_description("starting room (1)")
     elif (current_location == SECOND_LOCATION):
-        print_to_description("location 2")
+        print_to_description("starting room (2)")
     elif (current_location == THIRD_LOCATION):
-        print_to_description("location 3")
+        print_to_description("starting room (3)")
     elif (current_location == FOURTH_LOCATION):
-        print_to_description("location 4")
+        print_to_description("hallway (1)")
+    elif (current_location == FIFTH_LOCATION):
+        print_to_description("hallway (2)")
+    elif (current_location == SIXTH_LOCATION):
+        print_to_description("hallway (3)")
+    elif (current_location == SEVENTH_LOCATION):
+        print_to_description("hallway (4)")
+    elif (current_location == EIGHTH_LOCATION):
+        print_to_description("orange room (1)")
+    elif (current_location == NINTH_LOCATION):
+        print_to_description("orange room (2)")
+    elif (current_location == TENTH_LOCATION):
+        print_to_description("orange room (3)")
+    elif (current_location == ELEVENTH_LOCATION):
+        print_to_description("orange room (4)")
+    elif (current_location == TWELFTH_LOCATION):
+        print_to_description("hallway (5)")
+    elif (current_location == THIRTEENTH_LOCATION):
+        print_to_description("hallway (6)")
     else:
         print_to_description("unknown location:" + current_location)
 
@@ -218,36 +253,104 @@ def set_current_image():
 def get_location_to_north():
     
     if (current_location == THIRD_LOCATION):
-        return FIRST_LOCATION
-    elif (current_location == FOURTH_LOCATION):
         return SECOND_LOCATION
+    elif (current_location == SECOND_LOCATION):
+        return FIRST_LOCATION
+    elif (current_location == SIXTH_LOCATION):
+        return SEVENTH_LOCATION
+    elif (current_location == SEVENTH_LOCATION):
+        return TWELFTH_LOCATION
+    elif (current_location == EIGHTH_LOCATION):
+        return ELEVENTH_LOCATION
+    elif (current_location == NINTH_LOCATION):
+        return TENTH_LOCATION
+    elif (current_location == FIFTEENTH_LOCATION):
+        return FOURTEENTH_LOCATION
+    elif (current_location == SIXTEENTH_LOCATION):
+        return FIFTEENTH_LOCATION
+    elif (current_location == SEVENTEENTH_LOCATION):
+        return SIXTEENTH_LOCATION
+    elif (current_location == EIGHTEENTH_LOCATION):
+        return SEVENTEENTH_LOCATION
+    elif (current_location == NINETEENTH_LOCATION):
+        return EIGHTEENTH_LOCATION
+    elif (current_location == TWENTIETH_LOCATION):
+        return TWENTY_THIRD_LOCATION
+    elif (current_location == TWENTY_FOURTH_LOCATION):
+        return TWENTY_FIFTH_LOCATION
+    elif (current_location == TWENTY_FIFTH_LOCATION):
+        return TWENTY_SIXTH_LOCATION
+    elif (current_location == TWENTY_SEVENTH_LOCATION):
+        return TWENTY_EIGHTH_LOCATION
+    elif (current_location == THIRTIETH_LOCATION):
+        return TWENTY_NINTH_LOCATION
+    elif (current_location == THIRTY_FIRST_LOCATION):
+        return THIRTY_SECOND_LOCATION
+    elif (current_location == THIRTY_FOURTH_LOCATION):
+        return THIRTY_THIRD_LOCATION
+    elif (current_location == THIRTY_FIFTH_LOCATION):
+        return THIRTY_FOURTH_LOCATION
     else:
         return 0
 
 def get_location_to_south():
     
     if (current_location == FIRST_LOCATION):
-        return THIRD_LOCATION
+        return SECOND_LOCATION
     elif (current_location == SECOND_LOCATION):
-        return FOURTH_LOCATION
+        return THIRD_LOCATION
+    elif (current_location == SEVENTH_LOCATION):
+        return SIXTH_LOCATION
+    elif (current_location == ELEVENTH_LOCATION):
+        return EIGHTH_LOCATION
+    elif (current_location == TENTH_LOCATION):
+        return NINTH_LOCATION
+    elif (current_location == TWELFTH_LOCATION):
+        return SEVENTH_LOCATION
+    elif (current_location == FOURTEENTH_LOCATION):
+        return FIFTEENTH_LOCATION
+    elif (current_location == FIFTEENTH_LOCATION):
+        return SIXTEENTH_LOCATION
+    elif (current_location == SIXTEENTH_LOCATION):
+        return SEVENTEENTH_LOCATION
+    elif (current_location == EIGHTEENTH_LOCATION):
+        return NINETEENTH_LOCATION
+    elif (current_location == TWENTY_THIRD_LOCATION):
+        return TWENTIETH_LOCATION
+    elif (current_location == TWENTY_FOURTH_LOCATION):
+        return TWENTY_THIRD_LOCATION
+    elif (current_location == TWENTY_FIFTH_LOCATION):
+        return TWENTY_FOURTH_LOCATION
+    elif (current_location == TWENTY_SIXTH_LOCATION):
+        return TWENTY_FIFTH_LOCATION
+    elif (current_location == TWENTY_EIGHTH_LOCATION):
+        return TWENTY_SEVENTH_LOCATION
+    elif (current_location == TWENTY_NINTH_LOCATION):
+        return THIRTIETH_LOCATION
+    elif (current_location == THIRTY_SECOND_LOCATION):
+        return THIRTY_FIRST_LOCATION
+    elif (current_location == THIRTY_THIRD_LOCATION):
+        return THIRTY_FOURTH_LOCATION
+    elif (current_location == THIRTY_FIRST_LOCATION):
+        return THIRTY_FIFTH_LOCATION
     else:
         return 0
 
 def get_location_to_east():
     
-    if (current_location == FIRST_LOCATION):
-        return SECOND_LOCATION
-    elif (current_location == THIRD_LOCATION):
+    if (current_location == THIRD_LOCATION):
         return FOURTH_LOCATION
+    elif (current_location == FOURTH_LOCATION):
+        return FIFTH_LOCATION
     else:
         return 0
 
 def get_location_to_west():
     
-    if (current_location == SECOND_LOCATION):
-        return FIRST_LOCATION
-    elif (current_location == FOURTH_LOCATION):
+    if (current_location == FOURTH_LOCATION):
         return THIRD_LOCATION
+    elif (current_location == FIFTH_LOCATION):
+        return FOURTH_LOCATION
     else:
         return 0
         
@@ -460,7 +563,7 @@ def play_audio(filename, asynchronous = True, loop = True):
                            (winsound.SND_ASYNC if asynchronous else 0)  + \
                            (winsound.SND_LOOP if loop else 0)
                            )
-    
+
 def main():
     
     build_interface()
