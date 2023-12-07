@@ -342,6 +342,38 @@ def get_location_to_east():
         return FOURTH_LOCATION
     elif (current_location == FOURTH_LOCATION):
         return FIFTH_LOCATION
+    elif (current_location == FIFTH_LOCATION):
+        return SIXTH_LOCATION
+    elif (current_location == EIGHTH_LOCATION):
+        return SEVENTH_LOCATION
+    elif (current_location == NINTH_LOCATION):
+        return EIGHTH_LOCATION
+    elif (current_location == TENTH_LOCATION):
+        return ELEVENTH_LOCATION
+    elif (current_location == TWELFTH_LOCATION):
+        return THIRTEENTH_LOCATION
+    elif (current_location == THIRTEENTH_LOCATION):
+        return FOURTEENTH_LOCATION
+    elif (current_location == TWENTIETH_LOCATION):
+        return NINETEENTH_LOCATION
+    elif (current_location == TWENTY_FIRST_LOCATION):
+        return TWENTIETH_LOCATION
+    elif (current_location == TWENTY_SECOND_LOCATION):
+        return TWENTY_FIRST_LOCATION
+    elif (current_location == TWENTY_SEVENTH_LOCATION):
+        return TWENTY_THIRD_LOCATION
+    elif (current_location == TWENTY_EIGHTH_LOCATION):
+        return TWENTY_FOURTH_LOCATION
+    elif (current_location == TWENTY_NINTH_LOCATION):
+        return TWENTY_EIGHTH_LOCATION
+    elif (current_location == THIRTY_FIRST_LOCATION):
+        return THIRTIETH_LOCATION
+    elif (current_location == THIRTY_FOURTH_LOCATION):
+        return THIRTY_FIRST_LOCATION
+    elif (current_location == THIRTY_THIRD_LOCATION):
+        return THIRTY_FIRST_LOCATION
+    elif (current_location == THIRTY_SIXTH_LOCATION):
+        return THIRTY_FIFTH_LOCATION
     else:
         return 0
 
