@@ -4,7 +4,7 @@ def get_location_to_north(current_location, door_open=False):
     if (current_location == 3):
         return 2
     elif (current_location == 2):
-        return 3
+        return 1
     elif (current_location == 6):
         return 7
     elif (current_location == 7):

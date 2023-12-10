@@ -4,20 +4,15 @@ from tkinter import simpledialog
 import json
 import locations
 import objects
+import desc_print
 
 PORTRAIT_LAYOUT = True
 
 list_of_locations = locations.list_of_locations
 
-with open('json/names.json') as names_file:
-    location_names = json.load(names_file)
-
-with open('json/descriptions.json') as descriptions_file:
-    location_descriptions = json.load(descriptions_file)
-
 command_widget = None
 image_label = None
-description_widget = None
+description_widget = desc_print.description_widget
 inventory_widget = None
 north_button = None
 south_button = None
@@ -59,7 +54,7 @@ def perform_command(verb, noun):
     elif (verb == "HELP"):
         perform_help_command(noun)
     else:
-        print_to_description("unknown command")
+        desc_print.print_to_description("unknown command")
         
 def perform_go_command(direction):
 
@@ -78,7 +73,7 @@ def perform_go_command(direction):
         new_location = 0
         
     if (new_location == 0):
-        print_to_description("You can't go that way!")
+        desc_print.print_to_description("You can't go that way!")
     else:
         current_location = new_location
         refresh_location = True
@@ -90,22 +85,22 @@ def perform_get_command(object_name):
     
     if not (game_object is None):
         if (game_object.location != current_location or game_object.visible == False):
-            print_to_description("You don't see one of those here!")
+            desc_print.print_to_description("You don't see one of those here!")
         elif (game_object.movable == False):
-            print_to_description("You can't pick it up!")
+            desc_print.print_to_description("You can't pick it up!")
         elif (game_object.carried == True):
-            print_to_description("You are already carrying it")
+            desc_print.print_to_description("You are already carrying it")
         else:
             #handle special conditions
             if (False):
-                print_to_description("special condition")
+                desc_print.print_to_description("special condition")
             else:
                 #pick up the object
                 game_object.carried = True
                 game_object.visible = False
                 refresh_objects_visible = True
     else:
-        print_to_description("You don't see one of those here!")
+        desc_print.print_to_description("You don't see one of those here!")
 
 # 
 def perform_put_command(object_name):
@@ -115,7 +110,7 @@ def perform_put_command(object_name):
     
     if not (game_object is None):
         if (game_object.carried == False):
-            print_to_description("You are not carrying one of those.")
+            desc_print.print_to_description("You are not carrying one of those.")
         else:
             #put down the object
             game_object.location = current_location
@@ -123,7 +118,7 @@ def perform_put_command(object_name):
             game_object.visible = True
             refresh_objects_visible = True
     else:
-        print_to_description("You are not carrying one of those!")
+        desc_print.print_to_description("You are not carrying one of those!")
 # 
 def perform_look_command(object_name):
 
@@ -136,14 +131,14 @@ def perform_look_command(object_name):
     if not (game_object is None):
 
         if ((game_object.carried == True) or (game_object.visible and game_object.location == current_location)):
-            print_to_description(game_object.description)
+            desc_print.print_to_description(game_object.description)
         else:
             #recognized but not visible
-            print_to_description("You can't see one of those!")
+            desc_print.print_to_description("You can't see one of those!")
  
         #special cases - when certain objects are looked at, others are revealed!
         if (False):
-            print_to_description("special condition")
+            desc_print.print_to_description("special condition")
             global refresh_objects_visible
             refresh_objects_visible = True
 
@@ -154,7 +149,7 @@ def perform_look_command(object_name):
             refresh_objects_visible = True
         else:
             #not visible recognized
-            print_to_description("You can't see one of those!")
+            desc_print.print_to_description("You can't see one of those!")
 
 def perform_read_command(object_name):
 
@@ -162,11 +157,11 @@ def perform_read_command(object_name):
  
     if not (game_object is None):
         if (False):
-            print_to_description("special condition")
+            desc_print.print_to_description("special condition")
         else:
-            print_to_description("There is no text on it")
+            desc_print.print_to_description("There is no text on it")
     else:
-        print_to_description("I am not sure which " + object_name + "you are referring to")
+        desc_print.print_to_description("I am not sure which " + object_name + "you are referring to")
 # 
 def perform_open_command(object_name):
 
@@ -175,46 +170,16 @@ def perform_open_command(object_name):
  
     if not (game_object is None):
         if (False):
-            print_to_description("special condition")
+            desc_print.print_to_description("special condition")
         else:
-            print_to_description("You can't open one of those.")
+            desc_print.print_to_description("You can't open one of those.")
     else:
-        print_to_description("You don't see one of those here.")
+        desc_print.print_to_description("You don't see one of those here.")
 
 def perform_help_command(verb):
-    print_to_description("here are the commands for the game:")
+    desc_print.print_to_description("here are the commands for the game:")
     for command in list_of_commands:
-        print_to_description(command)
-def describe_current_location():
-        
-    if (current_location == 1):
-        print_to_description(location_names[0])
-    elif (current_location == 2):
-        print_to_description(location_names[1])
-    elif (current_location == 3):
-        print_to_description(location_names[2])
-    elif (current_location == 4):
-        print_to_description(location_names[3])
-    elif (current_location == 5):
-        print_to_description(location_names[4])
-    elif (current_location == 6):
-        print_to_description(location_names[5])
-    elif (current_location == 7):
-        print_to_description(location_names[6])
-    elif (current_location == 8):
-        print_to_description(location_names[7])
-    elif (current_location == 9):
-        print_to_description(location_names[8])
-    elif (current_location == 10):
-        print_to_description(location_names[9])
-    elif (current_location == 11):
-        print_to_description(location_names[10])
-    elif (current_location == 12):
-        print_to_description(location_names[11])
-    elif (current_location == 13):
-        print_to_description(location_names[12])
-    else:
-        print_to_description("unknown location:" + current_location)
+        desc_print.print_to_description(command)
 
 def set_current_image():
     
@@ -225,7 +190,7 @@ def set_current_image():
     elif (current_location == 3):
         image_label.img = PhotoImage(file ='res/images/blank-3.gif')
     elif (current_location == 4):
-        image_label.img = PhotoImage(file ='res/images/blank-4.gif')
+        image_label.img = PhotoImage(file ='res/images/hallway_prototype.png')
     else:
         image_label.img = PhotoImage(file ='res/images/blank-1.gif')
         
@@ -250,7 +215,7 @@ def describe_current_visible_objects():
             object_list = object_list + ("," if object_count > 0 else "") + current_object.name
             object_count = object_count + 1
             
-    print_to_description("You see: " + (object_list + "." if object_count > 0 else "nothing special.")) 
+    desc_print.print_to_description("You see: " + (object_list + "." if object_count > 0 else "nothing special."))
 
 def describe_current_inventory():
     
@@ -274,18 +239,9 @@ def handle_special_condition():
     global end_of_game
     
     if (False):
-        print_to_description("GAME OVER")
+        desc_print.print_to_description("GAME OVER")
         end_of_game = True
 
-def print_to_description(output, user_input=False):
-    description_widget.config(state = 'normal')
-    description_widget.insert(END, output)
-    if (user_input):
-        description_widget.tag_add("blue_text", CURRENT + " linestart", END + "-1c")
-        description_widget.tag_configure("blue_text", foreground = 'blue')
-    description_widget.insert(END, '\n')        
-    description_widget.config(state = 'disabled')
-    description_widget.see(END)
 
 def build_interface():
     
@@ -311,13 +267,13 @@ def build_interface():
     else:
         image_label.grid(row=0, column=0, rowspan=3, columnspan=1,padx = 2, pady = 2)
 
-    description_widget = Text(root, width =60, height = 10, relief = GROOVE, wrap = 'word')
-    description_widget.insert(1.0, "Welcome to my game.\n\nGood Luck!\n\n ")
-    description_widget.config(state = "disabled")
+    desc_print.description_widget = Text(root, width =60, height = 10, relief = GROOVE, wrap = 'word')
+    desc_print.description_widget.insert(1.0, "Welcome to my game.\n\nGood Luck!\n\n ")
+    desc_print.description_widget.config(state = "disabled")
     if (PORTRAIT_LAYOUT):
-        description_widget.grid(row=1, column=0, columnspan=3, sticky=W, padx=2, pady =2)
+        desc_print.description_widget.grid(row=1, column=0, columnspan=3, sticky=W, padx=2, pady =2)
     else:
-        description_widget.grid(row=0, column=1, rowspan=1, columnspan=2, padx=2, pady =2)
+        desc_print.description_widget.grid(row=0, column=1, rowspan=1, columnspan=2, padx=2, pady =2)
 
     command_widget = ttk.Entry(root, width = (25 if PORTRAIT_LAYOUT else 54), style="BW.TLabel")
     command_widget.bind('<Return>', return_key_enter)
@@ -361,7 +317,7 @@ def set_current_state():
     global refresh_objects_visible
 
     if (refresh_location):
-        describe_current_location()
+        locations.describe_current_location(current_location)
         set_current_image()
     
     if (refresh_location or refresh_objects_visible):
@@ -379,29 +335,29 @@ def set_current_state():
     command_widget.config(state = ("disabled" if end_of_game else "normal"))
 
 def north_button_click():
-    print_to_description("N", True)
+    desc_print.print_to_description("N", True)
     perform_command("N", "")
     set_current_state()
 
 def south_button_click():
-    print_to_description("S", True)
+    desc_print.print_to_description("S", True)
     perform_command("S", "")
     set_current_state()
 
 def east_button_click():
-    print_to_description("E", True)
+    desc_print.print_to_description("E", True)
     perform_command("E", "")
     set_current_state()
 
 def west_button_click():
-    print_to_description("W", True)
+    desc_print.print_to_description("W", True)
     perform_command("W", "")
     set_current_state()
 
 def return_key_enter(event):
     if( event.widget == command_widget):
         command_string = command_widget.get()
-        print_to_description(command_string, True)
+        desc_print.print_to_description(command_string, True)
 
         command_widget.delete(0, END)
         words = command_string.split(' ', 1)
