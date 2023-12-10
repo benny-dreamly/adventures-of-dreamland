@@ -241,15 +241,15 @@ def describe_current_location():
 def set_current_image():
     
     if (current_location == 1):
-        image_label.img = PhotoImage(file = 'res/blank-1.gif')
+        image_label.img = PhotoImage(file ='res/images/blank-1.gif')
     elif (current_location == 2):
-        image_label.img = PhotoImage(file = 'res/blank-2.gif')
+        image_label.img = PhotoImage(file ='res/images/blank-2.gif')
     elif (current_location == 3):
-        image_label.img = PhotoImage(file = 'res/blank-3.gif')
+        image_label.img = PhotoImage(file ='res/images/blank-3.gif')
     elif (current_location == 4):
-        image_label.img = PhotoImage(file = 'res/blank-4.gif')
+        image_label.img = PhotoImage(file ='res/images/blank-4.gif')
     else:
-        image_label.img = PhotoImage(file = 'res/blank-1.gif')
+        image_label.img = PhotoImage(file ='res/images/blank-1.gif')
         
     image_label.config(image = image_label.img)
         
@@ -627,6 +627,11 @@ def play_audio(filename, asynchronous = True, loop = True):
                            (winsound.SND_ASYNC if asynchronous else 0)  + \
                            (winsound.SND_LOOP if loop else 0)
                            )
+    elif (operating_system == 'darwin'):
+        import os
+        sound_file =
+        path_to_file = 'res/sounds/{}'.format(sound_file)
+        os.system('afplay {}'.format(path_to_file))
 
 def main():
     
