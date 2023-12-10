@@ -3,29 +3,19 @@ from tkinter import ttk
 from tkinter import simpledialog
 import GameObject
 import movement
-
+import json
 
 PORTRAIT_LAYOUT = True
 
-list_of_locations = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36]
+with open('locations.json') as locations_file:
+    list_of_locations = json.load(locations_file)
 
-location_names = ["starting room (1)",
-                  "starting room (2)",
-                  "starting room (3)",
-                  "hallway (1)",
-                  "hallway (2)",
-                  "hallway (3)",
-                  "hallway (4)",
-                  "orange room (1)"
-                  "orange room (2)"
-                  "orange room (3)"
-                  "orange room (4)"
-                  "hallway (5)"
-                  "hallway (6)"
-                  ]
-location_descriptions = [
-    ""
-]
+with open('names.json') as names_file:
+    location_names = json.load(names_file)
+
+with open('descriptions.json') as descriptions_file:
+    location_descriptions = json.load(descriptions_file)
+
 command_widget = None
 image_label = None
 description_widget = None
@@ -46,21 +36,8 @@ generic_object = GameObject.GameObject("key", list_of_locations[0], True, True, 
 
 game_objects = [generic_object]
 
-list_of_commands = [
-    "GO",
-    "N",
-    "S",
-    "E",
-    "W",
-    "NORTH",
-    "SOUTH",
-    "EAST",
-    "WEST",
-    "GET",
-    "READ",
-    "OPEN",
-    "HELP"
-]
+with open('commands.json') as commands_file:
+    list_of_commands = json.load(commands_file)
 
 def perform_command(verb, noun):
     
@@ -437,10 +414,10 @@ def return_key_enter(event):
 
 def set_directions_to_move():
 
-    move_to_north = (get_location_to_north() > 0) and (end_of_game == False)
-    move_to_south = (get_location_to_south() > 0) and (end_of_game == False)
-    move_to_east = (get_location_to_east() > 0) and (end_of_game == False)
-    move_to_west = (get_location_to_west() > 0) and (end_of_game == False)
+    move_to_north = (movement.get_location_to_north() > 0) and (end_of_game == False)
+    move_to_south = (movement.get_location_to_south() > 0) and (end_of_game == False)
+    move_to_east = (movement.get_location_to_east() > 0) and (end_of_game == False)
+    move_to_west = (movement.get_location_to_west() > 0) and (end_of_game == False)
     
     north_button.config(state = ("normal" if move_to_north else "disabled"))
     south_button.config(state = ("normal" if move_to_south else "disabled"))
