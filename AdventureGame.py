@@ -9,10 +9,10 @@ PORTRAIT_LAYOUT = True
 
 list_of_locations = locations.list_of_locations
 
-with open('names.json') as names_file:
+with open('json/names.json') as names_file:
     location_names = json.load(names_file)
 
-with open('descriptions.json') as descriptions_file:
+with open('json/descriptions.json') as descriptions_file:
     location_descriptions = json.load(descriptions_file)
 
 command_widget = None
@@ -33,7 +33,7 @@ end_of_game = False
 
 import movement
 
-with open('commands.json') as commands_file:
+with open('json/commands.json') as commands_file:
     list_of_commands = json.load(commands_file)
 
 game_objects = objects.game_objects
