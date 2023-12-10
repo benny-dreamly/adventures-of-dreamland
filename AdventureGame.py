@@ -8,7 +8,9 @@ import desc_print
 
 PORTRAIT_LAYOUT = True
 
-list_of_locations = locations.list_of_locations
+list_of_locations = locations.load_locations()
+location_names = locations.load_location_names()
+location_descriptions = locations.load_location_descriptions()
 
 command_widget = None
 image_label = None
@@ -23,10 +25,8 @@ root = None
 refresh_location = True
 refresh_objects_visible = True
 
-current_location = locations.list_of_locations[0]
+current_location = list_of_locations[0]
 end_of_game = False
-
-import movement
 
 with open('json/commands.json') as commands_file:
     list_of_commands = json.load(commands_file)
@@ -62,13 +62,13 @@ def perform_go_command(direction):
     global refresh_location
     
     if (direction == "N" or direction == "NORTH"):
-        new_location = movement.get_location_to_north(current_location)
+        new_location = get_location_to_north(current_location)
     elif (direction == "S" or direction == "SOUTH"):
-        new_location = movement.get_location_to_south(current_location)
+        new_location = get_location_to_south(current_location)
     elif (direction == "E" or direction == "EAST"):
-        new_location = movement.get_location_to_east(current_location)
+        new_location = get_location_to_east(current_location)
     elif (direction == "W" or direction == "WEST"):
-        new_location = movement.get_location_to_west(current_location)
+        new_location = get_location_to_west(current_location)
     else:
         new_location = 0
         
@@ -181,6 +181,36 @@ def perform_help_command(verb):
     for command in list_of_commands:
         desc_print.print_to_description(command)
 
+def describe_current_location(current_location):
+    if (current_location == 1):
+        desc_print.print_to_description(location_names[0])
+    elif (current_location == 2):
+        desc_print.print_to_description(location_names[1])
+    elif (current_location == 3):
+        desc_print.print_to_description(location_names[2])
+    elif (current_location == 4):
+        desc_print.print_to_description(location_names[3])
+    elif (current_location == 5):
+        desc_print.print_to_description(location_names[4])
+    elif (current_location == 6):
+        desc_print.print_to_description(location_names[5])
+    elif (current_location == 7):
+        desc_print.print_to_description(location_names[6])
+    elif (current_location == 8):
+        desc_print.print_to_description(location_names[7])
+    elif (current_location == 9):
+        desc_print.print_to_description(location_names[8])
+    elif (current_location == 10):
+        desc_print.print_to_description(location_names[9])
+    elif (current_location == 11):
+        desc_print.print_to_description(location_names[10])
+    elif (current_location == 12):
+        desc_print.print_to_description(location_names[11])
+    elif (current_location == 13):
+        desc_print.print_to_description(location_names[12])
+    else:
+        desc_print.print_to_description("unknown location:" + current_location)
+
 def set_current_image():
     
     if (current_location == 1):
@@ -196,26 +226,167 @@ def set_current_image():
         
     image_label.config(image = image_label.img)
 
+def get_location_to_north(current_location, door_open=False):
+    if (current_location == 3):
+        return 2
+    elif (current_location == 2):
+        return 1
+    elif (current_location == 6):
+        return 7
+    elif (current_location == 7):
+        return 12
+    elif (current_location == 8):
+        return 11
+    elif (current_location == 9):
+        return 10
+    elif (current_location == 15):
+        return 14
+    elif (current_location == 16):
+        return 15
+    elif (current_location == 17):
+        return 16
+    elif (current_location == 18):
+        return 17
+    elif (current_location == 19):
+        return 18
+    elif (current_location == 20):
+        return 23
+    elif (current_location == 24):
+        return 25
+    elif (current_location == 25):
+        return 26
+    elif (current_location == 27):
+        return 28
+    elif (current_location == 30):
+        return 29
+    elif (current_location == 31):
+        return 32
+    elif (current_location == 34):
+        return 33
+    elif (current_location == 35):
+        return 34
+    else:
+        return 0
 
-def get_game_object(object_name):
-    sought_object = None
-    for current_object in game_objects:
-        if (current_object.name.upper() == object_name):
-            sought_object = current_object
-            break
-    return sought_object
+def get_location_to_south(current_location, door_open=False):
+    if (current_location == 1):
+        return 2
+    elif (current_location == 2):
+        return 3
+    elif (current_location == 7):
+        return 6
+    elif (current_location == 11):
+        return 8
+    elif (current_location == 10):
+        return 9
+    elif (current_location == 12):
+        return 7
+    elif (current_location == 14):
+        return 15
+    elif (current_location == 15):
+        return 16
+    elif (current_location == 16):
+        return 17
+    elif (current_location == 17):
+        return 18
+    elif (current_location == 18):
+        return 19
+    elif (current_location == 23):
+        return 20
+    elif (current_location == 24):
+        return 23
+    elif (current_location == 25):
+        return 24
+    elif (current_location == 26):
+        return 25
+    elif (current_location == 28):
+        return 27
+    elif (current_location == 29):
+        return 30
+    elif (current_location == 32):
+        return 31
+    elif (current_location == 33):
+        return 34
+    elif (current_location == 31 and door_open == True):
+        return 35
+    else:
+        return 0
 
-def describe_current_visible_objects():
-    
-    object_count = 0
-    object_list = ""
-    
-    for current_object in game_objects:
-        if ((current_object.location  == current_location) and (current_object.visible == True) and (current_object.carried == False)):
-            object_list = object_list + ("," if object_count > 0 else "") + current_object.name
-            object_count = object_count + 1
-            
-    desc_print.print_to_description("You see: " + (object_list + "." if object_count > 0 else "nothing special."))
+
+def get_location_to_east(current_location, door_open=False):
+    if (current_location == 3):
+        return 4
+    elif (current_location == 4):
+        return 5
+    elif (current_location == 5):
+        return 6
+    elif (current_location == 8):
+        return 7
+    elif (current_location == 9):
+        return 8
+    elif (current_location == 10):
+        return 11
+    elif (current_location == 12):
+        return 13
+    elif (current_location == 13):
+        return 14
+    elif (current_location == 20):
+        return 19
+    elif (current_location == 21):
+        return 20
+    elif (current_location == 22):
+        return 21
+    elif (current_location == 27):
+        return 23
+    elif (current_location == 28):
+        return 24
+    elif (current_location == 29):
+        return 28
+    elif (current_location == 31):
+        return 30
+    elif (current_location == 34):
+        return 32
+    elif (current_location == 33):
+        return 31
+    elif (current_location == 36):
+        return 35
+    else:
+        return 0
+
+
+def get_location_to_west(current_location, door_open=False):
+    if (current_location == 4):
+        return 3
+    elif (current_location == 5):
+        return 4
+    elif (current_location == 6):
+        return 5
+    elif (current_location == 13):
+        return 12
+    elif (current_location == 14):
+        return 13
+    elif (current_location == 19):
+        return 20
+    elif (current_location == 20):
+        return 21
+    elif (current_location == 21):
+        return 22
+    elif (current_location == 23):
+        return 27
+    elif (current_location == 24):
+        return 28
+    elif (current_location == 28):
+        return 29
+    elif (current_location == 30):
+        return 31
+    elif (current_location == 31):
+        return 34
+    elif (current_location == 32):
+        return 33
+    elif (current_location == 35):
+        return 36
+    else:
+        return 0
 
 def describe_current_inventory():
     
@@ -317,11 +488,11 @@ def set_current_state():
     global refresh_objects_visible
 
     if (refresh_location):
-        locations.describe_current_location(current_location)
+        describe_current_location(current_location)
         set_current_image()
     
     if (refresh_location or refresh_objects_visible):
-        describe_current_visible_objects()
+        objects.describe_current_visible_objects()
 
     handle_special_condition()
     set_directions_to_move()            
@@ -369,10 +540,10 @@ def return_key_enter(event):
 
 def set_directions_to_move():
 
-    move_to_north = (movement.get_location_to_north(current_location) > 0) and (end_of_game == False)
-    move_to_south = (movement.get_location_to_south(current_location) > 0) and (end_of_game == False)
-    move_to_east = (movement.get_location_to_east(current_location) > 0) and (end_of_game == False)
-    move_to_west = (movement.get_location_to_west(current_location) > 0) and (end_of_game == False)
+    move_to_north = (get_location_to_north(current_location) > 0) and (end_of_game == False)
+    move_to_south = (get_location_to_south(current_location) > 0) and (end_of_game == False)
+    move_to_east = (get_location_to_east(current_location) > 0) and (end_of_game == False)
+    move_to_west = (get_location_to_west(current_location) > 0) and (end_of_game == False)
     
     north_button.config(state = ("normal" if move_to_north else "disabled"))
     south_button.config(state = ("normal" if move_to_south else "disabled"))
