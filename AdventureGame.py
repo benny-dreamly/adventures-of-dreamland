@@ -7,8 +7,23 @@ PORTRAIT_LAYOUT = True
 
 list_of_locations = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36]
 
-location_names = ["starting room (1)", "starting room (2)", "starting room (3)", "hallway (1)", "hallway (2)", "hallway (3)"]
-
+location_names = ["starting room (1)",
+                  "starting room (2)",
+                  "starting room (3)",
+                  "hallway (1)",
+                  "hallway (2)",
+                  "hallway (3)",
+                  "hallway (4)",
+                  "orange room (1)"
+                  "orange room (2)"
+                  "orange room (3)"
+                  "orange room (4)"
+                  "hallway (5)"
+                  "hallway (6)"
+                  ]
+location_descriptions = [
+    ""
+]
 command_widget = None
 image_label = None
 description_widget = None
@@ -29,6 +44,21 @@ generic_object = GameObject.GameObject("key", list_of_locations[0], True, True, 
 
 game_objects = [generic_object]
 
+list_of_commands = [
+    "GO",
+    "N",
+    "S",
+    "E",
+    "W",
+    "NORTH",
+    "SOUTH",
+    "EAST",
+    "WEST",
+    "GET",
+    "READ",
+    "OPEN",
+    "HELP"
+]
 
 def perform_command(verb, noun):
     
@@ -48,8 +78,10 @@ def perform_command(verb, noun):
         perform_read_command(noun)        
     elif (verb == "OPEN"):
         perform_open_command(noun)
+    elif (verb == "HELP"):
+        perform_help_command(noun)
     else:
-        print_to_description("huh?")       
+        print_to_description("unknown command")
         
 def perform_go_command(direction):
 
@@ -170,7 +202,11 @@ def perform_open_command(object_name):
             print_to_description("You can't open one of those.")
     else:
         print_to_description("You don't see one of those here.")
-                
+
+def perform_help_command(verb):
+    print_to_description("here are the commands for the game:")
+    for command in list_of_commands:
+        print_to_description(command)
 def describe_current_location():
         
     if (current_location == 1):
@@ -186,19 +222,19 @@ def describe_current_location():
     elif (current_location == 6):
         print_to_description(location_names[5])
     elif (current_location == 7):
-        print_to_description("hallway (4)")
+        print_to_description(location_names[6])
     elif (current_location == 8):
-        print_to_description("orange room (1)")
+        print_to_description(location_names[7])
     elif (current_location == 9):
-        print_to_description("orange room (2)")
+        print_to_description(location_names[8])
     elif (current_location == 10):
-        print_to_description("orange room (3)")
+        print_to_description(location_names[9])
     elif (current_location == 11):
-        print_to_description("orange room (4)")
+        print_to_description(location_names[10])
     elif (current_location == 12):
-        print_to_description("hallway (5)")
+        print_to_description(location_names[11])
     elif (current_location == 13):
-        print_to_description("hallway (6)")
+        print_to_description(location_names[12])
     else:
         print_to_description("unknown location:" + current_location)
 
