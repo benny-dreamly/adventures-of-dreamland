@@ -1,1 +1,4 @@
 rules.md
+__pycache__
+.idea
+.DS_STORE
