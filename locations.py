@@ -11,3 +11,15 @@ def load_location_names():
 def load_location_descriptions():
     with open('json/descriptions.json') as descriptions_file:
         return json.load(descriptions_file)
+
+def load_commands():
+    with open('json/commands.json') as commands_file:
+        return json.load(commands_file)
+
+def load_location_subtitles():
+    with open('json/sub_titles.json') as subtitles_file:
+        return json.load(subtitles_file)
+
+def load_commands():
+    with open('json/commands.json') as commands_file:
+        return json.load(commands_file)

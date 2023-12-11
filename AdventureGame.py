@@ -2,7 +2,6 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import simpledialog
 import GameObject
-import json
 import locations
 
 PORTRAIT_LAYOUT = True
@@ -10,6 +9,7 @@ PORTRAIT_LAYOUT = True
 list_of_locations = locations.load_locations()
 location_names = locations.load_location_names()
 location_descriptions = locations.load_location_descriptions()
+location_subtitles = locations.load_location_subtitles()
 
 command_widget = None
 image_label = None
@@ -23,18 +23,17 @@ root = None
 
 door_open = False
 
-generic_object = GameObject.GameObject("key", list_of_locations[0], True, True, False, "a golden key")
-
 refresh_location = True
 refresh_objects_visible = True
 
 current_location = list_of_locations[0]
 end_of_game = False
 
-with open('json/commands.json') as commands_file:
-    list_of_commands = json.load(commands_file)
+list_of_commands = locations.load_commands()
 
-game_objects = [generic_object]
+key = GameObject.GameObject("key", list_of_locations[0], True, True, False, "a golden key")
+
+game_objects = [key]
 
 def perform_command(verb, noun):
     
@@ -187,18 +186,25 @@ def perform_help_command(verb):
 def describe_current_location(current_location):
     if (current_location == 1):
         print_to_description(location_names[0])
+        print_to_description(location_subtitles[0])
     elif (current_location == 2):
         print_to_description(location_names[1])
+        print_to_description(location_subtitles[0])
     elif (current_location == 3):
         print_to_description(location_names[2])
+        print_to_description(location_subtitles[0])
     elif (current_location == 4):
         print_to_description(location_names[3])
+        print_to_description(location_subtitles[1])
     elif (current_location == 5):
         print_to_description(location_names[4])
+        print_to_description(location_subtitles[1])
     elif (current_location == 6):
         print_to_description(location_names[5])
+        print_to_description(location_subtitles[1])
     elif (current_location == 7):
         print_to_description(location_names[6])
+        print_to_description(location_subtitles[1])
     elif (current_location == 8):
         print_to_description(location_names[7])
     elif (current_location == 9):
@@ -209,14 +215,19 @@ def describe_current_location(current_location):
         print_to_description(location_names[10])
     elif (current_location == 12):
         print_to_description(location_names[11])
+        print_to_description(location_subtitles[1])
     elif (current_location == 13):
         print_to_description(location_names[12])
+        print_to_description(location_subtitles[1])
     elif (current_location == 13):
         print_to_description(location_names[13])
+        print_to_description(location_subtitles[1])
     elif (current_location == 14):
         print_to_description(location_names[14])
+        print_to_description(location_subtitles[1])
     elif (current_location == 15):
         print_to_description(location_names[15])
+        print_to_description(location_subtitles[1])
     else:
         print_to_description("unknown location:" + current_location)
 
