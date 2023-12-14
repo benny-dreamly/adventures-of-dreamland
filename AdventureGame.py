@@ -1,8 +1,10 @@
+import tkinter
 from tkinter import *
 from tkinter import ttk
 from tkinter import simpledialog
 import GameObject
 import locations
+from puzzle import DraggablePuzzlePopup
 
 PORTRAIT_LAYOUT = True
 
@@ -31,15 +33,31 @@ end_of_game = False
 
 list_of_commands = locations.load_commands()
 
-key = GameObject.GameObject("key", list_of_locations[0], True, True, False, "a golden key")
-
-game_objects = [key]
+pp1 = GameObject.GameObject("puzzle piece", list_of_locations[0], True, True, False, "puzzle piece 1")
+pp2 = GameObject.GameObject("puzzle piece", list_of_locations[10], True, True, False, "puzzle piece 2")
+hint1 = GameObject.GameObject("hint 1", list_of_locations[0], True, False, False, "hint #1")
+clue1 = GameObject.GameObject("clue 1", list_of_locations[1], True, False, False, "clue #1")
+clue2 = GameObject.GameObject("clue 2", list_of_locations[2], True, False, False, "clue #2 (ONLY READ ONCE HINT 1 IS SOLVED)")
+puzzle1 = GameObject.GameObject("puzzle", list_of_locations[2], True, True, False, "puzzle #1")
+puzzle2 = GameObject.GameObject("puzzle", list_of_locations[7], True, True, False, "puzzle #2")
+puzzle3 = GameObject.GameObject("puzzle", list_of_locations[2], True, True, False, "puzzle #3")
+puzzle4 = GameObject.GameObject("puzzle", list_of_locations[2], True, True, False, "puzzle #4")
+kp1 = GameObject.GameObject("key piece A", list_of_locations[0], True, False, False, "I wonder what you do with me?", True)
+kp2 = GameObject.GameObject("key piece B", list_of_locations[0], True, False, False, "I wonder what you do with me?", True)
+kp3 = GameObject.GameObject("key piece C", list_of_locations[0], True, False, False, "I wonder what you do with me?", True)
+kp4 = GameObject.GameObject("key piece D", list_of_locations[0], True, False, False, "I wonder what you do with me?", True)
+kp5 = GameObject.GameObject("key piece E", list_of_locations[0], True, False, False, "I wonder what you do with me?", True)
+kp6 = GameObject.GameObject("key piece F", list_of_locations[0], True, False, False, "I wonder what you do with me?", True)
+kp7 = GameObject.GameObject("key piece G", list_of_locations[0], True, False, False, "I wonder what you do with me?", True)
+key = GameObject.GameObject("key", list_of_locations[0], True, False, False, "a golden key")
+scroll = GameObject.GameObject("scroll", list_of_locations[0], True, True, False, "an ancient papyrus scroll")
+game_objects = [pp1, pp2, hint1, clue1, clue2, puzzle1, puzzle2, kp1, kp2, kp3, kp4, kp5, kp6, kp7, key, scroll]
 
 def perform_command(verb, noun):
     
     if (verb == "GO"):
         perform_go_command(noun)
-    elif ((verb == "N") or (verb == "S") or (verb == "E") or (verb == "W")):
+    elif ((verb == "N") or (verb == "S") or (verb == "E") or (verb == "W") or (verb == "A") or (verb == "D")):
         perform_go_command(verb)        
     elif ((verb == "NORTH") or (verb == "SOUTH") or (verb == "EAST") or (verb == "WEST")):
         perform_go_command(verb)        
@@ -55,6 +73,8 @@ def perform_command(verb, noun):
         perform_open_command(noun)
     elif (verb == "HELP"):
         perform_help_command(noun)
+    elif (verb == "SOLVE"):
+        perform_solve_command(noun)
     else:
         print_to_description("unknown command")
         
@@ -63,13 +83,13 @@ def perform_go_command(direction):
     global current_location
     global refresh_location
     
-    if (direction == "N" or direction == "NORTH"):
+    if (direction == "N" or direction == "NORTH" or direction == "W"):
         new_location = get_location_to_north(current_location)
     elif (direction == "S" or direction == "SOUTH"):
         new_location = get_location_to_south(current_location)
-    elif (direction == "E" or direction == "EAST"):
+    elif (direction == "E" or direction == "EAST" or direction == "D"):
         new_location = get_location_to_east(current_location)
-    elif (direction == "W" or direction == "WEST"):
+    elif (direction == "W" or direction == "WEST" or direction == "A"):
         new_location = get_location_to_west(current_location)
     else:
         new_location = 0
@@ -81,12 +101,13 @@ def perform_go_command(direction):
         refresh_location = True
 
 def perform_get_command(object_name):
-    
     global refresh_objects_visible
     game_object = get_game_object(object_name)
-    
+    special_flag = False
     if not (game_object is None):
-        if (game_object.location != current_location or game_object.visible == False):
+        if game_object.name == "key piece a":
+            special_flag = True
+        if (game_object.location != current_location or game_object.visible == False) and (special_flag != True):
             print_to_description("You don't see one of those here!")
         elif (game_object.movable == False):
             print_to_description("You can't pick it up!")
@@ -94,8 +115,10 @@ def perform_get_command(object_name):
             print_to_description("You are already carrying it")
         else:
             #handle special conditions
-            if (False):
-                print_to_description("special condition")
+            if special_flag == False:
+                game_object.carried = True
+                game_object.visible = False
+                refresh_objects_visible = True
             else:
                 #pick up the object
                 game_object.carried = True
@@ -156,12 +179,25 @@ def perform_look_command(object_name):
 def perform_read_command(object_name):
 
     game_object = get_game_object(object_name)
- 
+
     if not (game_object is None):
-        if (False):
-            print_to_description("special condition")
+        if game_object == hint1:
+            if hint1.carried:
+                print_to_description("hint #1:")
+                print_to_description("Bw xcb bpm xchhtm xqmkm qv bpm xchhtm, gwc vmml bw xcb qb qv bpm xchhtm. Gwc uig ias: Pwe lw Q xcb bpm xqmkm qv bpm xchhtm? Zmil pqvb 2 bw nqoczm wcb pwe bw xcb bpm xchhtm xqmkm qv bpm nqzab xchhtm.")
+        elif game_object == clue1:
+                if clue1.carried:
+                    print_to_description("clue #1:")
+                    print_to_description("In order to read the hint, you need to know how to decipher it. Your clue is 8 salad.")
+        elif game_object == clue2:
+             if clue2.carried:
+                 print_to_description("clue #2:")
+                 print_to_description("Still confused after deciphering the first hint? I don't blame you. To progress, you need to SOLVE the puzzle.")
+        elif game_object == scroll:
+            if scroll.carried:
+                show_popup_image()
         else:
-            print_to_description("There is no text on it")
+            print_to_description("You're not carrying anything readable")
     else:
         print_to_description("I am not sure which " + object_name + "you are referring to")
 # 
@@ -182,6 +218,62 @@ def perform_help_command(verb):
     print_to_description("here are the commands for the game:")
     for command in list_of_commands:
         print_to_description(command)
+
+## implement solve command with two or more objects (requires AT LEAST two objects, probably will only be two objects, but am unsure how to implement that)
+## how do I implement this? no idea will ask mr wehnes about changing the parameters of the game to allow multiple objects inside each command to get the puzzle solving working (will also need to do that to fuse the key pieces together into a key)
+
+def perform_solve_command(object_name):
+    global refresh_objects_visible
+    game_object = get_game_object(object_name)
+    if not (game_object is None):
+        if game_object.carried and game_object == puzzle1 and pp1.carried:
+            print_to_description("the puzzle glimmers and the piece disappears.")
+            pp1.carried = False
+            pp1.visible = False
+            print_to_description("the puzzle collapses into a key piece for you.")
+            game_object.visible = False
+            game_object.carried = False
+            kp1.visible = True
+            kp1.location = current_location
+            perform_command("GET", "KEY PIECE A")
+        else:
+            print_to_description("You're missing something.")
+    else:
+        print_to_description("You can't do that.")
+
+def perform_fuse_command(object_name):
+    game_object = get_game_object(object_name)
+    if not (game_object is None):
+        if game_object.carried and game_object == kp1 and kp2.carried and kp3.carried and kp4.carried and kp5.carried and kp6.carried and kp7.carried and game_object.fuseable:
+            print_to_description("The key pieces start glowing, as if you've awakened their ancient powers. One by one, they slowly start forming an actual key.")
+            game_object.carried = False
+            kp2.carried = False
+            kp3.carried = False
+            kp4.carried = False
+            kp5.carried = False
+            kp6.carried = False
+            kp7.carried = False
+            key.visible = True
+            key.location = current_location
+            perform_command("GET", "KEY")
+        else:
+            print_to_description("You're missing something.")
+    else:
+        print_to_description("You can't do that.")
+
+def show_popup_image():
+
+    popup = tkinter.Toplevel(root)
+
+    img = PhotoImage(file="res/images/blank-1.gif")
+
+    label = tkinter.Label(popup, image=img)
+    label.image = img  # Keep a reference to the image to prevent garbage collection
+    label.pack()
+
+def show_puzzle():
+    puzzle_popup = DraggablePuzzlePopup()
+    puzzle_popup.show()
 
 def describe_current_location(current_location):
     if (current_location == 1):
@@ -239,8 +331,12 @@ def set_current_image():
         image_label.img = PhotoImage(file ='res/images/blank-2.gif')
     elif (current_location == 3):
         image_label.img = PhotoImage(file ='res/images/blank-3.gif')
-    elif (current_location == 4):
-        image_label.img = PhotoImage(file ='res/images/hallway_prototype.png')
+    elif (current_location == 4 or current_location == 5 or current_location == 13):
+        image_label.img = PhotoImage(file ='res/images/hallway_prototype_straight.png')
+    elif (current_location == 6 or current_location == 14):
+        image_label.img = PhotoImage(file='res/images/hall_right_corner_wire_frame.png')
+    elif (current_location == 12 or current_location == 19):
+        image_label.img = PhotoImage(file = 'res/images/hall_left_corner_wireframe.png')
     else:
         image_label.img = PhotoImage(file ='res/images/blank-1.gif')
         
@@ -381,6 +477,10 @@ def get_location_to_west(current_location, door_open=False):
         return 4
     elif (current_location == 6):
         return 5
+    elif (current_location == 7):
+        return 8
+    elif (current_location == 8):
+        return 9
     elif (current_location == 13):
         return 12
     elif (current_location == 14):
@@ -446,6 +546,15 @@ def describe_current_visible_objects():
     object_count = 0
     object_list = ""
 
+    if pp1.carried and puzzle1.carried:
+        hint1.visible = True
+
+    if hint1.carried:
+        clue1.visible = True
+
+    if clue1.carried:
+        clue2.visible = True
+
     for current_object in game_objects:
         if ((current_object.location == current_location) and (current_object.visible == True) and (
                 current_object.carried == False)):
@@ -468,7 +577,7 @@ def build_interface():
     global root
 
     root = Tk()
-    root.resizable(0,0)
+    root.resizable(True, True)
     
     style = ttk.Style()
     style.configure("BW.TLabel", foreground="black", background="white")
@@ -548,22 +657,22 @@ def set_current_state():
 
 def north_button_click():
     print_to_description("N", True)
-    perform_command("N", "")
+    perform_command("NORTH", "")
     set_current_state()
 
 def south_button_click():
     print_to_description("S", True)
-    perform_command("S", "")
+    perform_command("SOUTH", "")
     set_current_state()
 
 def east_button_click():
     print_to_description("E", True)
-    perform_command("E", "")
+    perform_command("EAST", "")
     set_current_state()
 
 def west_button_click():
-    print_to_description("W", True)
-    perform_command("W", "")
+    print_to_description("WEST", True)
+    perform_command("WEST", "")
     set_current_state()
 
 def return_key_enter(event):
@@ -624,6 +733,7 @@ def play_audio(filename, asynchronous = True, loop = True):
         sound_file = ""
         path_to_file = 'res/sounds/{}'.format(sound_file)
         os.system('afplay {}'.format(path_to_file))
+
 
 def main():
     
