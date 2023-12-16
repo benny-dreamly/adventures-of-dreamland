@@ -4,7 +4,6 @@ from tkinter import ttk
 from tkinter import simpledialog
 import GameObject
 import locations
-from puzzle import DraggablePuzzlePopup
 
 PORTRAIT_LAYOUT = True
 
@@ -33,15 +32,13 @@ end_of_game = False
 
 list_of_commands = locations.load_commands()
 
-pp1 = GameObject.GameObject("puzzle piece", list_of_locations[0], True, True, False, "puzzle piece 1")
-pp2 = GameObject.GameObject("puzzle piece", list_of_locations[10], True, True, False, "puzzle piece 2")
+puzzle_piece_1 = GameObject.GameObject("puzzle piece", list_of_locations[0], True, True, False, "puzzle piece 1")
+puzzle_piece_2 = GameObject.GameObject("puzzle piece", list_of_locations[10], True, True, False, "puzzle piece 2")
 hint1 = GameObject.GameObject("hint 1", list_of_locations[0], True, False, False, "hint #1")
 clue1 = GameObject.GameObject("clue 1", list_of_locations[1], True, False, False, "clue #1")
 clue2 = GameObject.GameObject("clue 2", list_of_locations[2], True, False, False, "clue #2 (ONLY READ ONCE HINT 1 IS SOLVED)")
-puzzle1 = GameObject.GameObject("puzzle", list_of_locations[2], True, True, False, "puzzle #1")
-puzzle2 = GameObject.GameObject("puzzle", list_of_locations[7], True, True, False, "puzzle #2")
-puzzle3 = GameObject.GameObject("puzzle", list_of_locations[2], True, True, False, "puzzle #3")
-puzzle4 = GameObject.GameObject("puzzle", list_of_locations[2], True, True, False, "puzzle #4")
+puzzle = GameObject.GameObject("puzzle", list_of_locations[2], True, True, False, "puzzle #1")
+puzzle1_with_puzzle_piece_1 = GameObject.GameObject("puzzle (1/9)", puzzle, True, False, False, "puzzle #1")
 kp1 = GameObject.GameObject("key piece A", list_of_locations[0], True, False, False, "I wonder what you do with me?", True)
 kp2 = GameObject.GameObject("key piece B", list_of_locations[0], True, False, False, "I wonder what you do with me?", True)
 kp3 = GameObject.GameObject("key piece C", list_of_locations[0], True, False, False, "I wonder what you do with me?", True)
@@ -51,7 +48,8 @@ kp6 = GameObject.GameObject("key piece F", list_of_locations[0], True, False, Fa
 kp7 = GameObject.GameObject("key piece G", list_of_locations[0], True, False, False, "I wonder what you do with me?", True)
 key = GameObject.GameObject("key", list_of_locations[0], True, False, False, "a golden key")
 scroll = GameObject.GameObject("scroll", list_of_locations[0], True, True, False, "an ancient papyrus scroll")
-game_objects = [pp1, pp2, hint1, clue1, clue2, puzzle1, puzzle2, kp1, kp2, kp3, kp4, kp5, kp6, kp7, key, scroll]
+scroll_hint = GameObject.GameObject("hint", list_of_locations[10], True, True, False, "huh")
+game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue2, puzzle, puzzle1_with_puzzle_piece_1, kp1, kp2, kp3, kp4, kp5, kp6, kp7, key, scroll]
 
 def perform_command(verb, noun):
     
@@ -103,10 +101,7 @@ def perform_go_command(direction):
 def perform_get_command(object_name):
     global refresh_objects_visible
     game_object = get_game_object(object_name)
-    special_flag = False
     if not (game_object is None):
-        if game_object.name == "key piece a":
-            special_flag = True
         if (game_object.location != current_location or game_object.visible == False) and (special_flag != True):
             print_to_description("You don't see one of those here!")
         elif (game_object.movable == False):
@@ -115,10 +110,8 @@ def perform_get_command(object_name):
             print_to_description("You are already carrying it")
         else:
             #handle special conditions
-            if special_flag == False:
-                game_object.carried = True
-                game_object.visible = False
-                refresh_objects_visible = True
+            if (False):
+                print_to_description("special condition")
             else:
                 #pick up the object
                 game_object.carried = True
@@ -195,7 +188,10 @@ def perform_read_command(object_name):
                  print_to_description("Still confused after deciphering the first hint? I don't blame you. To progress, you need to SOLVE the puzzle.")
         elif game_object == scroll:
             if scroll.carried:
-                show_popup_image()
+                show_scroll_image()
+        elif game_object == scroll_hint:
+            if scroll_hint.carried:
+                show_scroll_hint_image()
         else:
             print_to_description("You're not carrying anything readable")
     else:
@@ -219,23 +215,35 @@ def perform_help_command(verb):
     for command in list_of_commands:
         print_to_description(command)
 
-## implement solve command with two or more objects (requires AT LEAST two objects, probably will only be two objects, but am unsure how to implement that)
-## how do I implement this? no idea will ask mr wehnes about changing the parameters of the game to allow multiple objects inside each command to get the puzzle solving working (will also need to do that to fuse the key pieces together into a key)
-
 def perform_solve_command(object_name):
     global refresh_objects_visible
     game_object = get_game_object(object_name)
+    piece_slot_message = "The piece slots into the puzzle, but you still haven't solved it."
     if not (game_object is None):
-        if game_object.carried and game_object == puzzle1 and pp1.carried:
-            print_to_description("the puzzle glimmers and the piece disappears.")
-            pp1.carried = False
-            pp1.visible = False
-            print_to_description("the puzzle collapses into a key piece for you.")
-            game_object.visible = False
-            game_object.carried = False
-            kp1.visible = True
-            kp1.location = current_location
-            perform_command("GET", "KEY PIECE A")
+        if game_object.carried and game_object == puzzle1:
+            answer = simpledialog.askstring("Input", "What would you like to put in the puzzle first?", parent=root)
+            if puzzle_piece_1.carried == False:
+                print_to_description("It looks like you don't have anything to put into the puzzle.")
+            elif (answer != "puzzle piece"):
+                print_to_description("Unfortunately, it looks like it doesn't fit in the puzzle.")
+            else:
+                puzzle_piece_inserted = False
+                while not puzzle_piece_inserted:
+                    slot = simpledialog.askinteger("Input", "Which slot would you like to put your piece in?", parent=root)
+                    if slot != 1:
+                        print_to_description("The piece won't fit, no matter how you rotate it.")
+                        answer = simpledialog.askstring("Input", "Would you like to try again?", parent=root)
+                        if answer == "No":
+                            break
+                    else:
+                        print_to_description(piece_slot_message)
+                        puzzle_piece_inserted = True
+                puzzle_piece_1.carried = False
+                game_object.carried = False
+                puzzle1_with_puzzle_piece_1.carried = True
+                refresh_objects_visible = True
+            #print_to_description("the puzzle collapses into a key piece for you.")
+            #kp1.carried = True
         else:
             print_to_description("You're missing something.")
     else:
@@ -261,7 +269,7 @@ def perform_fuse_command(object_name):
     else:
         print_to_description("You can't do that.")
 
-def show_popup_image():
+def show_scroll_image():
 
     popup = tkinter.Toplevel(root)
 
@@ -271,9 +279,15 @@ def show_popup_image():
     label.image = img  # Keep a reference to the image to prevent garbage collection
     label.pack()
 
-def show_puzzle():
-    puzzle_popup = DraggablePuzzlePopup()
-    puzzle_popup.show()
+def show_scroll_hint_image():
+
+    popup = tkinter.Toplevel(root)
+
+    img = PhotoImage(file="res/images/scroll_key.png")
+
+    label = tkinter.Label(popup, image=img)
+    label.image = img  # Keep a reference to the image to prevent garbage collection
+    label.pack()
 
 def describe_current_location(current_location):
     if (current_location == 1):
@@ -332,11 +346,11 @@ def set_current_image():
     elif (current_location == 3):
         image_label.img = PhotoImage(file ='res/images/blank-3.gif')
     elif (current_location == 4 or current_location == 5 or current_location == 13):
-        image_label.img = PhotoImage(file ='res/images/hallway_prototype_straight.png')
+        image_label.img = PhotoImage(file ='res/images/hallway.png')
     elif (current_location == 6 or current_location == 14):
-        image_label.img = PhotoImage(file='res/images/hall_right_corner_wire_frame.png')
+        image_label.img = PhotoImage(file='res/images/right_corner.png')
     elif (current_location == 12 or current_location == 19):
-        image_label.img = PhotoImage(file = 'res/images/hall_left_corner_wireframe.png')
+        image_label.img = PhotoImage(file = 'res/images/left_corner.png')
     else:
         image_label.img = PhotoImage(file ='res/images/blank-1.gif')
         
@@ -546,7 +560,7 @@ def describe_current_visible_objects():
     object_count = 0
     object_list = ""
 
-    if pp1.carried and puzzle1.carried:
+    if puzzle_piece_1.carried and puzzle1.carried:
         hint1.visible = True
 
     if hint1.carried:
@@ -589,7 +603,7 @@ def build_interface():
         image_label.grid(row=0, column=0, rowspan=3, columnspan=1,padx = 2, pady = 2)
 
     description_widget = Text(root, width =60, height = 10, relief = GROOVE, wrap = 'word')
-    description_widget.insert(1.0, "Welcome to my game.\n\nGood Luck!\n\n ")
+    description_widget.insert(1.0, "After the catastrophe that was the pandemic, Benny finds himself back in dreamland, but something seems wrong. It looks like Fala and Nodo have taken him prisoner! Now he has to use all of the knowledge he’s gathered throughout all of his various adventures in the past to escape. \n\nFala and Nodo have hidden various puzzles throughout the castle basement. Can you figure them out and help Benny escape before evil takes over the kingdom? You’re the kingdom’s only hope at rescuing the protector of Dreamland.\n\n ")
     description_widget.config(state = "disabled")
     if (PORTRAIT_LAYOUT):
         description_widget.grid(row=1, column=0, columnspan=3, sticky=W, padx=2, pady =2)
