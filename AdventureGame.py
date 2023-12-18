@@ -49,7 +49,9 @@ kp7 = GameObject.GameObject("key piece G", list_of_locations[0], True, False, Fa
 key = GameObject.GameObject("key", list_of_locations[0], True, False, False, "a golden key")
 scroll = GameObject.GameObject("scroll", list_of_locations[0], True, True, False, "an ancient papyrus scroll")
 scroll_hint = GameObject.GameObject("hint", list_of_locations[10], True, True, False, "huh")
-game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue2, puzzle, puzzle1_with_puzzle_piece_1, kp1, kp2, kp3, kp4, kp5, kp6, kp7, key, scroll]
+safe = GameObject.GameObject("safe", list_of_locations[9], False, True, False, "a small safe")
+gold_bar = GameObject.GameObject("gold bar", list_of_locations[10], True, True, False, "a gold bar with an engraving in it")
+game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue2, puzzle, puzzle1_with_puzzle_piece_1, kp1, kp2, kp3, kp4, kp5, kp6, kp7, key, scroll, safe, gold_bar]
 
 def perform_command(verb, noun):
     
@@ -192,6 +194,9 @@ def perform_read_command(object_name):
         elif game_object == scroll_hint:
             if scroll_hint.carried:
                 show_scroll_hint_image()
+        elif game_object == gold_bar:
+            if gold_bar.carried:
+                print_to_description("Coins, Minerals, Gold, Silver")
         else:
             print_to_description("You're not carrying anything readable")
     else:
@@ -201,7 +206,7 @@ def perform_open_command(object_name):
 
     global door_open
     game_object = get_game_object(object_name)
- 
+
     if not (game_object is None):
         if (False):
             print_to_description("special condition")
@@ -313,12 +318,16 @@ def describe_current_location(current_location):
         print_to_description(location_descriptions[6])
     elif (current_location == 8):
         print_to_description(location_names[7])
+        print_to_description(location_descriptions[7])
     elif (current_location == 9):
         print_to_description(location_names[8])
+        print_to_description(location_descriptions[8])
     elif (current_location == 10):
         print_to_description(location_names[9])
+        print_to_description(location_descriptions[9])
     elif (current_location == 11):
         print_to_description(location_names[10])
+        print_to_description(location_descriptions[10])
     elif (current_location == 12):
         print_to_description(location_names[11])
         print_to_description(location_subtitles[1])
