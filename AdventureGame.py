@@ -220,9 +220,9 @@ def perform_solve_command(object_name):
     game_object = get_game_object(object_name)
     piece_slot_message = "The piece slots into the puzzle, but you still haven't solved it."
     if not (game_object is None):
-        if game_object.carried and game_object == puzzle1:
+        if game_object.carried and game_object == puzzle:
             answer = simpledialog.askstring("Input", "What would you like to put in the puzzle first?", parent=root)
-            if puzzle_piece_1.carried == False:
+            if not puzzle_piece_1.carried:
                 print_to_description("It looks like you don't have anything to put into the puzzle.")
             elif (answer != "puzzle piece"):
                 print_to_description("Unfortunately, it looks like it doesn't fit in the puzzle.")
@@ -273,7 +273,7 @@ def show_scroll_image():
 
     popup = tkinter.Toplevel(root)
 
-    img = PhotoImage(file="res/images/blank-1.gif")
+    img = PhotoImage(file="res/images/scroll_scaled.png")
 
     label = tkinter.Label(popup, image=img)
     label.image = img  # Keep a reference to the image to prevent garbage collection
@@ -292,25 +292,25 @@ def show_scroll_hint_image():
 def describe_current_location(current_location):
     if (current_location == 1):
         print_to_description(location_names[0])
-        print_to_description(location_subtitles[0])
+        print_to_description(location_descriptions[0])
     elif (current_location == 2):
         print_to_description(location_names[1])
-        print_to_description(location_subtitles[0])
+        print_to_description(location_descriptions[1])
     elif (current_location == 3):
         print_to_description(location_names[2])
-        print_to_description(location_subtitles[0])
+        print_to_description(location_descriptions[2])
     elif (current_location == 4):
         print_to_description(location_names[3])
-        print_to_description(location_subtitles[1])
+        print_to_description(location_descriptions[3])
     elif (current_location == 5):
         print_to_description(location_names[4])
-        print_to_description(location_subtitles[1])
+        print_to_description(location_descriptions[4])
     elif (current_location == 6):
         print_to_description(location_names[5])
-        print_to_description(location_subtitles[1])
+        print_to_description(location_descriptions[5])
     elif (current_location == 7):
         print_to_description(location_names[6])
-        print_to_description(location_subtitles[1])
+        print_to_description(location_descriptions[6])
     elif (current_location == 8):
         print_to_description(location_names[7])
     elif (current_location == 9):
@@ -560,7 +560,7 @@ def describe_current_visible_objects():
     object_count = 0
     object_list = ""
 
-    if puzzle_piece_1.carried and puzzle1.carried:
+    if puzzle_piece_1.carried and puzzle.carried:
         hint1.visible = True
 
     if hint1.carried:
@@ -572,10 +572,10 @@ def describe_current_visible_objects():
     for current_object in game_objects:
         if ((current_object.location == current_location) and (current_object.visible == True) and (
                 current_object.carried == False)):
-            object_list = object_list + ("," if object_count > 0 else "") + current_object.name
+            object_list = object_list + (" and " if object_count > 0 else "") + current_object.name
             object_count = object_count + 1
 
-    print_to_description("You see: " + (object_list + "." if object_count > 0 else "nothing special."))
+    print_to_description("Benny sees " + (object_list + "." if object_count > 0 else "nothing special."))
 
 
 def build_interface():
@@ -603,7 +603,7 @@ def build_interface():
         image_label.grid(row=0, column=0, rowspan=3, columnspan=1,padx = 2, pady = 2)
 
     description_widget = Text(root, width =60, height = 10, relief = GROOVE, wrap = 'word')
-    description_widget.insert(1.0, "After the catastrophe that was the pandemic, Benny finds himself back in dreamland, but something seems wrong. It looks like Fala and Nodo have taken him prisoner! Now he has to use all of the knowledge he’s gathered throughout all of his various adventures in the past to escape. \n\nFala and Nodo have hidden various puzzles throughout the castle basement. Can you figure them out and help Benny escape before evil takes over the kingdom? You’re the kingdom’s only hope at rescuing the protector of Dreamland.\n\n ")
+    description_widget.insert(1.0, "After the catastrophe that was the pandemic, Benny finds himself back in dreamland, but something seems wrong. It looks like Fala and Nodo have taken him prisoner! Now he has to use all of the knowledge he’s gathered throughout all of his various adventures in the past to escape. \n\nFala and Nodo have hidden various puzzles throughout the castle basement. Can you figure them out and help Benny escape before evil takes over the kingdom? You’re the kingdom’s only hope at rescuing the protector of Dreamland.\n\n")
     description_widget.config(state = "disabled")
     if (PORTRAIT_LAYOUT):
         description_widget.grid(row=1, column=0, columnspan=3, sticky=W, padx=2, pady =2)
