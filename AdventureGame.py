@@ -23,6 +23,7 @@ west_button = None
 root = None
 
 door_open = False
+safe_open = False
 
 refresh_location = True
 refresh_objects_visible = True
@@ -37,8 +38,9 @@ puzzle_piece_2 = GameObject.GameObject("puzzle piece", list_of_locations[10], Tr
 hint1 = GameObject.GameObject("hint 1", list_of_locations[0], True, False, False, "hint #1")
 clue1 = GameObject.GameObject("clue 1", list_of_locations[1], True, False, False, "clue #1")
 clue2 = GameObject.GameObject("clue 2", list_of_locations[2], True, False, False, "clue #2 (ONLY READ ONCE HINT 1 IS SOLVED)")
-puzzle = GameObject.GameObject("puzzle", list_of_locations[2], True, True, False, "puzzle #1")
-puzzle1_with_puzzle_piece_1 = GameObject.GameObject("puzzle (1/9)", puzzle, True, False, False, "puzzle #1")
+puzzle = GameObject.GameObject("puzzle", list_of_locations[2], True, True, False, "puzzle")
+puzzle_with_one_piece_inserted = GameObject.GameObject("puzzle (1/9)", puzzle, True, False, False, "puzzle")
+puzzle_with_two_pieces_inserted = GameObject.GameObject("puzzle (2/9)", puzzle_with_one_piece_inserted, True, False, False, "puzzle")
 kp1 = GameObject.GameObject("key piece A", list_of_locations[0], True, False, False, "I wonder what you do with me?", True)
 kp2 = GameObject.GameObject("key piece B", list_of_locations[0], True, False, False, "I wonder what you do with me?", True)
 kp3 = GameObject.GameObject("key piece C", list_of_locations[0], True, False, False, "I wonder what you do with me?", True)
@@ -51,7 +53,7 @@ scroll = GameObject.GameObject("scroll", list_of_locations[0], True, True, False
 scroll_hint = GameObject.GameObject("hint", list_of_locations[10], True, True, False, "huh")
 safe = GameObject.GameObject("safe", list_of_locations[9], False, True, False, "a small safe")
 gold_bar = GameObject.GameObject("gold bar", list_of_locations[10], True, True, False, "a gold bar with an engraving in it")
-game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue2, puzzle, puzzle1_with_puzzle_piece_1, kp1, kp2, kp3, kp4, kp5, kp6, kp7, key, scroll, safe, gold_bar]
+game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue2, puzzle, puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, kp1, kp2, kp3, kp4, kp5, kp6, kp7, key, scroll, safe, gold_bar]
 
 def perform_command(verb, noun):
     
@@ -157,8 +159,8 @@ def perform_look_command(object_name):
             print_to_description("You can't see one of those!")
  
         #special cases - when certain objects are looked at, others are revealed!
-        if (False):
-            print_to_description("special condition")
+        if game_object == safe and safe_open:
+            print_to_description("Benny sees a puzzle piece in the safe. Maybe he can grab it?")
             global refresh_objects_visible
             refresh_objects_visible = True
 
@@ -205,11 +207,14 @@ def perform_read_command(object_name):
 def perform_open_command(object_name):
 
     global door_open
+    global safe_open
     game_object = get_game_object(object_name)
 
     if not (game_object is None):
-        if (False):
-            print_to_description("special condition")
+        if game_object == safe and (game_object.visible and game_object.location == current_location) and safe_open:
+            print_to_description("Benny pulls on the handle and the safe opens!")
+            set_current_image()
+            game_object.description = "a small safe, with the door wide open"
         else:
             print_to_description("You can't open one of those.")
     else:
@@ -245,8 +250,30 @@ def perform_solve_command(object_name):
                         puzzle_piece_inserted = True
                 puzzle_piece_1.carried = False
                 game_object.carried = False
-                puzzle1_with_puzzle_piece_1.carried = True
+                puzzle_with_one_piece_inserted.carried = True
                 refresh_objects_visible = True
+        if game_object.carried and game_object == puzzle_with_one_piece_inserted:
+            answer = simpledialog.askstring("Input", "What would you like to put in the puzzle next?", parent=root)
+            if not puzzle_piece_2.carried:
+                print_to_description("It looks like you don't have anything to put into the puzzle.")
+            elif (answer != "puzzle piece"):
+                print_to_description("Unfortunately, it looks like it doesn't fit in the puzzle.")
+            else:
+                puzzle_piece_inserted = False
+                while not puzzle_piece_inserted:
+                    slot = simpledialog.askinteger("Input", "Which slot would you like to put your piece in?", parent=root)
+                    if slot != 2:
+                        print_to_description("The piece won't fit, no matter how you rotate it.")
+                        answer = simpledialog.askstring("Input", "Would you like to try again?", parent=root)
+                        if answer == "No":
+                            break
+                    else:
+                        print_to_description(piece_slot_message)
+                        puzzle_piece_inserted = True
+                    puzzle_piece_2.carried = False
+                    game_object.carried = False
+                    puzzle_with_two_pieces_inserted.carried = True
+                    refresh_objects_visible = True
             #print_to_description("the puzzle collapses into a key piece for you.")
             #kp1.carried = True
         else:
@@ -274,6 +301,25 @@ def perform_fuse_command(object_name):
     else:
         print_to_description("You can't do that.")
 
+def perform_unlock_command(object_name):
+    global safe_open
+    game_object = get_game_object(object_name)
+    if not (game_object is None):
+        if game_object == safe and (game_object.visible and game_object.location == current_location):
+            while not safe_open:
+                code = simpledialog.askinteger("Code", "What is the code to the safe?", parent=root)
+                if code != 32378:
+                    print_to_description("Benny tries your code, but the safe won't open.")
+                    answer = simpledialog.askstring("Input", "Would you like to try again?", parent=root)
+                    if answer == "No":
+                        break
+                else:
+                    print_to_description("The code you provided Benny with worked! The safe is now unlocked.")
+                    safe_open = True
+        else:
+            print_to_description("You can't unlock that!")
+    else:
+        print_to_description("There's nothing to unlock.")
 def show_scroll_image():
 
     popup = tkinter.Toplevel(root)
@@ -360,6 +406,8 @@ def set_current_image():
         image_label.img = PhotoImage(file='res/images/right_corner.png')
     elif (current_location == 12 or current_location == 19):
         image_label.img = PhotoImage(file = 'res/images/left_corner.png')
+    elif safe_open and current_location == 10:
+        image_label.img = PhotoImage(file = 'res/images/blank-1.gif')
     else:
         image_label.img = PhotoImage(file ='res/images/blank-1.gif')
         
