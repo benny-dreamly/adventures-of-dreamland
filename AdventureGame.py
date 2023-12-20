@@ -34,7 +34,6 @@ end_of_game = False
 list_of_commands = locations.load_commands()
 
 puzzle_piece_1 = GameObject.GameObject("puzzle piece", list_of_locations[0], True, True, False, "puzzle piece 1")
-puzzle_piece_2 = GameObject.GameObject("puzzle piece", list_of_locations[10], True, True, False, "puzzle piece 2")
 hint1 = GameObject.GameObject("hint 1", list_of_locations[0], True, False, False, "hint #1")
 clue1 = GameObject.GameObject("clue 1", list_of_locations[1], True, False, False, "clue #1")
 clue2 = GameObject.GameObject("clue 2", list_of_locations[2], True, False, False, "clue #2 (ONLY READ ONCE HINT 1 IS SOLVED)")
@@ -53,7 +52,9 @@ scroll = GameObject.GameObject("scroll", list_of_locations[0], True, True, False
 scroll_hint = GameObject.GameObject("hint", list_of_locations[10], True, True, False, "huh")
 safe = GameObject.GameObject("safe", list_of_locations[9], False, True, False, "a small safe")
 gold_bar = GameObject.GameObject("gold bar", list_of_locations[10], True, True, False, "a gold bar with an engraving in it")
-game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue2, puzzle, puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, kp1, kp2, kp3, kp4, kp5, kp6, kp7, key, scroll, safe, gold_bar]
+bar_clue = GameObject.GameObject("clue", list_of_locations[10], True, False, False, "clue")
+puzzle_piece_2 = GameObject.GameObject("puzzle piece", safe, True, False, False, "puzzle piece 2")
+game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue2, puzzle, puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, kp1, kp2, kp3, kp4, kp5, kp6, kp7, key, scroll, safe, gold_bar, bar_clue]
 
 def perform_command(verb, noun):
     
@@ -174,7 +175,7 @@ def perform_look_command(object_name):
             print_to_description("You can't see one of those!")
 
 def perform_read_command(object_name):
-
+    
     game_object = get_game_object(object_name)
 
     if not (game_object is None):
@@ -552,6 +553,8 @@ def get_location_to_west(current_location, door_open=False):
         return 8
     elif (current_location == 8):
         return 9
+    elif (current_location == 11):
+        return 10
     elif (current_location == 13):
         return 12
     elif (current_location == 14):
@@ -625,6 +628,9 @@ def describe_current_visible_objects():
 
     if clue1.carried:
         clue2.visible = True
+
+    if gold_bar.carried:
+        bar_clue.visible = True
 
     for current_object in game_objects:
         if ((current_object.location == current_location) and (current_object.visible == True) and (
