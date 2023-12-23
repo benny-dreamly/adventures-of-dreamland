@@ -415,7 +415,7 @@ def set_current_image():
     elif safe_open and current_location == 10:
         image_label.img = ImageTk.PhotoImage(file = 'res/images/open-safe-test.tiff')
     else:
-        image_label.img = PhotoImage(file ='res/images/blank-1.gif')
+        image_label.img = PhotoImage(file ='res/images/missing.png')
         
     image_label.config(image = image_label.img)
 
