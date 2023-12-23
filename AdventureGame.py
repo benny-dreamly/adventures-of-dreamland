@@ -54,7 +54,7 @@ scroll_hint = GameObject.GameObject("hint", list_of_locations[10], True, True, F
 safe = GameObject.GameObject("safe", list_of_locations[9], False, True, False, "a small safe")
 gold_bar = GameObject.GameObject("gold bar", list_of_locations[10], True, True, False, "a gold bar with an engraving in it")
 bar_clue = GameObject.GameObject("clue", list_of_locations[10], True, False, False, "clue")
-puzzle_piece_2 = GameObject.GameObject("puzzle piece", safe, True, False, False, "puzzle piece 2")
+puzzle_piece_2 = GameObject.GameObject("puzzle piece", list_of_locations[10], True, False, False, "puzzle piece 2")
 game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue2, puzzle, puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, kp1, kp2, kp3, kp4, kp5, kp6, kp7, key, scroll, safe, gold_bar, bar_clue]
 
 def perform_command(verb, noun):
@@ -407,9 +407,9 @@ def set_current_image():
     elif (current_location == 4 or current_location == 5 or current_location == 13):
         image_label.img = PhotoImage(file ='res/images/hallway.png')
     elif (current_location == 6 or current_location == 14):
-        image_label.img = PhotoImage(file='res/images/right_corner.png')
+        image_label.img = ImageTk.PhotoImage(file='res/images/right_corner.tiff')
     elif (current_location == 12 or current_location == 19):
-        image_label.img = PhotoImage(file = 'res/images/left_corner.png')
+        image_label.img = ImageTk.PhotoImage(file = 'res/images/left_corner.tiff')
     elif current_location == 10 and not safe_open:
         image_label.img = ImageTk.PhotoImage(file = 'res/images/test-safe-room.tiff')
     elif safe_open and current_location == 10:
