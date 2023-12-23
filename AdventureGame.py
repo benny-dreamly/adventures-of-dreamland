@@ -175,7 +175,7 @@ def perform_look_command(object_name):
             print_to_description("You can't see one of those!")
 
 def perform_read_command(object_name):
-    
+
     game_object = get_game_object(object_name)
 
     if not (game_object is None):
