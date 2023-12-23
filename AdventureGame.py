@@ -405,13 +405,13 @@ def set_current_image():
     elif (current_location == 3):
         image_label.img = PhotoImage(file ='res/images/blank-3.gif')
     elif (current_location == 4 or current_location == 5 or current_location == 13):
-        image_label.img = PhotoImage(file ='res/images/hallway.png')
+        image_label.img = ImageTk.PhotoImage(file ='res/images/hallway.tiff')
     elif (current_location == 6 or current_location == 14):
         image_label.img = ImageTk.PhotoImage(file='res/images/right_corner.tiff')
     elif (current_location == 12 or current_location == 19):
         image_label.img = ImageTk.PhotoImage(file = 'res/images/left_corner.tiff')
     elif current_location == 10 and not safe_open:
-        image_label.img = ImageTk.PhotoImage(file = 'res/images/test-safe-room.tiff')
+        image_label.img = ImageTk.PhotoImage(file ='res/images/safe-room-test.tiff')
     elif safe_open and current_location == 10:
         image_label.img = ImageTk.PhotoImage(file = 'res/images/open-safe-test.tiff')
     else:
