@@ -2,6 +2,7 @@ import tkinter
 from tkinter import *
 from tkinter import ttk
 from tkinter import simpledialog
+from PIL import ImageTk, Image
 import GameObject
 import locations
 
@@ -78,6 +79,8 @@ def perform_command(verb, noun):
         perform_help_command(noun)
     elif (verb == "SOLVE"):
         perform_solve_command(noun)
+    elif (verb == "UNLOCK"):
+        perform_unlock_command(noun)
     else:
         print_to_description("unknown command")
         
@@ -407,8 +410,10 @@ def set_current_image():
         image_label.img = PhotoImage(file='res/images/right_corner.png')
     elif (current_location == 12 or current_location == 19):
         image_label.img = PhotoImage(file = 'res/images/left_corner.png')
+    elif current_location == 10 and not safe_open:
+        image_label.img = ImageTk.PhotoImage(file = 'res/images/test-safe-room.tiff')
     elif safe_open and current_location == 10:
-        image_label.img = PhotoImage(file = 'res/images/blank-1.gif')
+        image_label.img = ImageTk.PhotoImage(file = 'res/images/open-safe-test.tiff')
     else:
         image_label.img = PhotoImage(file ='res/images/blank-1.gif')
         
@@ -631,6 +636,9 @@ def describe_current_visible_objects():
 
     if gold_bar.carried:
         bar_clue.visible = True
+
+    if safe_open:
+        puzzle_piece_2.visible = True
 
     for current_object in game_objects:
         if ((current_object.location == current_location) and (current_object.visible == True) and (
