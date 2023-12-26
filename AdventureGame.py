@@ -380,31 +380,22 @@ def describe_current_location(current_location):
         print_to_description(location_descriptions[10])
     elif (current_location == 12):
         print_to_description(location_names[11])
-        print_to_description(location_subtitles[1])
     elif (current_location == 13):
         print_to_description(location_names[12])
-        print_to_description(location_subtitles[1])
     elif (current_location == 14):
         print_to_description(location_names[13])
-        print_to_description(location_subtitles[1])
     elif (current_location == 15):
         print_to_description(location_names[14])
-        print_to_description(location_subtitles[1])
     elif (current_location == 16):
         print_to_description(location_names[15])
-        print_to_description(location_subtitles[1])
     elif (current_location == 17):
         print_to_description(location_names[16])
-        print_to_description(location_subtitles[1])
     elif (current_location == 18):
         print_to_description(location_names[17])
-        print_to_description(location_subtitles[1])
     elif (current_location == 19):
         print_to_description(location_names[18])
-        print_to_description(location_subtitles[1])
     elif (current_location == 20):
         print_to_description(location_names[19])
-        print_to_description(location_subtitles[1])
     else:
         print_to_description("unknown location:" + current_location)
 
