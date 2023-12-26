@@ -409,7 +409,7 @@ def set_current_image():
     elif (current_location == 6 or current_location == 14):
         image_label.img = ImageTk.PhotoImage(file='res/images/right_corner.tiff')
     elif (current_location == 12 or current_location == 19):
-        image_label.img = ImageTk.PhotoImage(file = 'res/images/left_corner.tiff')
+        image_label.img = ImageTk.PhotoImage(file ='res/images/left_corner.png')
     elif current_location == 10 and not safe_open:
         image_label.img = ImageTk.PhotoImage(file ='res/images/safe-room-test.tiff')
     elif safe_open and current_location == 10:
