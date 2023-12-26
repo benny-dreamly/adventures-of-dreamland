@@ -380,6 +380,7 @@ def describe_current_location(current_location):
         print_to_description(location_descriptions[10])
     elif (current_location == 12):
         print_to_description(location_names[11])
+        print_to_description(location_descriptions[11])
     elif (current_location == 13):
         print_to_description(location_names[12])
     elif (current_location == 14):
