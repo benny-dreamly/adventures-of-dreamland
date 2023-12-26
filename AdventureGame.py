@@ -22,6 +22,7 @@ south_button = None
 east_button = None
 west_button = None
 root = None
+button_frame = None
 
 door_open = False
 safe_open = False
@@ -652,7 +653,6 @@ def describe_current_visible_objects():
 
     print_to_description("Benny sees " + (object_list + "." if object_count > 0 else "nothing special."))
 
-
 def build_interface():
     
     global command_widget
@@ -664,9 +664,11 @@ def build_interface():
     global east_button
     global west_button    
     global root
+    global button_frame
 
     root = Tk()
     root.resizable(True, True)
+    root.bind('<Configure>', on_window_resize)  # Call on_window_resize on window resize
     
     style = ttk.Style()
     style.configure("BW.TLabel", foreground="black", background="white")
@@ -720,7 +722,31 @@ def build_interface():
         inventory_widget.grid(row=2, column=2, rowspan = 2, padx = 2, pady = 2,sticky=W)
     else:
         inventory_widget.grid(row=2, column=2, rowspan = 2, padx = 2, pady = 2,sticky=W)
-    
+
+
+def on_window_resize(event):
+    global button_frame
+
+    # Update the elements upon window resize
+    if PORTRAIT_LAYOUT:
+        root.grid_columnconfigure(0, weight=1)
+        root.grid_rowconfigure(1, weight=1)
+
+        description_widget.grid(row=1, column=0, columnspan=3, sticky="nsew")
+        command_widget.grid(row=2, column=0, columnspan=3, sticky="ew")
+
+        # Adjust the button frame to span all columns, align left
+        button_frame.grid(row=3, column=0, columnspan=3, padx=2, pady=2, sticky="w")
+    else:
+        root.grid_columnconfigure(1, weight=1)
+        root.grid_rowconfigure(0, weight=1)
+
+        description_widget.grid(row=0, column=1, rowspan=1, columnspan=2, sticky="nsew")
+        command_widget.grid(row=1, column=1, rowspan=1, columnspan=2, sticky="ew")
+
+        # Place the button frame below the text and input elements, center horizontally
+        button_frame.grid(row=2, column=1, columnspan=1, padx=2, pady=10, sticky="nsew")
+
 def set_current_state():
 
     global refresh_location
