@@ -423,9 +423,9 @@ def set_current_image():
     elif (current_location == 12 or current_location == 19):
         image_label.img = ImageTk.PhotoImage(file ='res/images/left_corner.png')
     elif current_location == 10 and not safe_open:
-        image_label.img = ImageTk.PhotoImage(file ='res/images/safe-room-test.tiff')
+        image_label.img = ImageTk.PhotoImage(file ='res/images/safe-room-temp.tiff')
     elif safe_open and current_location == 10:
-        image_label.img = ImageTk.PhotoImage(file = 'res/images/open-safe-test.tiff')
+        image_label.img = ImageTk.PhotoImage(file ='res/images/open-safe-temp.tiff')
     else:
         image_label.img = PhotoImage(file ='res/images/missing.png')
         
