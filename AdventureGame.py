@@ -416,7 +416,7 @@ def set_current_image():
         image_label.img = PhotoImage(file ='res/images/blank-2.gif')
     elif (current_location == 3):
         image_label.img = PhotoImage(file ='res/images/blank-3.gif')
-    elif (current_location == 4 or current_location == 5 or current_location == 13):
+    elif (current_location == 4 or current_location == 5 or current_location == 13 or current_location == 15 or current_location == 16 or current_location == 17 or current_location == 18):
         image_label.img = ImageTk.PhotoImage(file ='res/images/hallway.tiff')
     elif (current_location == 6 or current_location == 14):
         image_label.img = ImageTk.PhotoImage(file='res/images/right_corner.tiff')
