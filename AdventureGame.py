@@ -4,14 +4,61 @@ from tkinter import ttk
 from tkinter import simpledialog
 from PIL import ImageTk, Image
 import GameObject
-import locations
 
 PORTRAIT_LAYOUT = True
 
-list_of_locations = locations.load_locations()
-location_names = locations.load_location_names()
-location_descriptions = locations.load_location_descriptions()
-location_subtitles = locations.load_location_subtitles()
+list_of_locations = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36]
+location_names = [ "Cell (Room 1)\n",
+  "Cell (Room 2)\n",
+  "Cell (Room 3)\n",
+  "Hallway (Room 1)\n",
+  "Hallway (Room 2)\n",
+  "Hallway (Room 3)\n",
+  "Hallway (Room 4)\n",
+  "Vault (Room 1)\n",
+  "Vault (Room 2)\n",
+  "Vault (Room 3)\n",
+  "Vault (Room 4)\n",
+  "Hallway (Room 5)\n",
+  "Hallway (Room 6)\n",
+  "Hallway (Room 7)\n",
+  "Hallway (Room 8)\n",
+  "Hallway (Room 9)\n",
+  "Hallway (Room 10)\n",
+  "Hallway (Room 11)\n",
+  "Hallway (Room 12)\n",
+  "Hallway (Room 13)\n",
+  "zone 4, room 1",
+  "zone 4, room 2",
+  "zone 5, room 1",
+  "zone 5, room 2",
+  "zone 6, room 1",
+  "zone 6, room 2",
+  "zone 5, room 3",
+  "zone 5, room 4",
+  "zone 7, room 1",
+  "zone 7, room 2",
+  "zone 8, room 1",
+  "zone 8, room 2",
+  "zone 8, room 3",
+  "zone 8, room 4",
+  "zone 9, room 1",
+  "zone 9, room 2"
+]
+location_descriptions = [
+  "Benny wakes up in a dark room. He realizes that Fala and Nodo have locked him in the castle jail. Unfortunately, it seems like the great evil has possessed them and decided to lock him up for good. Luckily for him, the guards may have forgotten to lock the cell door behind them!\n\nThe room looks dilapidated, like nobody’s bothered to maintain it since there hasn’t been any prisoners for years. Cobwebs are scattered around the room, and it looks like the cell is bigger than he thought. There’s a table in the corner, with an old looking scroll that might be made from papyrus. Under the table, he can see a puzzle piece. It seems like the hidden puzzles he heard about when he was being transported into the cell were real. He might have a shot at escaping.\n",
+  "Unfortunately for Benny, in the next room he can’t see anything obvious. He thinks he might have to come back later in case there’s something hidden in the room that he can’t see right now. It feels like there might be something hidden in this room.\n",
+  "Benny realizes that this cell he’s in right now is really big. It still looks about the same as the other two rooms, lots of cobwebs and some various scattered furniture pieces. This room seems special, though. There’s a pedestal in the middle with a puzzle on it? Yep. Looks like a puzzle. Maybe this will help him escape?\n",
+  "Benny finds himself in a hallway, that doesn’t quite seem to have an end to it. He thinks nothing of it, as it appears just to be a hallway.\n",
+  "Still looks like a hallway.\n",
+  "At last, Benny finds a turn in the corridor. Maybe he’ll find something hidden in the next room?\n",
+  "Benny is still in a hallway, but it looks like he’s finally getting somewhere. He can see a room to his left. Maybe he should investigate it?\n",
+  "Benny finds himself in another room. It looks like it could be one of the vaults? Nope, just seems to look like some storage. Possibly an office? Nevermind, it really does look like one of the castle vaults. The dark and dingy brick hallways have been replaced with nice wood floors and well kept bricks instead. There’s a small counter in the room, which looks like it could have been used by someone that was keeping track of the items in the vault. It seems that there’s also some space behind the counter that seems to lead into another room.\n",
+  "Benny finds a little room with some shelves behind the counter, with a small box one of the shelves. There seems to be a room beside this one that looks to be the actual vault with all of the important valuables in it. No locked door or anything on the actual vault area either. Super strange when you consider there’s probably lots of fairly expensive items in it.\n",
+  "Benny finds himself in the actual heart of the vault. It looks like there’s lots of shelves with various precious minerals and lots of coins on the floor. He sees a small safe on one of the shelves, and it looks like he can open it. Unfortunately for him, he doesn’t yet have the combination for the safe. Maybe it will show itself in the next room?\n",
+  "There seems to be lots of gold and silver in this room too, but the Dream Diamond and lots of the kingdom’s valuables he’s recovered in the past are also in this part of the vault. Maybe there’s something important in here? \n\nOh look at that, he’s found a small engraving on one of the gold bars. Maybe he can grab it? There also seems to be a little piece of paper in the corner.\n",
+  "Benny finds himself at another corner, this time it’s a right turn. There sure is a very long hallway in this castle basement.\n"
+]
 
 command_widget = None
 image_label = None
@@ -35,7 +82,7 @@ end_of_game = False
 
 playing = False
 
-list_of_commands = locations.load_commands()
+list_of_commands = ["GO","N","S","E","W","NORTH","SOUTH","EAST","WEST","GET","READ","OPEN", "HELP"]
 
 puzzle_piece_1 = GameObject.GameObject("puzzle piece", list_of_locations[0], True, True, False, "puzzle piece 1")
 hint1 = GameObject.GameObject("hint 1", list_of_locations[0], True, False, False, "hint #1")
