@@ -450,8 +450,6 @@ def get_location_to_north(current_location, door_open=False):
         return 7
     elif (current_location == 7):
         return 12
-    elif (current_location == 8):
-        return 11
     elif (current_location == 9):
         return 10
     elif (current_location == 15):
@@ -490,8 +488,6 @@ def get_location_to_south(current_location, door_open=False):
         return 3
     elif (current_location == 7):
         return 6
-    elif (current_location == 11):
-        return 8
     elif (current_location == 10):
         return 9
     elif (current_location == 12):
