@@ -33,6 +33,8 @@ refresh_objects_visible = True
 current_location = list_of_locations[0]
 end_of_game = False
 
+playing = False
+
 list_of_commands = locations.load_commands()
 
 puzzle_piece_1 = GameObject.GameObject("puzzle piece", list_of_locations[0], True, True, False, "puzzle piece 1")
@@ -844,9 +846,8 @@ def play_audio(filename, asynchronous = True, loop = True):
                            )
     elif (operating_system == 'darwin'):
         import os
-        sound_file = ""
-        path_to_file = 'res/sounds/{}'.format(sound_file)
-        os.system('afplay {}'.format(path_to_file))
+        while playing:
+            os.system('afplay res/audio/{}'.format(filename))
 
 
 def main():
