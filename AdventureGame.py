@@ -416,10 +416,26 @@ def set_current_image():
         image_label.img = ImageTk.PhotoImage(file='res/images/right_corner.tiff')
     elif (current_location == 12 or current_location == 19):
         image_label.img = ImageTk.PhotoImage(file ='res/images/left_corner.png')
-    elif current_location == 10 and not safe_open:
-        image_label.img = ImageTk.PhotoImage(file ='res/images/safe-closed.tiff')
-    elif safe_open and current_location == 10:
-        image_label.img = ImageTk.PhotoImage(file ='res/images/safe-open.tiff')
+    elif (current_location == 8):
+        image_label.img = ImageTk.PhotoImage(file='res/images/vault-1.tiff')
+    elif (current_location == 9):
+        image_label.img = ImageTk.PhotoImage(file='res/images/vault-2.tiff')
+    elif (current_location == 10):
+        if safe_open == True:
+            image_label.img = ImageTk.PhotoImage(file='res/images/safe-open.tiff')
+        elif safe_open and puzzle_piece_2.visible == False:
+            image_label.img = ImageTk.PhotoImage(file ='res/images/open-safe-no-piece.tiff')
+        else:
+            image_label.img = ImageTk.PhotoImage(file ='res/images/safe-closed.tiff')
+    elif (current_location == 11):
+        if gold_bar.visible and scroll_hint.visible:
+            image_label.img = ImageTk.PhotoImage(file='res/images/vault-4.tiff')
+        elif gold_bar.visible and not scroll_hint.visible:
+            image_label.img = ImageTk.PhotoImage(file='res/images/vault-4-no-hint.tiff')
+        elif scroll_hint.visible and not gold_bar.visible:
+            image_label.img = ImageTk.PhotoImage(file='res/images/vault-4-no-bar.tiff')
+        else:
+            image_label.img = ImageTk.PhotoImage(file='res/images/vault-4-no-bar-no-hint.tiff')
     else:
         image_label.img = PhotoImage(file ='res/images/missing.png')
         
@@ -758,6 +774,7 @@ def set_current_state():
         set_current_image()
     
     if (refresh_location or refresh_objects_visible):
+        set_current_image()
         describe_current_visible_objects()
 
     handle_special_condition()
