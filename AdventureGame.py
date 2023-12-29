@@ -129,7 +129,6 @@ def perform_get_command(object_name):
     else:
         print_to_description("You don't see one of those here!")
 
-# 
 def perform_put_command(object_name):
 
     global refresh_objects_visible
@@ -146,7 +145,7 @@ def perform_put_command(object_name):
             refresh_objects_visible = True
     else:
         print_to_description("You are not carrying one of those!")
-# 
+
 def perform_look_command(object_name):
 
     global sword_found
@@ -208,7 +207,7 @@ def perform_read_command(object_name):
             print_to_description("You're not carrying anything readable")
     else:
         print_to_description("I am not sure which " + object_name + "you are referring to")
-# 
+
 def perform_open_command(object_name):
 
     global door_open
