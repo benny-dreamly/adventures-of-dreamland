@@ -313,7 +313,7 @@ def perform_unlock_command(object_name):
         if game_object == safe and (game_object.visible and game_object.location == current_location):
             while not safe_open:
                 code = simpledialog.askinteger("Code", "What is the code to the safe?", parent=root)
-                if code != 32378:
+                if code != 16378:
                     print_to_description("Benny tries your code, but the safe won't open.")
                     answer = simpledialog.askstring("Input", "Would you like to try again?", parent=root)
                     if answer == "No":
@@ -416,9 +416,9 @@ def set_current_image():
     elif (current_location == 12 or current_location == 19):
         image_label.img = ImageTk.PhotoImage(file ='res/images/left_corner.png')
     elif current_location == 10 and not safe_open:
-        image_label.img = ImageTk.PhotoImage(file ='res/images/safe-room-temp.tiff')
+        image_label.img = ImageTk.PhotoImage(file ='res/images/safe-closed.tiff')
     elif safe_open and current_location == 10:
-        image_label.img = ImageTk.PhotoImage(file ='res/images/open-safe-temp.tiff')
+        image_label.img = ImageTk.PhotoImage(file ='res/images/safe-open.tiff')
     else:
         image_label.img = PhotoImage(file ='res/images/missing.png')
         
