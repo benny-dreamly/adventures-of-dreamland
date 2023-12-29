@@ -1,4 +1,6 @@
 __pycache__
 .idea
 .DS_STORE
-adventures-of-dreamland-story.rtf
+build
+dist
+AdventureGame.spec
