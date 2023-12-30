@@ -87,6 +87,7 @@ list_of_commands = ["GO","N","S","E","W","NORTH","SOUTH","EAST","WEST","GET","RE
 puzzle_piece_1 = GameObject.GameObject("puzzle piece", list_of_locations[0], True, True, False, "puzzle piece 1")
 hint1 = GameObject.GameObject("hint 1", list_of_locations[0], True, False, False, "hint #1")
 clue1 = GameObject.GameObject("clue 1", list_of_locations[1], True, False, False, "clue #1")
+clue11 = GameObject.GameObject("clue 1.5", list_of_locations[1], True, False, False, "clue #1.5")
 clue2 = GameObject.GameObject("clue 2", list_of_locations[2], True, False, False, "clue #2 (ONLY READ ONCE HINT 1 IS SOLVED)")
 puzzle = GameObject.GameObject("puzzle", list_of_locations[2], True, True, False, "puzzle")
 puzzle_with_one_piece_inserted = GameObject.GameObject("puzzle (1/9)", puzzle, True, False, False, "puzzle")
@@ -131,6 +132,8 @@ def perform_command(verb, noun):
         perform_solve_command(noun)
     elif (verb == "UNLOCK"):
         perform_unlock_command(noun)
+    elif (verb == "DECIPHER"):
+        perform_decipher_command(noun)
     else:
         print_to_description("unknown command")
         
@@ -252,6 +255,10 @@ def perform_read_command(object_name):
         elif game_object == gold_bar:
             if gold_bar.carried:
                 print_to_description("Coins, Minerals, Gold, Silver")
+        elif game_object == clue11:
+            if clue11.carried:
+                print_to_description("clue #1.5:")
+                print_to_description("Still having trouble figuring out how to decipher the hint? I don't blame you, it would require some knowledge that only super nerdy people have. Luckily for you, there exists a way to do it for you. Your clue is the word decipher.")
         else:
             print_to_description("You're not carrying anything readable")
     else:
@@ -373,6 +380,26 @@ def perform_unlock_command(object_name):
             print_to_description("You can't unlock that!")
     else:
         print_to_description("There's nothing to unlock.")
+        
+def perform_decipher_command(message):
+    message = message.upper()
+    alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    result = ""
+    
+    key = simpledialog.askinteger("Key", "What would you like to use to decipher the message?", parent=root)
+    
+    for letter in message:
+        if letter in alpha: #if the letter is actually a letter
+            #find the corresponding ciphertext letter in the alphabet
+            letter_index = (alpha.find(letter) - key) % len(alpha)
+
+            result = result + alpha[letter_index]
+        else:
+            result = result + letter
+
+    print_to_description("Deciphered message:")
+    print_to_description(result)
+
 def show_scroll_image():
 
     popup = tkinter.Toplevel(root)
@@ -697,6 +724,7 @@ def describe_current_visible_objects():
         clue1.visible = True
 
     if clue1.carried:
+        clue11.visible = True
         clue2.visible = True
 
     if gold_bar.carried:
