@@ -380,25 +380,41 @@ def perform_unlock_command(object_name):
             print_to_description("You can't unlock that!")
     else:
         print_to_description("There's nothing to unlock.")
-        
+
+
 def perform_decipher_command(message):
     message = message.upper()
     alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     result = ""
-    
+
     key = simpledialog.askinteger("Key", "What would you like to use to decipher the message?", parent=root)
-    
+
     for letter in message:
-        if letter in alpha: #if the letter is actually a letter
-            #find the corresponding ciphertext letter in the alphabet
+        if letter in alpha:  # if the letter is actually a letter
+            # find the corresponding ciphertext letter in the alphabet
             letter_index = (alpha.find(letter) - key) % len(alpha)
 
             result = result + alpha[letter_index]
         else:
             result = result + letter
 
+    rectified_result = rectify_case(result)
     print_to_description("Deciphered message:")
-    print_to_description(result)
+    print_to_description(rectified_result)
+
+def rectify_case(input_text):
+    rectified_text = ""
+    reference_text = simpledialog.askstring("Reference", "Please input the text you wanted to decipher.", parent=root)
+    for idx, char in enumerate(input_text):
+        if idx < len(reference_text):
+            if reference_text[idx].isupper():
+                rectified_text += char.upper()
+            else:
+                rectified_text += char.lower()
+        else:
+            rectified_text += char.lower()  # Handles any extra characters in the input
+
+    return rectified_text
 
 def show_scroll_image():
 
