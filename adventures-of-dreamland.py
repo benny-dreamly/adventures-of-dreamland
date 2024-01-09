@@ -84,10 +84,10 @@ playing = False
 
 list_of_commands = ["GO","N","S","E","W","NORTH","SOUTH","EAST","WEST","GET","READ","OPEN", "HELP"]
 
-puzzle_piece_1 = GameObject.GameObject("puzzle piece", list_of_locations[0], True, True, False, "puzzle piece 1")
+puzzle_piece_1 = GameObject.GameObject("puzzle piece 1", list_of_locations[0], True, True, False, "puzzle piece 1")
 hint1 = GameObject.GameObject("hint 1", list_of_locations[0], True, False, False, "hint #1")
 clue1 = GameObject.GameObject("clue 1", list_of_locations[1], True, False, False, "clue #1")
-clue11 = GameObject.GameObject("clue 1.5", list_of_locations[1], True, False, False, "clue #1.5")
+clue11 = GameObject.GameObject("clue 1-2", list_of_locations[0], True, False, False, "clue #1.5")
 clue2 = GameObject.GameObject("clue 2", list_of_locations[2], True, False, False, "clue #2 (ONLY READ ONCE HINT 1 IS SOLVED)")
 puzzle = GameObject.GameObject("puzzle", list_of_locations[2], True, True, False, "puzzle")
 puzzle_with_one_piece_inserted = GameObject.GameObject("puzzle (1/9)", puzzle, True, False, False, "puzzle")
@@ -105,8 +105,13 @@ scroll_hint = GameObject.GameObject("hint", list_of_locations[10], True, True, F
 safe = GameObject.GameObject("safe", list_of_locations[9], False, True, False, "a small safe")
 gold_bar = GameObject.GameObject("gold bar", list_of_locations[10], True, True, False, "a gold bar with an engraving in it")
 bar_clue = GameObject.GameObject("clue", list_of_locations[10], True, False, False, "clue")
-puzzle_piece_2 = GameObject.GameObject("puzzle piece", list_of_locations[10], True, False, False, "puzzle piece 2")
-game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue2, puzzle, puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, kp1, kp2, kp3, kp4, kp5, kp6, kp7, key, scroll, safe, gold_bar, bar_clue]
+puzzle_piece_2 = GameObject.GameObject("puzzle piece 2", list_of_locations[9], True, False, False, "puzzle piece 2")
+game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue11, clue2, puzzle, puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, kp1, kp2, kp3, kp4, kp5, kp6, kp7, key, scroll, safe, gold_bar, bar_clue]
+
+current_location = 10
+scroll.carried = True
+scroll_hint.carried = True
+puzzle_with_one_piece_inserted.carried = True
 
 def perform_command(verb, noun):
     
@@ -255,6 +260,9 @@ def perform_read_command(object_name):
         elif game_object == gold_bar:
             if gold_bar.carried:
                 print_to_description("Coins, Minerals, Gold, Silver")
+        elif game_object == bar_clue:
+            if bar_clue.carried:
+                print_to_description("sounds like you've found a code!")
         elif game_object == clue11:
             if clue11.carried:
                 print_to_description("clue #1.5:")
@@ -294,7 +302,7 @@ def perform_solve_command(object_name):
             answer = simpledialog.askstring("Input", "What would you like to put in the puzzle first?", parent=root)
             if not puzzle_piece_1.carried:
                 print_to_description("It looks like you don't have anything to put into the puzzle.")
-            elif (answer != "puzzle piece"):
+            elif (answer != "puzzle piece 1"):
                 print_to_description("Unfortunately, it looks like it doesn't fit in the puzzle.")
             else:
                 puzzle_piece_inserted = False
@@ -312,11 +320,11 @@ def perform_solve_command(object_name):
                 game_object.carried = False
                 puzzle_with_one_piece_inserted.carried = True
                 refresh_objects_visible = True
-        if game_object.carried and game_object == puzzle_with_one_piece_inserted:
+        elif game_object.carried and game_object == puzzle_with_one_piece_inserted:
             answer = simpledialog.askstring("Input", "What would you like to put in the puzzle next?", parent=root)
             if not puzzle_piece_2.carried:
                 print_to_description("It looks like you don't have anything to put into the puzzle.")
-            elif (answer != "puzzle piece"):
+            elif (answer != "puzzle piece 2"):
                 print_to_description("Unfortunately, it looks like it doesn't fit in the puzzle.")
             else:
                 puzzle_piece_inserted = False
@@ -333,6 +341,7 @@ def perform_solve_command(object_name):
                     puzzle_piece_2.carried = False
                     game_object.carried = False
                     puzzle_with_two_pieces_inserted.carried = True
+                    puzzle_piece_2.visible = False
                     refresh_objects_visible = True
             #print_to_description("the puzzle collapses into a key piece for you.")
             #kp1.carried = True
@@ -363,6 +372,7 @@ def perform_fuse_command(object_name):
 
 def perform_unlock_command(object_name):
     global safe_open
+    global refresh_objects_visible
     game_object = get_game_object(object_name)
     if not (game_object is None):
         if game_object == safe and (game_object.visible and game_object.location == current_location):
@@ -376,6 +386,7 @@ def perform_unlock_command(object_name):
                 else:
                     print_to_description("The code you provided Benny with worked! The safe is now unlocked.")
                     safe_open = True
+            refresh_objects_visible = True
         else:
             print_to_description("You can't unlock that!")
     else:
@@ -385,7 +396,7 @@ def perform_unlock_command(object_name):
 def perform_decipher_command(message):
     message = message.upper()
     alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    result = ""
+    deciphered_message = ""
 
     key = simpledialog.askinteger("Key", "What would you like to use to decipher the message?", parent=root)
 
@@ -394,13 +405,13 @@ def perform_decipher_command(message):
             # find the corresponding ciphertext letter in the alphabet
             letter_index = (alpha.find(letter) - key) % len(alpha)
 
-            result = result + alpha[letter_index]
+            deciphered_message = deciphered_message + alpha[letter_index]
         else:
-            result = result + letter
+            deciphered_message = deciphered_message + letter
 
-    rectified_result = rectify_case(result)
+    rectified_message = rectify_case(deciphered_message)
     print_to_description("Deciphered message:")
-    print_to_description(rectified_result)
+    print_to_description(rectified_message)
 
 def rectify_case(input_text):
     rectified_text = ""
@@ -512,9 +523,12 @@ def set_current_image():
         image_label.img = ImageTk.PhotoImage(file='res/images/vault-2.tiff')
     elif (current_location == 10):
         if safe_open == True:
-            image_label.img = ImageTk.PhotoImage(file='res/images/safe-open.tiff')
-        elif safe_open and puzzle_piece_2.visible == False:
-            image_label.img = ImageTk.PhotoImage(file ='res/images/open-safe-no-piece.tiff')
+            if puzzle_piece_2.visible:
+                image_label.img = ImageTk.PhotoImage(file='res/images/safe-open.tiff')
+            elif puzzle_piece_2.carried and not puzzle_with_two_pieces_inserted.carried:
+                image_label.img = ImageTk.PhotoImage(file='res/images/open-safe-no-piece.tiff')
+            else:
+                unused_variable = 1+1
         else:
             image_label.img = ImageTk.PhotoImage(file ='res/images/safe-closed.tiff')
     elif (current_location == 11):
@@ -741,12 +755,14 @@ def describe_current_visible_objects():
 
     if clue1.carried:
         clue11.visible = True
+
+    if clue11.carried:
         clue2.visible = True
 
     if gold_bar.carried:
         bar_clue.visible = True
 
-    if safe_open:
+    if safe_open and not puzzle_with_two_pieces_inserted.carried:
         puzzle_piece_2.visible = True
 
     for current_object in game_objects:
