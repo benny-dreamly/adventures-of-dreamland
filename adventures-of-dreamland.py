@@ -90,8 +90,6 @@ playing = False
 
 list_of_commands = ["GO","N","S","E","W","NORTH","SOUTH","EAST","WEST","GET","READ","OPEN", "HELP"]
 
-# Object Definitions
-
 puzzle_piece_1 = GameObject.GameObject("puzzle piece 1", list_of_locations[0], True, True, False, "puzzle piece 1")
 hint1 = GameObject.GameObject("hint 1", list_of_locations[0], True, False, False, "hint #1")
 clue1 = GameObject.GameObject("clue 1", list_of_locations[1], True, False, False, "clue #1")
@@ -116,7 +114,6 @@ bar_clue = GameObject.GameObject("clue", list_of_locations[10], True, False, Fal
 puzzle_piece_2 = GameObject.GameObject("puzzle piece 2", list_of_locations[9], True, False, False, "puzzle piece 2")
 game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue11, clue2, puzzle, puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, kp1, kp2, kp3, kp4, kp5, kp6, kp7, key, scroll, safe, gold_bar, bar_clue]
 
-# commands (possibly need to get rid of solutions in the code, but don't exactly know how to do that)
 def perform_command(verb, noun):
     
     if (verb == "GO"):
@@ -125,11 +122,11 @@ def perform_command(verb, noun):
         perform_go_command(verb)        
     elif ((verb == "NORTH") or (verb == "SOUTH") or (verb == "EAST") or (verb == "WEST")):
         perform_go_command(verb)        
-    elif (verb == "GET"):
+    elif verb == "GET" or verb == "TAKE" or verb == "GRAB":
         perform_get_command(noun)
-    elif (verb == "PUT"):
+    elif verb == "PUT" or verb == "DROP":
         perform_put_command(noun)
-    elif (verb == "LOOK"):
+    elif verb == "LOOK" or verb == "INVESTIGATE":
         perform_look_command(noun)
     elif (verb == "READ"):
         perform_read_command(noun)        
@@ -430,8 +427,6 @@ def rectify_case(input_text):
 
     return rectified_text
 
-#Location Descriptions
-
 def describe_current_location(current_location):
     if (current_location == 1):
         print_to_description(location_names[0])
@@ -496,8 +491,6 @@ def describe_current_location(current_location):
     else:
         print_to_description("unknown location:" + current_location)
 
-# Image Handling
-
 def set_current_image():
     
     if (current_location == 1):
@@ -559,8 +552,6 @@ def show_scroll_hint_image():
     label = tkinter.Label(popup, image=img)
     label.image = img  # Keep a reference to the image to prevent garbage collection
     label.pack()
-
-# Movement
 
 def get_location_to_north(current_location):
     if (current_location == 3):
@@ -724,8 +715,6 @@ def get_location_to_west(current_location):
     else:
         return 0
 
-# Inventory Management
-
 def describe_current_inventory():
     
     object_count = 0
@@ -743,8 +732,6 @@ def describe_current_inventory():
     inventory_widget.insert(1.0, inventory)
     inventory_widget.config(state = "disabled")
 
-# Special Condiitons
-
 def handle_special_condition():
     
     global end_of_game
@@ -753,8 +740,6 @@ def handle_special_condition():
         print_to_description("GAME OVER")
         end_of_game = True
 
-# Object Management
-
 def get_game_object(object_name):
     sought_object = None
     for current_object in game_objects:
@@ -762,7 +747,6 @@ def get_game_object(object_name):
             sought_object = current_object
             break
     return sought_object
-
 
 def describe_current_visible_objects():
     object_count = 0
@@ -793,8 +777,6 @@ def describe_current_visible_objects():
             object_count = object_count + 1
 
     print_to_description("Benny sees " + (object_list + "." if object_count > 0 else "nothing special."))
-
-# Interface + Dynamic Window Resizing
 
 def build_interface():
     
@@ -913,8 +895,6 @@ def set_current_state():
     
     command_widget.config(state = ("disabled" if end_of_game else "normal"))
 
-# Buttons and Input
-
 def north_button_click():
     print_to_description("N", True)
     perform_command("NORTH", "")
@@ -960,8 +940,6 @@ def set_directions_to_move():
     east_button.config(state = ("normal" if move_to_east else "disabled"))
     west_button.config(state = ("normal" if move_to_west else "disabled"))
 
-# Descriptions
-
 def print_to_description(output, user_input=False):
     description_widget.config(state = 'normal')
     description_widget.insert(END, output)
@@ -971,8 +949,6 @@ def print_to_description(output, user_input=False):
     description_widget.insert(END, '\n')
     description_widget.config(state = 'disabled')
     description_widget.see(END)
-
-# Audio
 
 def play_audio(filename, asynchronous = True, loop = True):
 
@@ -996,7 +972,6 @@ def play_audio(filename, asynchronous = True, loop = True):
         import os
         while playing:
             os.system('afplay res/audio/{}'.format(filename))
-
 
 def main():
     
