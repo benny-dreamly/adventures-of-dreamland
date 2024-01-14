@@ -90,6 +90,8 @@ playing = False
 
 list_of_commands = ["GO","N","S","E","W","NORTH","SOUTH","EAST","WEST","GET","READ","OPEN", "HELP"]
 
+# Object Definitions
+
 puzzle_piece_1 = GameObject.GameObject("puzzle piece 1", list_of_locations[0], True, True, False, "puzzle piece 1")
 hint1 = GameObject.GameObject("hint 1", list_of_locations[0], True, False, False, "hint #1")
 clue1 = GameObject.GameObject("clue 1", list_of_locations[1], True, False, False, "clue #1")
@@ -114,6 +116,7 @@ bar_clue = GameObject.GameObject("clue", list_of_locations[10], True, False, Fal
 puzzle_piece_2 = GameObject.GameObject("puzzle piece 2", list_of_locations[9], True, False, False, "puzzle piece 2")
 game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue11, clue2, puzzle, puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, kp1, kp2, kp3, kp4, kp5, kp6, kp7, key, scroll, safe, gold_bar, bar_clue]
 
+# commands (possibly need to get rid of solutions in the code, but don't exactly know how to do that)
 def perform_command(verb, noun):
     
     if (verb == "GO"):
@@ -427,25 +430,7 @@ def rectify_case(input_text):
 
     return rectified_text
 
-def show_scroll_image():
-
-    popup = tkinter.Toplevel(root)
-
-    img = PhotoImage(file="res/images/scroll_scaled.png")
-
-    label = tkinter.Label(popup, image=img)
-    label.image = img  # Keep a reference to the image to prevent garbage collection
-    label.pack()
-
-def show_scroll_hint_image():
-
-    popup = tkinter.Toplevel(root)
-
-    img = PhotoImage(file="res/images/scroll_key.png")
-
-    label = tkinter.Label(popup, image=img)
-    label.image = img  # Keep a reference to the image to prevent garbage collection
-    label.pack()
+#Location Descriptions
 
 def describe_current_location(current_location):
     if (current_location == 1):
@@ -511,6 +496,8 @@ def describe_current_location(current_location):
     else:
         print_to_description("unknown location:" + current_location)
 
+# Image Handling
+
 def set_current_image():
     
     if (current_location == 1):
@@ -553,7 +540,29 @@ def set_current_image():
         
     image_label.config(image = image_label.img)
 
-def get_location_to_north(current_location, door_open=False):
+def show_scroll_image():
+
+    popup = tkinter.Toplevel(root)
+
+    img = PhotoImage(file="res/images/scroll_scaled.png")
+
+    label = tkinter.Label(popup, image=img)
+    label.image = img  # Keep a reference to the image to prevent garbage collection
+    label.pack()
+
+def show_scroll_hint_image():
+
+    popup = tkinter.Toplevel(root)
+
+    img = PhotoImage(file="res/images/scroll_key.png")
+
+    label = tkinter.Label(popup, image=img)
+    label.image = img  # Keep a reference to the image to prevent garbage collection
+    label.pack()
+
+# Movement
+
+def get_location_to_north(current_location):
     if (current_location == 3):
         return 2
     elif (current_location == 2):
@@ -593,7 +602,7 @@ def get_location_to_north(current_location, door_open=False):
     else:
         return 0
 
-def get_location_to_south(current_location, door_open=False):
+def get_location_to_south(current_location):
     if (current_location == 1):
         return 2
     elif (current_location == 2):
@@ -630,13 +639,12 @@ def get_location_to_south(current_location, door_open=False):
         return 31
     elif (current_location == 33):
         return 34
-    elif (current_location == 31 and door_open == True):
+    elif (current_location == 31 and door_open):
         return 35
     else:
         return 0
 
-
-def get_location_to_east(current_location, door_open=False):
+def get_location_to_east(current_location):
     if (current_location == 3):
         return 4
     elif (current_location == 4):
@@ -676,8 +684,7 @@ def get_location_to_east(current_location, door_open=False):
     else:
         return 0
 
-
-def get_location_to_west(current_location, door_open=False):
+def get_location_to_west(current_location):
     if (current_location == 4):
         return 3
     elif (current_location == 5):
@@ -717,6 +724,8 @@ def get_location_to_west(current_location, door_open=False):
     else:
         return 0
 
+# Inventory Management
+
 def describe_current_inventory():
     
     object_count = 0
@@ -734,6 +743,8 @@ def describe_current_inventory():
     inventory_widget.insert(1.0, inventory)
     inventory_widget.config(state = "disabled")
 
+# Special Condiitons
+
 def handle_special_condition():
     
     global end_of_game
@@ -741,6 +752,8 @@ def handle_special_condition():
     if (False):
         print_to_description("GAME OVER")
         end_of_game = True
+
+# Object Management
 
 def get_game_object(object_name):
     sought_object = None
@@ -780,6 +793,8 @@ def describe_current_visible_objects():
             object_count = object_count + 1
 
     print_to_description("Benny sees " + (object_list + "." if object_count > 0 else "nothing special."))
+
+# Interface + Dynamic Window Resizing
 
 def build_interface():
     
@@ -851,7 +866,6 @@ def build_interface():
     else:
         inventory_widget.grid(row=2, column=2, rowspan = 2, padx = 2, pady = 2,sticky=W)
 
-
 def on_window_resize(event):
     global button_frame
 
@@ -899,6 +913,8 @@ def set_current_state():
     
     command_widget.config(state = ("disabled" if end_of_game else "normal"))
 
+# Buttons and Input
+
 def north_button_click():
     print_to_description("N", True)
     perform_command("NORTH", "")
@@ -944,6 +960,8 @@ def set_directions_to_move():
     east_button.config(state = ("normal" if move_to_east else "disabled"))
     west_button.config(state = ("normal" if move_to_west else "disabled"))
 
+# Descriptions
+
 def print_to_description(output, user_input=False):
     description_widget.config(state = 'normal')
     description_widget.insert(END, output)
@@ -953,6 +971,8 @@ def print_to_description(output, user_input=False):
     description_widget.insert(END, '\n')
     description_widget.config(state = 'disabled')
     description_widget.see(END)
+
+# Audio
 
 def play_audio(filename, asynchronous = True, loop = True):
 

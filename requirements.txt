@@ -1,0 +1,4 @@
+# These are the required packages for the adventure game to work.
+# Most of the implementation uses the default python library, but does require one extra package, so if you'd like to use this on your own, you do need this library.
+
+Pillow~=10.1.0
