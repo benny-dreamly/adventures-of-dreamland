@@ -188,17 +188,14 @@ game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue1
 
 
 def perform_command(verb, noun):
-    if verb == "GO":
-        perform_go_command(noun)
-    elif (verb == "N") or (verb == "S") or (verb == "E") or (verb == "W") or (verb == "A") or (verb == "D"):
+
+    if verb in ["GO", "N", "S", "E", "W", "A", "D", "NORTH", "SOUTH", "EAST", "WEST"]:
         perform_go_command(verb)
-    elif (verb == "NORTH") or (verb == "SOUTH") or (verb == "EAST") or (verb == "WEST"):
-        perform_go_command(verb)
-    elif verb == "GET" or verb == "TAKE" or verb == "GRAB":
+    elif verb in ["GET", "TAKE", "GRAB"]:
         perform_get_command(noun)
-    elif verb == "PUT" or verb == "DROP":
+    elif verb in ["PUT", "DROP"]:
         perform_put_command(noun)
-    elif verb == "LOOK" or verb == "INVESTIGATE":
+    elif verb in ["LOOK", "INVESTIGATE"]:
         perform_look_command(noun)
     elif verb == "READ":
         perform_read_command(noun)
@@ -220,13 +217,13 @@ def perform_go_command(direction):
     global current_location
     global refresh_location
 
-    if direction == "N" or direction == "NORTH" or direction == "W":
+    if direction in ["N", "NORTH", "W"]:
         new_location = get_location_to_north(current_location)
-    elif direction == "S" or direction == "SOUTH":
+    elif direction in ["S", "SOUTH"]:
         new_location = get_location_to_south(current_location)
-    elif direction == "E" or direction == "EAST" or direction == "D":
+    elif direction in ["E", "EAST", "D"]:
         new_location = get_location_to_east(current_location)
-    elif direction == "W" or direction == "WEST" or direction == "A":
+    elif direction in ["W", "WEST", "A"]:
         new_location = get_location_to_west(current_location)
     else:
         new_location = 0
