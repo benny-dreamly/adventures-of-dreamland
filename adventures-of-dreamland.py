@@ -2,6 +2,7 @@ import tkinter
 from tkinter import *
 from tkinter import ttk
 from tkinter import simpledialog
+import textwrap
 from PIL import ImageTk, Image
 import GameObject
 
@@ -48,25 +49,82 @@ location_names = [
     "zone 9, room 2"
 ]
 location_descriptions = [
-    "Benny wakes up in a dark room. He realizes that Fala and Nodo have locked him in the castle jail. Unfortunately, it seems like the great evil has possessed them and decided to lock him up for good. Luckily for him, the guards may have forgotten to lock the cell door behind them!\n\nThe room looks dilapidated, like nobody’s bothered to maintain it since there hasn’t been any prisoners for years. Cobwebs are scattered around the room, and it looks like the cell is bigger than he thought. There’s a table in the corner, with an old looking scroll that might be made from papyrus. Under the table, he can see a puzzle piece. It seems like the hidden puzzles he heard about when he was being transported into the cell were real. He might have a shot at escaping.\n",
-    "Unfortunately for Benny, in the next room he can’t see anything obvious. He thinks he might have to come back later in case there’s something hidden in the room that he can’t see right now. It feels like there might be something hidden in this room.\n",
-    "Benny realizes that this cell he’s in right now is really big. It still looks about the same as the other two rooms, lots of cobwebs and some various scattered furniture pieces. This room seems special, though. There’s a pedestal in the middle with a puzzle on it? Yep. Looks like a puzzle. Maybe this will help him escape?\n",
-    "Benny finds himself in a hallway, that doesn’t quite seem to have an end to it. He thinks nothing of it, as it appears just to be a hallway.\n",
-    "Still looks like a hallway.\n",
-    "At last, Benny finds a turn in the corridor. Maybe he’ll find something hidden in the next room?\n",
-    "Benny is still in a hallway, but it looks like he’s finally getting somewhere. He can see a room to his left. Maybe he should investigate it?\n",
-    "Benny finds himself in another room. It looks like it could be one of the vaults? Nope, just seems to look like some storage. Possibly an office? Nevermind, it really does look like one of the castle vaults. The dark and dingy brick hallways have been replaced with nice wood floors and well kept bricks instead. There’s a small counter in the room, which looks like it could have been used by someone that was keeping track of the items in the vault. It seems that there’s also some space behind the counter that seems to lead into another room.\n",
-    "Benny finds a little room with some shelves behind the counter, with a small box one of the shelves. There seems to be a room beside this one that looks to be the actual vault with all of the important valuables in it. No locked door or anything on the actual vault area either. Super strange when you consider there’s probably lots of fairly expensive items in it.\n",
-    "Benny finds himself in the actual heart of the vault. It looks like there’s lots of shelves with various precious minerals and lots of coins on the floor. He sees a small safe on one of the shelves, and it looks like he can open it. Unfortunately for him, he doesn’t yet have the combination for the safe. Maybe it will show itself in the next room?\n",
-    "There seems to be lots of gold and silver in this room too, but the Dream Diamond and lots of the kingdom’s valuables he’s recovered in the past are also in this part of the vault. Maybe there’s something important in here? \n\nOh look at that, he’s found a small engraving on one of the gold bars. Maybe he can grab it? There also seems to be a little piece of paper in the corner.\n",
-    "Benny finds himself at another corner, this time it’s a right turn. There sure is a very long hallway in this castle basement.\n"
-    "Benny is still in a straight hallway, how long even is this?\n",
-    "How can there be such a long hallway? It feels impractical.\n",
-    "It's yet another straight hallway... Why?\n",
-    "This hallway feels endless. When will it end?\n",
-    "Benny has finally arrived at yet another corner, this time it's another right turn... maybe this is the end of the hallway?\n",
-    "At last, there seems to be a fork in the road, Benny can keep going straight into another room, or go right into yet another room. Which room will he choose to investigate?\n"
+    textwrap.dedent('''\
+        Benny wakes up in a dark room. He realizes that Fala and Nodo have locked him in the castle jail. 
+        Unfortunately, it seems like the great evil has possessed them and decided to lock him up for good. Luckily for 
+        him, the guards may have forgotten to lock the cell door behind them!
+
+        The room looks dilapidated, like nobody’s bothered to maintain it since there hasn’t been any prisoners for years. 
+        Cobwebs are scattered around the room, and it looks like the cell is bigger than he thought. There’s a table in the 
+        corner, with an old looking scroll that might be made from papyrus. Under the table, he can see a puzzle piece. 
+        It seems like the hidden puzzles he heard about when he was being transported into the cell were real. 
+        He might have a shot at escaping.
+    '''),
+    textwrap.dedent('''\
+        Unfortunately for Benny, in the next room he can’t see anything obvious. He thinks he might have to come back 
+        later in case there’s something hidden in the room that he can’t see right now. It feels like there might be 
+        something hidden in this room.
+    '''),
+    textwrap.dedent('''\
+        Benny realizes that this cell he’s in right now is really big. It still looks about the same as the other two 
+        rooms, lots of cobwebs and some various scattered furniture pieces. This room seems special, though. There’s a 
+        pedestal in the middle with a puzzle on it? Yep. Looks like a puzzle. Maybe this will help him escape?
+    '''),
+    textwrap.dedent('''\
+        Benny finds himself in a hallway, that doesn’t quite seem to have an end to it. He thinks nothing of it, 
+        as it appears just to be a hallway.
+    '''),
+    textwrap.dedent("Still looks like a hallway.\n"),
+    textwrap.dedent(
+        "At last, Benny finds a turn in the corridor. Maybe he’ll find something hidden in the next room?\n"),
+    textwrap.dedent('''\
+        Benny is still in a hallway, but it looks like he’s finally getting somewhere. He can see a room to his left. 
+        Maybe he should investigate it?
+    '''),
+    textwrap.dedent('''\
+        Benny finds himself in another room. It looks like it could be one of the vaults? Nope, just seems to look 
+        like some storage. Possibly an office? Nevermind, it really does look like one of the castle vaults. The dark and 
+        dingy brick hallways have been replaced with nice wood floors and well kept bricks instead. There’s a small 
+        counter in the room, which looks like it could have been used by someone that was keeping track of the items in 
+        the vault. It seems that there’s also some space behind the counter that seems to lead into another room.
+    '''),
+    textwrap.dedent('''\
+        Benny finds a little room with some shelves behind the counter, with a small box one of the shelves. There 
+        seems to be a room beside this one that looks to be the actual vault with all of the important valuables in it. 
+        No locked door or anything on the actual vault area either. Super strange when you consider there’s probably lots 
+        of fairly expensive items in it.
+    '''),
+    textwrap.dedent('''\
+        Benny finds himself in the actual heart of the vault. It looks like there’s lots of shelves with various 
+        precious minerals and lots of coins on the floor. He sees a small safe on one of the shelves, and it looks like 
+        he can open it. Unfortunately for him, he doesn’t yet have the combination for the safe. Maybe it will show 
+        itself in the next room?
+    '''),
+    textwrap.dedent('''\
+        There seems to be lots of gold and silver in this room too, but the Dream Diamond and lots of the kingdom’s 
+        valuables he’s recovered in the past are also in this part of the vault. Maybe there’s something important in 
+        here?
+
+        Oh look at that, he’s found a small engraving on one of the gold bars. Maybe he can grab it? There also 
+        seems to be a little piece of paper in the corner.
+    '''),
+    textwrap.dedent('''\
+        Benny finds himself at another corner, this time it’s a right turn. There sure is a very long hallway in this 
+        castle basement.
+    '''),
+    textwrap.dedent("Benny is still in a straight hallway, how long even is this?\n"),
+    textwrap.dedent("How can there be such a long hallway? It feels impractical.\n"),
+    textwrap.dedent("It's yet another straight hallway... Why?\n"),
+    textwrap.dedent("This hallway feels endless. When will it end?\n"),
+    textwrap.dedent('''\
+        Benny has finally arrived at yet another corner, this time it's another right turn... maybe this is the end of 
+        the hallway?\n'''),
+    textwrap.dedent('''\
+        At last, there seems to be a fork in the road, Benny can keep going straight into another room, or go right 
+        into yet another room. Which room will he choose to investigate?\n
+    ''')
 ]
+
 
 command_widget = None
 image_label = None
@@ -257,8 +315,9 @@ def perform_read_command(object_name):
         if game_object == hint1:
             if hint1.carried:
                 print_to_description("hint #1:")
-                print_to_description(
-                    "Bw xcb bpm xchhtm xqmkm qv bpm xchhtm, gwc vmml bw xcb qb qv bpm xchhtm. Gwc uig ias: Pwe lw Q xcb bpm xqmkm qv bpm xchhtm? Zmil pqvb 2 bw nqoczm wcb pwe bw xcb bpm xchhtm xqmkm qv bpm nqzab xchhtm.")
+                print_to_description('''Bw xcb bpm xchhtm xqmkm qv bpm xchhtm, gwc vmml bw xcb qb qv bpm xchhtm. Gwc 
+                uig ias: Pwe lw Q xcb bpm xqmkm qv bpm xchhtm? Zmil pqvb 2 bw nqoczm wcb pwe bw xcb bpm xchhtm xqmkm 
+                qv bpm nqzab xchhtm.''')
         elif game_object == clue1:
             if clue1.carried:
                 print_to_description("clue #1:")
@@ -268,7 +327,8 @@ def perform_read_command(object_name):
             if clue2.carried:
                 print_to_description("clue #2:")
                 print_to_description(
-                    "Still confused after deciphering the first hint? I don't blame you. To progress, you need to SOLVE the puzzle.")
+                    '''Still confused after deciphering the first hint? I don't blame you. To progress, you need to 
+                    SOLVE the puzzle.''')
         elif game_object == scroll:
             if scroll.carried:
                 show_scroll_image()
@@ -285,7 +345,9 @@ def perform_read_command(object_name):
             if clue11.carried:
                 print_to_description("clue #1.5:")
                 print_to_description(
-                    "Still having trouble figuring out how to decipher the hint? I don't blame you, it would require some knowledge that only super nerdy people have. Luckily for you, there exists a way to do it for you. Your clue is the word decipher.")
+                    '''Still having trouble figuring out how to decipher the hint? I don't blame you, it would 
+                    require some knowledge that only super nerdy people have. Luckily for you, there exists a way to 
+                    do it for you. Your clue is the word decipher.''')
         else:
             print_to_description("You're not carrying anything readable")
     else:
@@ -377,16 +439,11 @@ def perform_solve_command(object_name):
 def perform_fuse_command(object_name):
     game_object = get_game_object(object_name)
     if not (game_object is None):
-        if game_object.carried and game_object == kp1 and kp2.carried and kp3.carried and kp4.carried and kp5.carried and kp6.carried and kp7.carried and game_object.fuseable:
-            print_to_description(
-                "The key pieces start glowing, as if you've awakened their ancient powers. One by one, they slowly start forming an actual key.")
-            game_object.carried = False
-            kp2.carried = False
-            kp3.carried = False
-            kp4.carried = False
-            kp5.carried = False
-            kp6.carried = False
-            kp7.carried = False
+        if all(obj.carried for obj in [game_object, kp1, kp2, kp3, kp4, kp5, kp6, kp7]) and game_object.fuseable:
+            print_to_description('''The key pieces start glowing, as if you've awakened their ancient powers. One by 
+            one, they slowly start forming an actual key.''')
+            for obj in [game_object, kp2, kp3, kp4, kp5, kp6, kp7]:
+                obj.carried = False
             key.visible = True
             key.location = current_location
             perform_command("GET", "KEY")
@@ -456,109 +513,38 @@ def rectify_case(input_text):
 
 
 def describe_current_location(current_location):
-    if current_location == 1:
-        print_to_description(location_names[0])
-        print_to_description(location_descriptions[0])
-    elif current_location == 2:
-        print_to_description(location_names[1])
-        print_to_description(location_descriptions[1])
-    elif current_location == 3:
-        print_to_description(location_names[2])
-        print_to_description(location_descriptions[2])
-    elif current_location == 4:
-        print_to_description(location_names[3])
-        print_to_description(location_descriptions[3])
-    elif current_location == 5:
-        print_to_description(location_names[4])
-        print_to_description(location_descriptions[4])
-    elif current_location == 6:
-        print_to_description(location_names[5])
-        print_to_description(location_descriptions[5])
-    elif current_location == 7:
-        print_to_description(location_names[6])
-        print_to_description(location_descriptions[6])
-    elif current_location == 8:
-        print_to_description(location_names[7])
-        print_to_description(location_descriptions[7])
-    elif current_location == 9:
-        print_to_description(location_names[8])
-        print_to_description(location_descriptions[8])
-    elif current_location == 10:
-        print_to_description(location_names[9])
-        print_to_description(location_descriptions[9])
-    elif current_location == 11:
-        print_to_description(location_names[10])
-        print_to_description(location_descriptions[10])
-    elif current_location == 12:
-        print_to_description(location_names[11])
-        print_to_description(location_descriptions[11])
-    elif current_location == 13:
-        print_to_description(location_names[12])
-        print_to_description(location_descriptions[12])
-    elif current_location == 14:
-        print_to_description(location_names[13])
-        print_to_description(location_descriptions[13])
-    elif current_location == 15:
-        print_to_description(location_names[14])
-        print_to_description(location_descriptions[14])
-    elif current_location == 16:
-        print_to_description(location_names[15])
-        print_to_description(location_descriptions[15])
-    elif current_location == 17:
-        print_to_description(location_names[16])
-        print_to_description(location_descriptions[16])
-    elif current_location == 18:
-        print_to_description(location_names[17])
-        print_to_description(location_descriptions[17])
-    elif current_location == 19:
-        print_to_description(location_names[18])
-        print_to_description(location_descriptions[18])
-    elif current_location == 20:
-        print_to_description(location_names[19])
-        print_to_description(location_descriptions[19])
+    index = current_location - 1  # Adjust for 0-based indexing in Python lists
+    if 0 <= index < len(location_names):
+        print_to_description(location_names[index])
+        print_to_description(location_descriptions[index])
     else:
-        print_to_description("unknown location:" + current_location)
+        print_to_description("unknown location: " + str(current_location))
 
 
 def set_current_image():
-    if current_location == 1:
-        image_label.img = PhotoImage(file='res/images/blank-1.gif')
-    elif current_location == 2:
-        image_label.img = PhotoImage(file='res/images/blank-2.gif')
-    elif current_location == 3:
-        image_label.img = PhotoImage(file='res/images/blank-3.gif')
-    elif current_location == 4 or current_location == 5 or current_location == 13 or current_location == 15 or current_location == 16 or current_location == 17 or current_location == 18:
-        image_label.img = ImageTk.PhotoImage(file='res/images/hallway.tiff')
-    elif current_location == 6 or current_location == 14:
-        image_label.img = ImageTk.PhotoImage(file='res/images/right_corner.tiff')
-    elif current_location == 12 or current_location == 19:
-        image_label.img = ImageTk.PhotoImage(file='res/images/left_corner.png')
-    elif current_location == 8:
-        image_label.img = ImageTk.PhotoImage(file='res/images/vault-1.tiff')
-    elif current_location == 9:
-        image_label.img = ImageTk.PhotoImage(file='res/images/vault-2.tiff')
-    elif current_location == 10:
-        if safe_open:
-            if puzzle_piece_2.visible:
-                image_label.img = ImageTk.PhotoImage(file='res/images/safe-open.tiff')
-            elif puzzle_piece_2.carried and not puzzle_with_two_pieces_inserted.carried:
-                image_label.img = ImageTk.PhotoImage(file='res/images/open-safe-no-piece.tiff')
-            else:
-                unused_variable = 1 + 1
-        else:
-            image_label.img = ImageTk.PhotoImage(file='res/images/safe-closed.tiff')
-    elif current_location == 11:
-        if gold_bar.visible and scroll_hint.visible:
-            image_label.img = ImageTk.PhotoImage(file='res/images/vault-4.tiff')
-        elif gold_bar.visible and not scroll_hint.visible:
-            image_label.img = ImageTk.PhotoImage(file='res/images/vault-4-no-hint.tiff')
-        elif scroll_hint.visible and not gold_bar.visible:
-            image_label.img = ImageTk.PhotoImage(file='res/images/vault-4-no-bar.tiff')
-        else:
-            image_label.img = ImageTk.PhotoImage(file='res/images/vault-4-no-bar-no-hint.tiff')
-    else:
-        image_label.img = PhotoImage(file='res/images/missing.png')
+    image_mapping = {
+        1: 'blank-1.gif',
+        2: 'blank-2.gif',
+        3: 'blank-3.gif',
+        4: 'hallway.tiff',
+        5: 'hallway.tiff',
+        13: 'hallway.tiff',
+        15: 'hallway.tiff',
+        16: 'hallway.tiff',
+        17: 'hallway.tiff',
+        18: 'hallway.tiff',
+        6: 'right_corner.tiff',
+        14: 'right_corner.tiff',
+        12: 'left_corner.png',
+        19: 'left_corner.png',
+        8: 'vault-1.tiff',
+        9: 'vault-2.tiff',
+        10: 'safe-open.tiff' if safe_open and puzzle_piece_2.visible else 'open-safe-no-piece.tiff' if puzzle_piece_2.carried and not puzzle_with_two_pieces_inserted.carried else 'safe-closed.tiff',
+        11: 'vault-4.tiff' if gold_bar.visible and scroll_hint.visible else 'vault-4-no-hint.tiff' if gold_bar.visible and not scroll_hint.visible else 'vault-4-no-bar.tiff' if scroll_hint.visible and not gold_bar.visible else 'vault-4-no-bar-no-hint.tiff',
+    }
 
+    image_file = image_mapping.get(current_location, 'missing.png')
+    image_label.img = ImageTk.PhotoImage(file=f'res/images/{image_file}')
     image_label.config(image=image_label.img)
 
 
@@ -583,169 +569,106 @@ def show_scroll_hint_image():
 
 
 def get_location_to_north(current_location):
-    if current_location == 3:
-        return 2
-    elif current_location == 2:
-        return 1
-    elif current_location == 6:
-        return 7
-    elif current_location == 7:
-        return 12
-    elif current_location == 9:
-        return 10
-    elif current_location == 15:
-        return 14
-    elif current_location == 16:
-        return 15
-    elif current_location == 17:
-        return 16
-    elif current_location == 18:
-        return 17
-    elif current_location == 19:
-        return 18
-    elif current_location == 20:
-        return 23
-    elif current_location == 24:
-        return 25
-    elif current_location == 25:
-        return 26
-    elif current_location == 27:
-        return 28
-    elif current_location == 30:
-        return 29
-    elif current_location == 31:
-        return 32
-    elif current_location == 34:
-        return 33
-    elif current_location == 35:
-        return 34
-    else:
-        return 0
+    north_mappings = {
+        3: 2,
+        2: 1,
+        6: 7,
+        7: 12,
+        9: 10,
+        15: 14,
+        16: 15,
+        17: 16,
+        18: 17,
+        19: 18,
+        20: 23,
+        24: 25,
+        25: 26,
+        27: 28,
+        30: 29,
+        31: 32,
+        34: 33,
+        35: 34
+    }
+
+    return north_mappings.get(current_location, 0)
 
 
 def get_location_to_south(current_location):
-    if current_location == 1:
-        return 2
-    elif current_location == 2:
-        return 3
-    elif current_location == 7:
-        return 6
-    elif current_location == 10:
-        return 9
-    elif current_location == 12:
-        return 7
-    elif current_location == 14:
-        return 15
-    elif current_location == 15:
-        return 16
-    elif current_location == 16:
-        return 17
-    elif current_location == 17:
-        return 18
-    elif current_location == 18:
-        return 19
-    elif current_location == 23:
-        return 20
-    elif current_location == 24:
-        return 23
-    elif current_location == 25:
-        return 24
-    elif current_location == 26:
-        return 25
-    elif current_location == 28:
-        return 27
-    elif current_location == 29:
-        return 30
-    elif current_location == 32:
-        return 31
-    elif current_location == 33:
-        return 34
-    elif current_location == 31 and door_open:
+    south_mappings = {
+        1: 2,
+        2: 3,
+        7: 6,
+        10: 9,
+        12: 7,
+        14: 15,
+        15: 16,
+        16: 17,
+        17: 18,
+        18: 19,
+        23: 20,
+        24: 23,
+        25: 24,
+        26: 25,
+        28: 27,
+        29: 30,
+        32: 31,
+        33: 34
+    }
+
+    if current_location == 31 and door_open:
         return 35
-    else:
-        return 0
+
+    return south_mappings.get(current_location, 0)
 
 
 def get_location_to_east(current_location):
-    if current_location == 3:
-        return 4
-    elif current_location == 4:
-        return 5
-    elif current_location == 5:
-        return 6
-    elif current_location == 8:
-        return 7
-    elif current_location == 9:
-        return 8
-    elif current_location == 10:
-        return 11
-    elif current_location == 12:
-        return 13
-    elif current_location == 13:
-        return 14
-    elif current_location == 20:
-        return 19
-    elif current_location == 21:
-        return 20
-    elif current_location == 22:
-        return 21
-    elif current_location == 27:
-        return 23
-    elif current_location == 28:
-        return 24
-    elif current_location == 29:
-        return 28
-    elif current_location == 31:
-        return 30
-    elif current_location == 34:
-        return 32
-    elif current_location == 33:
-        return 31
-    elif current_location == 36:
-        return 35
-    else:
-        return 0
+    east_mappings = {
+        3: 4,
+        4: 5,
+        5: 6,
+        8: 7,
+        9: 8,
+        10: 11,
+        12: 13,
+        13: 14,
+        20: 19,
+        21: 20,
+        22: 21,
+        27: 23,
+        28: 24,
+        29: 28,
+        31: 30,
+        34: 32,
+        33: 31,
+        36: 35
+    }
+
+    return east_mappings.get(current_location, 0)
 
 
 def get_location_to_west(current_location):
-    if current_location == 4:
-        return 3
-    elif current_location == 5:
-        return 4
-    elif current_location == 6:
-        return 5
-    elif current_location == 7:
-        return 8
-    elif current_location == 8:
-        return 9
-    elif current_location == 11:
-        return 10
-    elif current_location == 13:
-        return 12
-    elif current_location == 14:
-        return 13
-    elif current_location == 19:
-        return 20
-    elif current_location == 20:
-        return 21
-    elif current_location == 21:
-        return 22
-    elif current_location == 23:
-        return 27
-    elif current_location == 24:
-        return 28
-    elif current_location == 28:
-        return 29
-    elif current_location == 30:
-        return 31
-    elif current_location == 31:
-        return 34
-    elif current_location == 32:
-        return 33
-    elif current_location == 35:
-        return 36
-    else:
-        return 0
+    west_mappings = {
+        4: 3,
+        5: 4,
+        6: 5,
+        7: 8,
+        8: 9,
+        11: 10,
+        13: 12,
+        14: 13,
+        19: 20,
+        20: 21,
+        21: 22,
+        23: 27,
+        24: 28,
+        28: 29,
+        30: 31,
+        31: 34,
+        32: 33,
+        35: 36
+    }
+
+    return west_mappings.get(current_location, 0)
 
 
 def describe_current_inventory():
@@ -838,8 +761,14 @@ def build_interface():
         image_label.grid(row=0, column=0, rowspan=3, columnspan=1, padx=2, pady=2)
 
     description_widget = Text(root, width=60, height=10, relief=GROOVE, wrap='word')
-    description_widget.insert(1.0,
-                              "After the catastrophe that was the pandemic, Benny finds himself back in dreamland, but something seems wrong. It looks like Fala and Nodo have taken him prisoner! Now he has to use all of the knowledge he’s gathered throughout all of his various adventures in the past to escape. \n\nFala and Nodo have hidden various puzzles throughout the castle basement. Can you figure them out and help Benny escape before evil takes over the kingdom? You’re the kingdom’s only hope at rescuing the protector of Dreamland.\n\n")
+    description_widget.insert(1.0, textwrap.dedent('''\
+    After the catastrophe that was the pandemic, Benny finds himself back in dreamland, but something seems wrong. It 
+    looks like Fala and Nodo have taken him prisoner! Now he has to use all of the knowledge he’s gathered throughout 
+    all of his various adventures in the past to escape. 
+
+    Fala and Nodo have hidden various puzzles throughout the castle basement. Can you figure them out and help Benny 
+    escape before evil takes over the kingdom? You’re the kingdom’s only hope at rescuing the protector of Dreamland.\n
+    '''))
     description_widget.config(state="disabled")
     if PORTRAIT_LAYOUT:
         description_widget.grid(row=1, column=0, columnspan=3, sticky=W, padx=2, pady=2)
