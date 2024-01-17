@@ -30,9 +30,9 @@ location_names = [
     "Hallway (Room 11)\n",
     "Hallway (Room 12)\n",
     "Hallway (Room 13)\n",
-    "zone 4, room 1",
-    "zone 4, room 2",
-    "zone 5, room 1",
+    "Supply Closet (Room 1)",
+    "Supply Closet (Room 2)",
+    "Stairwell",
 ]
 location_descriptions = [
     textwrap.dedent('''\
@@ -146,7 +146,6 @@ puzzle = GameObject.GameObject("puzzle", list_of_locations[2], True, True, False
 puzzle_with_one_piece_inserted = GameObject.GameObject("puzzle (1/4)", puzzle, True, False, False, "puzzle")
 puzzle_with_two_pieces_inserted = GameObject.GameObject("puzzle (2/4)", puzzle_with_one_piece_inserted, True, False,
                                                         False, "puzzle")
-key = GameObject.GameObject("key", finished_puzzle, True, False, False, "a golden key")
 scroll = GameObject.GameObject("scroll", list_of_locations[0], True, True, False, "an ancient papyrus scroll")
 scroll_hint = GameObject.GameObject("hint", list_of_locations[10], True, True, False, "huh")
 safe = GameObject.GameObject("safe", list_of_locations[9], False, True, False, "a small safe")
@@ -175,6 +174,7 @@ hint3 = GameObject.GameObject("hint 3", None, True, False, False, "hint 3")
 door = GameObject.GameObject("door", list_of_locations[19], False, True, False, "a large door...")
 finished_puzzle = GameObject.GameObject("puzzle (4/4)", puzzle_with_three_pieces_inserted, True, False, False, "a finished puzzle, what does it do?")
 puzzle_piece_4 = GameObject.GameObject("puzzle piece 4", list_of_locations[21], True, False, False, "another puzzle piece...")
+key = GameObject.GameObject("key", finished_puzzle, True, False, False, "a golden key")
 game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue11, clue2, puzzle,
                 puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, key,
                 scroll, safe, gold_bar, bar_clue, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4,
@@ -473,7 +473,7 @@ def perform_solve_command(object_name):
                     puzzle_with_two_pieces_inserted.carried = True
                     puzzle_piece_2.visible = False
                     refresh_objects_visible = True
-        elif game_object.carried and game_object == puzzle_with_one_piece_inserted:
+        elif game_object.carried and game_object == puzzle_with_two_pieces_inserted:
             answer = simpledialog.askstring("Input", "What would you like to put in the puzzle next?", parent=root)
             if not puzzle_piece_3.carried:
                 print_to_description("It looks like you don't have anything to put into the puzzle.")
@@ -497,7 +497,7 @@ def perform_solve_command(object_name):
                     puzzle_with_three_pieces_inserted.carried = True
                     puzzle_piece_3.visible = False
                     refresh_objects_visible = True
-        elif game_object.carried and game_object == puzzle_with_one_piece_inserted:
+        elif game_object.carried and game_object == puzzle_with_three_pieces_inserted:
             answer = simpledialog.askstring("Input", "What would you like to put in the puzzle next?", parent=root)
             if not puzzle_piece_4.carried:
                 print_to_description("It looks like you don't have anything to put into the puzzle.")
@@ -521,8 +521,6 @@ def perform_solve_command(object_name):
                     finished_puzzle.carried = True
                     puzzle_piece_4.visible = False
                     refresh_objects_visible = True
-            # print_to_description("the puzzle collapses into a key piece for you.")
-            # kp1.carried = True
         else:
             print_to_description("You're missing something.")
     else:
