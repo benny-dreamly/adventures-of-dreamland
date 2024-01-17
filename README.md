@@ -51,4 +51,4 @@ Hints will help you solve the puzzles, but beware, as the hints might not be so 
 Clues help you solve hints. That's all I'm going to give you though. 
 
 # Game Map
-![map.png](map.png)
+![map-fixed.png](map-fixed.png)

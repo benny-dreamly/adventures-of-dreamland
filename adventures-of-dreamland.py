@@ -8,8 +8,7 @@ import GameObject
 
 PORTRAIT_LAYOUT = True
 
-list_of_locations = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27,
-                     28, 29, 30, 31, 32, 33, 34, 35, 36]
+list_of_locations = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
 location_names = [
     "Cell (Room 1)\n",
     "Cell (Room 2)\n",
@@ -34,19 +33,6 @@ location_names = [
     "zone 4, room 1",
     "zone 4, room 2",
     "zone 5, room 1",
-    "zone 5, room 2",
-    "zone 6, room 1",
-    "zone 6, room 2",
-    "zone 5, room 3",
-    "zone 5, room 4",
-    "zone 7, room 1",
-    "zone 7, room 2",
-    "zone 8, room 1",
-    "zone 8, room 2",
-    "zone 8, room 3",
-    "zone 8, room 4",
-    "zone 9, room 1",
-    "zone 9, room 2"
 ]
 location_descriptions = [
     textwrap.dedent('''\
@@ -121,7 +107,7 @@ location_descriptions = [
         the hallway?\n'''),
     textwrap.dedent('''\
         At last, there seems to be a fork in the road, Benny can keep going straight into another room, or go right 
-        into yet another room. Which room will he choose to investigate?\n
+        into yet another room, after unlocking the door which seems to be in the way. How is he going to get a key to open this door?\n
     ''')
 ]
 
@@ -157,24 +143,10 @@ clue11 = GameObject.GameObject("clue 1-2", list_of_locations[0], True, False, Fa
 clue2 = GameObject.GameObject("clue 2", list_of_locations[2], True, False, False,
                               "clue #2 (ONLY READ ONCE HINT 1 IS SOLVED)")
 puzzle = GameObject.GameObject("puzzle", list_of_locations[2], True, True, False, "puzzle")
-puzzle_with_one_piece_inserted = GameObject.GameObject("puzzle (1/9)", puzzle, True, False, False, "puzzle")
-puzzle_with_two_pieces_inserted = GameObject.GameObject("puzzle (2/9)", puzzle_with_one_piece_inserted, True, False,
+puzzle_with_one_piece_inserted = GameObject.GameObject("puzzle (1/4)", puzzle, True, False, False, "puzzle")
+puzzle_with_two_pieces_inserted = GameObject.GameObject("puzzle (2/4)", puzzle_with_one_piece_inserted, True, False,
                                                         False, "puzzle")
-kp1 = GameObject.GameObject("key piece A", list_of_locations[0], True, False, False, "I wonder what you do with me?",
-                            True)
-kp2 = GameObject.GameObject("key piece B", list_of_locations[0], True, False, False, "I wonder what you do with me?",
-                            True)
-kp3 = GameObject.GameObject("key piece C", list_of_locations[0], True, False, False, "I wonder what you do with me?",
-                            True)
-kp4 = GameObject.GameObject("key piece D", list_of_locations[0], True, False, False, "I wonder what you do with me?",
-                            True)
-kp5 = GameObject.GameObject("key piece E", list_of_locations[0], True, False, False, "I wonder what you do with me?",
-                            True)
-kp6 = GameObject.GameObject("key piece F", list_of_locations[0], True, False, False, "I wonder what you do with me?",
-                            True)
-kp7 = GameObject.GameObject("key piece G", list_of_locations[0], True, False, False, "I wonder what you do with me?",
-                            True)
-key = GameObject.GameObject("key", list_of_locations[0], True, False, False, "a golden key")
+key = GameObject.GameObject("key", finished_puzzle, True, False, False, "a golden key")
 scroll = GameObject.GameObject("scroll", list_of_locations[0], True, True, False, "an ancient papyrus scroll")
 scroll_hint = GameObject.GameObject("hint", list_of_locations[10], True, True, False, "huh")
 safe = GameObject.GameObject("safe", list_of_locations[9], False, True, False, "a small safe")
@@ -182,25 +154,32 @@ gold_bar = GameObject.GameObject("gold bar", list_of_locations[10], True, True, 
                                  "a gold bar with an engraving in it")
 bar_clue = GameObject.GameObject("clue", list_of_locations[10], True, False, False, "clue")
 puzzle_piece_2 = GameObject.GameObject("puzzle piece 2", list_of_locations[9], True, False, False, "puzzle piece 2")
-hint_fragment_1 = GameObject.GameObject("hint A", list_of_locations[3], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
-hint_fragment_2 = GameObject.GameObject("hint B", list_of_locations[4], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
-hint_fragment_3 = GameObject.GameObject("hint C", list_of_locations[5], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
-hint_fragment_4 = GameObject.GameObject("hint D", list_of_locations[6], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
-hint_fragment_5 = GameObject.GameObject("hint E", list_of_locations[11], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
-hint_fragment_6 = GameObject.GameObject("hint F", list_of_locations[12], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
-hint_fragment_7 = GameObject.GameObject("hint G", list_of_locations[13], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
-hint_fragment_8 = GameObject.GameObject("hint H", list_of_locations[14], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
-hint_fragment_9 = GameObject.GameObject("hint I", list_of_locations[15], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
-hint_fragment_10 = GameObject.GameObject("hint J", list_of_locations[16], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
-hint_fragment_11 = GameObject.GameObject("hint K", list_of_locations[17], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
-hint_fragment_12 = GameObject.GameObject("hint L", list_of_locations[18], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
-hint_fragment_13 = GameObject.GameObject("hint M", list_of_locations[19], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
+hint_fragment_1 = GameObject.GameObject("hint A", list_of_locations[3], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_2 = GameObject.GameObject("hint B", list_of_locations[4], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_3 = GameObject.GameObject("hint C", list_of_locations[5], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_4 = GameObject.GameObject("hint D", list_of_locations[6], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_5 = GameObject.GameObject("hint E", list_of_locations[11], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_6 = GameObject.GameObject("hint F", list_of_locations[12], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_7 = GameObject.GameObject("hint G", list_of_locations[13], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_8 = GameObject.GameObject("hint H", list_of_locations[14], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_9 = GameObject.GameObject("hint I", list_of_locations[15], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_10 = GameObject.GameObject("hint J", list_of_locations[16], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_11 = GameObject.GameObject("hint K", list_of_locations[17], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_12 = GameObject.GameObject("hint L", list_of_locations[18], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_13 = GameObject.GameObject("hint M", list_of_locations[19], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
 fragment_clue = GameObject.GameObject("clue", list_of_locations[19], True, True, False, "more ripped looking paper...")
+puzzle_piece_3 = GameObject.GameObject("puzzle piece 3", list_of_locations[15], True, False, False, "another puzzle piece woo")
+puzzle_with_three_pieces_inserted = GameObject.GameObject("puzzle (3/4)", puzzle_with_two_pieces_inserted, True, False, False, "puzzle (3/4)")
+glue_stick = GameObject.GameObject("glue stick", list_of_locations[20], True, False, False, "a glue stick")
+hint3 = GameObject.GameObject("hint 3", None, True, False, False, "hint 3")
+door = GameObject.GameObject("door", list_of_locations[19], False, True, False, "a large door...")
+finished_puzzle = GameObject.GameObject("puzzle (4/4)", puzzle_with_three_pieces_inserted, True, False, False, "a finished puzzle, what does it do?")
+puzzle_piece_4 = GameObject.GameObject("puzzle piece 4", list_of_locations[21], True, False, False, "another puzzle piece...")
 game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue11, clue2, puzzle,
-                puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, kp1, kp2, kp3, kp4, kp5, kp6, kp7, key,
+                puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, key,
                 scroll, safe, gold_bar, bar_clue, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4,
                 hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10,
-                hint_fragment_11, hint_fragment_12, hint_fragment_13, fragment_clue]
+                hint_fragment_11, hint_fragment_12, hint_fragment_13, fragment_clue, puzzle_piece_3, puzzle_with_three_pieces_inserted, glue_stick, hint3, door, finished_puzzle]
 
 
 def perform_command(verb, noun):
@@ -225,6 +204,8 @@ def perform_command(verb, noun):
         perform_unlock_command(noun)
     elif verb == "DECIPHER":
         perform_decipher_command(noun)
+    elif verb == "GLUE":
+        perform_glue_command(noun)
     else:
         print_to_description("unknown command")
 
@@ -344,7 +325,7 @@ def perform_read_command(object_name):
                     SOLVE the puzzle.''')
         elif game_object == scroll:
             if scroll.carried:
-                show_popup_image("scroll_scaled.png")
+                show_popup_image("scroll.png")
         elif game_object == scroll_hint:
             if scroll_hint.carried:
                 show_popup_image("scroll_key.png")
@@ -393,7 +374,7 @@ def perform_read_command(object_name):
                 print_to_description("65 6E 74 20 70 61 73 74 20 77 65 72 65")
         elif game_object == hint_fragment_11:
             if hint_fragment_11.carried:
-                print_to_description("6E 2019 74 20 73 6F 20 69 6E 73 69 67 6E")
+                print_to_description("6E 27 74 20 73 6F 20 69 6E 73 69 67 6E")
         elif game_object == hint_fragment_12:
             if hint_fragment_12.carried:
                 print_to_description("69 66 69 63 61 6E 74 20 61 74 20 61 6C")
@@ -405,6 +386,13 @@ def perform_read_command(object_name):
                 print_to_description('''Confused by all the random letters and numbers strewn around the hallway that 
                     you've picked up? Can't blame you, but I can... this is how your computer stores the text in a text 
                     document. (more specifically a .txt file)''')
+        elif game_object == hint3:
+            if hint3.carried:
+                print_to_description('''49 6E 20 6F 72 64 65 72 20 74 6F 20 66 69 6E 64 20 77 68 61 74 20 79 6F 75 20 
+                6D 61 79 20 62 65 20 6C 6F 6F 6B 69 6E 67 20 66 6F 72 2C 20 69 74 20 6D 61 79 20 62 65 20 68 69 64 69 
+                6E 67 20 69 6E 20 70 6C 61 69 6E 20 73 69 67 68 74 2E 20 50 65 72 68 61 70 73 20 61 6C 6C 20 74 68 6F 
+                73 65 20 65 6D 70 74 79 20 68 61 6C 6C 77 61 79 73 20 79 6F 75 20 77 65 6E 74 20 70 61 73 74 20 77 65 
+                72 65 6E 27 74 20 73 6F 20 69 6E 73 69 67 6E 69 66 69 63 61 6E 74 20 61 74 20 61 6C 6C 3F''')
         else:
             print_to_description("You're not carrying anything readable")
     else:
@@ -485,6 +473,54 @@ def perform_solve_command(object_name):
                     puzzle_with_two_pieces_inserted.carried = True
                     puzzle_piece_2.visible = False
                     refresh_objects_visible = True
+        elif game_object.carried and game_object == puzzle_with_one_piece_inserted:
+            answer = simpledialog.askstring("Input", "What would you like to put in the puzzle next?", parent=root)
+            if not puzzle_piece_3.carried:
+                print_to_description("It looks like you don't have anything to put into the puzzle.")
+            elif answer != "puzzle piece 3":
+                print_to_description("Unfortunately, it looks like it doesn't fit in the puzzle.")
+            else:
+                puzzle_piece_inserted = False
+                while not puzzle_piece_inserted:
+                    slot = simpledialog.askinteger("Input", "Which slot would you like to put your piece in?",
+                                                   parent=root)
+                    if slot != 3:
+                        print_to_description("The piece won't fit, no matter how you rotate it.")
+                        answer = simpledialog.askstring("Input", "Would you like to try again?", parent=root)
+                        if answer == "No":
+                            break
+                    else:
+                        print_to_description(piece_slot_message)
+                        puzzle_piece_inserted = True
+                    puzzle_piece_3.carried = False
+                    game_object.carried = False
+                    puzzle_with_three_pieces_inserted.carried = True
+                    puzzle_piece_3.visible = False
+                    refresh_objects_visible = True
+        elif game_object.carried and game_object == puzzle_with_one_piece_inserted:
+            answer = simpledialog.askstring("Input", "What would you like to put in the puzzle next?", parent=root)
+            if not puzzle_piece_4.carried:
+                print_to_description("It looks like you don't have anything to put into the puzzle.")
+            elif answer != "puzzle piece 4":
+                print_to_description("Unfortunately, it looks like it doesn't fit in the puzzle.")
+            else:
+                puzzle_piece_inserted = False
+                while not puzzle_piece_inserted:
+                    slot = simpledialog.askinteger("Input", "Which slot would you like to put your piece in?",
+                                                   parent=root)
+                    if slot != 4:
+                        print_to_description("The piece won't fit, no matter how you rotate it.")
+                        answer = simpledialog.askstring("Input", "Would you like to try again?", parent=root)
+                        if answer == "No":
+                            break
+                    else:
+                        print_to_description(piece_slot_message)
+                        puzzle_piece_inserted = True
+                    puzzle_piece_4.carried = False
+                    game_object.carried = False
+                    finished_puzzle.carried = True
+                    puzzle_piece_4.visible = False
+                    refresh_objects_visible = True
             # print_to_description("the puzzle collapses into a key piece for you.")
             # kp1.carried = True
         else:
@@ -493,17 +529,15 @@ def perform_solve_command(object_name):
         print_to_description("You can't do that.")
 
 
-def perform_fuse_command(object_name):
+def perform_glue_command(object_name):
     game_object = get_game_object(object_name)
     if not (game_object is None):
-        if all(obj.carried for obj in [game_object, kp1, kp2, kp3, kp4, kp5, kp6, kp7]) and game_object.fuseable:
-            print_to_description('''The key pieces start glowing, as if you've awakened their ancient powers. One by 
-            one, they slowly start forming an actual key.''')
-            for obj in [game_object, kp2, kp3, kp4, kp5, kp6, kp7]:
-                obj.carried = False
-            key.visible = True
-            key.location = current_location
-            perform_command("GET", "KEY")
+        if glue_stick.carried:
+            if all(obj.carried for obj in [game_object, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4, hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10, hint_fragment_11, hint_fragment_12, hint_fragment_13]) and game_object.glueable:
+                print_to_description('''Benny succeeds at gluing the fragments of this hint together. Maybe it will be a bit easier to decipher now?''')
+                for obj in [game_object, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4, hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10, hint_fragment_11, hint_fragment_12, hint_fragment_13]:
+                    obj.carried = False
+                hint3.carried = True
         else:
             print_to_description("You're missing something.")
     else:
@@ -627,15 +661,10 @@ def get_location_to_north(current_location):
         17: 16,
         18: 17,
         19: 18,
-        20: 23,
-        24: 25,
-        25: 26,
-        27: 28,
-        30: 29,
-        31: 32,
-        34: 33,
-        35: 34
     }
+
+    if current_location == 20 and door_open:
+        return 23
 
     return north_mappings.get(current_location, 0)
 
@@ -653,17 +682,7 @@ def get_location_to_south(current_location):
         17: 18,
         18: 19,
         23: 20,
-        24: 23,
-        25: 24,
-        26: 25,
-        28: 27,
-        29: 30,
-        32: 31,
-        33: 34
     }
-
-    if current_location == 31 and door_open:
-        return 35
 
     return south_mappings.get(current_location, 0)
 
@@ -681,13 +700,6 @@ def get_location_to_east(current_location):
         20: 19,
         21: 20,
         22: 21,
-        27: 23,
-        28: 24,
-        29: 28,
-        31: 30,
-        34: 32,
-        33: 31,
-        36: 35
     }
 
     return east_mappings.get(current_location, 0)
@@ -706,13 +718,6 @@ def get_location_to_west(current_location):
         19: 20,
         20: 21,
         21: 22,
-        23: 27,
-        24: 28,
-        28: 29,
-        30: 31,
-        31: 34,
-        32: 33,
-        35: 36
     }
 
     return west_mappings.get(current_location, 0)
@@ -773,6 +778,45 @@ def describe_current_visible_objects():
 
     if safe_open and not puzzle_with_two_pieces_inserted.carried:
         puzzle_piece_2.visible = True
+
+    if hint_fragment_1.carried:
+        hint_fragment_2.visible = True
+
+    if hint_fragment_2.carried:
+        hint_fragment_3.visible = True
+
+    if hint_fragment_3.carried:
+        hint_fragment_4.visible = True
+
+    if hint_fragment_4.carried:
+        hint_fragment_5.visible = True
+
+    if hint_fragment_5.carried:
+        hint_fragment_6.visible = True
+
+    if hint_fragment_6.carried:
+        hint_fragment_7.visible = True
+
+    if hint_fragment_7.carried:
+        hint_fragment_8.visible = True
+
+    if hint_fragment_8.carried:
+        hint_fragment_9.visible = True
+
+    if hint_fragment_9.carried:
+        hint_fragment_10.visible = True
+
+    if hint_fragment_10.carried:
+        hint_fragment_11.visible = True
+
+    if hint_fragment_11.carried:
+        hint_fragment_12.visible = True
+
+    if hint_fragment_12.carried:
+        hint_fragment_13.visible = True
+
+    if hint_fragment_13.carried:
+        fragment_clue.visible = True
 
     for current_object in game_objects:
         if (current_object.location == current_location) and current_object.visible and not current_object.carried:
@@ -990,6 +1034,8 @@ def play_audio(filename, asynchronous=True, loop=True):
         import os
         while playing:
             os.system('afplay res/audio/{}'.format(filename))
+    else:
+        print_to_description("unsupported platform")
 
 
 def main():
