@@ -182,9 +182,25 @@ gold_bar = GameObject.GameObject("gold bar", list_of_locations[10], True, True, 
                                  "a gold bar with an engraving in it")
 bar_clue = GameObject.GameObject("clue", list_of_locations[10], True, False, False, "clue")
 puzzle_piece_2 = GameObject.GameObject("puzzle piece 2", list_of_locations[9], True, False, False, "puzzle piece 2")
+hint_fragment_1 = GameObject.GameObject("hint A", list_of_locations[3], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
+hint_fragment_2 = GameObject.GameObject("hint B", list_of_locations[4], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
+hint_fragment_3 = GameObject.GameObject("hint C", list_of_locations[5], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
+hint_fragment_4 = GameObject.GameObject("hint D", list_of_locations[6], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
+hint_fragment_5 = GameObject.GameObject("hint E", list_of_locations[11], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
+hint_fragment_6 = GameObject.GameObject("hint F", list_of_locations[12], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
+hint_fragment_7 = GameObject.GameObject("hint G", list_of_locations[13], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
+hint_fragment_8 = GameObject.GameObject("hint H", list_of_locations[14], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
+hint_fragment_9 = GameObject.GameObject("hint I", list_of_locations[15], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
+hint_fragment_10 = GameObject.GameObject("hint J", list_of_locations[16], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
+hint_fragment_11 = GameObject.GameObject("hint K", list_of_locations[17], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
+hint_fragment_12 = GameObject.GameObject("hint L", list_of_locations[18], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
+hint_fragment_13 = GameObject.GameObject("hint M", list_of_locations[19], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.")
+fragment_clue = GameObject.GameObject("clue", list_of_locations[19], True, True, False, "more ripped looking paper...")
 game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue11, clue2, puzzle,
                 puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, kp1, kp2, kp3, kp4, kp5, kp6, kp7, key,
-                scroll, safe, gold_bar, bar_clue]
+                scroll, safe, gold_bar, bar_clue, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4,
+                hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10,
+                hint_fragment_11, hint_fragment_12, hint_fragment_13, fragment_clue]
 
 
 def perform_command(verb, noun):
@@ -328,10 +344,10 @@ def perform_read_command(object_name):
                     SOLVE the puzzle.''')
         elif game_object == scroll:
             if scroll.carried:
-                show_scroll_image()
+                show_popup_image("scroll_scaled.png")
         elif game_object == scroll_hint:
             if scroll_hint.carried:
-                show_scroll_hint_image()
+                show_popup_image("scroll_key.png")
         elif game_object == gold_bar:
             if gold_bar.carried:
                 print_to_description("Coins, Minerals, Gold, Silver")
@@ -345,6 +361,50 @@ def perform_read_command(object_name):
                     '''Still having trouble figuring out how to decipher the hint? I don't blame you, it would 
                     require some knowledge that only super nerdy people have. Luckily for you, there exists a way to 
                     do it for you. Your clue is the word decipher.''')
+        elif game_object == hint_fragment_1:
+            if hint_fragment_1.carried:
+                print_to_description("49 6E 20 6F 72 64 65 72 20 74 6F 20 66")
+        elif game_object == hint_fragment_2:
+            if hint_fragment_2.carried:
+                print_to_description("69 6E 64 20 77 68 61 74 20 79 6F 75 20")
+        elif game_object == hint_fragment_3:
+            if hint_fragment_3.carried:
+                print_to_description("6D 61 79 20 62 65 20 6C 6F 6F 6B 69 6E")
+        elif game_object == hint_fragment_4:
+            if hint_fragment_4.carried:
+                print_to_description("67 20 66 6F 72 2C 20 69 74 20 6D 61 79")
+        elif game_object == hint_fragment_5:
+            if hint_fragment_5.carried:
+                print_to_description("20 62 65 20 68 69 64 69 6E 67 20 69 6E")
+        elif game_object == hint_fragment_6:
+            if hint_fragment_6.carried:
+                print_to_description("20 70 6C 61 69 6E 20 73 69 67 68 74 2E")
+        elif game_object == hint_fragment_7:
+            if hint_fragment_7.carried:
+                print_to_description("20 50 65 72 68 61 70 73 20 61 6C 6C 20")
+        elif game_object == hint_fragment_8:
+            if hint_fragment_8.carried:
+                print_to_description("74 68 6F 73 65 20 65 6D 70 74 79 20 68")
+        elif game_object == hint_fragment_9:
+            if hint_fragment_9.carried:
+                print_to_description("61 6C 6C 77 61 79 73 20 79 6F 75 20 77")
+        elif game_object == hint_fragment_10:
+            if hint_fragment_10.carried:
+                print_to_description("65 6E 74 20 70 61 73 74 20 77 65 72 65")
+        elif game_object == hint_fragment_11:
+            if hint_fragment_11.carried:
+                print_to_description("6E 2019 74 20 73 6F 20 69 6E 73 69 67 6E")
+        elif game_object == hint_fragment_12:
+            if hint_fragment_12.carried:
+                print_to_description("69 66 69 63 61 6E 74 20 61 74 20 61 6C")
+        elif game_object == hint_fragment_13:
+            if hint_fragment_13.carried:
+                print_to_description("6C 3F")
+        elif game_object == fragment_clue:
+            if fragment_clue.carried:
+                print_to_description('''Confused by all the random letters and numbers strewn around the hallway that 
+                    you've picked up? Can't blame you, but I can... this is how your computer stores the text in a text 
+                    document. (more specifically a .txt file)''')
         else:
             print_to_description("You're not carrying anything readable")
     else:
@@ -457,8 +517,8 @@ def perform_unlock_command(object_name):
     if not (game_object is None):
         if game_object == safe and (game_object.visible and game_object.location == current_location):
             while not safe_open:
-                code = simpledialog.askinteger("Code", "What is the code to the safe?", parent=root)
-                if code != 16378:
+                code = hex(simpledialog.askinteger("Code", "What is the code to the safe?", parent=root))
+                if code != 0x3ffa:
                     print_to_description("Benny tries your code, but the safe won't open.")
                     answer = simpledialog.askstring("Input", "Would you like to try again?", parent=root)
                     if answer == "No":
@@ -545,20 +605,10 @@ def set_current_image():
     image_label.config(image=image_label.img)
 
 
-def show_scroll_image():
+def show_popup_image(image_file):
     popup = tkinter.Toplevel(root)
 
-    img = PhotoImage(file="res/images/scroll_scaled.png")
-
-    label = tkinter.Label(popup, image=img)
-    label.image = img  # Keep a reference to the image to prevent garbage collection
-    label.pack()
-
-
-def show_scroll_hint_image():
-    popup = tkinter.Toplevel(root)
-
-    img = PhotoImage(file="res/images/scroll_key.png")
+    img = PhotoImage(file=f"res/images/{image_file}")
 
     label = tkinter.Label(popup, image=img)
     label.image = img  # Keep a reference to the image to prevent garbage collection
