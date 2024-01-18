@@ -102,6 +102,8 @@ location_descriptions = [
     textwrap.dedent("How can there be such a long hallway? It feels impractical.\n"),
     textwrap.dedent("It's yet another straight hallway... Why?\n"),
     textwrap.dedent("This hallway feels endless. When will it end?\n"),
+    textwrap.dedent("more hallway"),
+    textwrap.dedent("more hallway"),
     textwrap.dedent('''\
         Benny has finally arrived at yet another corner, this time it's another right turn... maybe this is the end of 
         the hallway?\n'''),
@@ -166,7 +168,7 @@ hint_fragment_10 = GameObject.GameObject("hint J", list_of_locations[16], True, 
 hint_fragment_11 = GameObject.GameObject("hint K", list_of_locations[17], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
 hint_fragment_12 = GameObject.GameObject("hint L", list_of_locations[18], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
 hint_fragment_13 = GameObject.GameObject("hint M", list_of_locations[19], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-fragment_clue = GameObject.GameObject("clue", list_of_locations[19], True, True, False, "more ripped looking paper...")
+fragment_clue = GameObject.GameObject("cluee", list_of_locations[19], True, True, False, "more ripped looking paper...")
 puzzle_piece_3 = GameObject.GameObject("puzzle piece 3", list_of_locations[15], True, False, False, "another puzzle piece woo")
 puzzle_with_three_pieces_inserted = GameObject.GameObject("puzzle (3/4)", puzzle_with_two_pieces_inserted, True, False, False, "puzzle (3/4)")
 glue_stick = GameObject.GameObject("glue stick", list_of_locations[20], True, False, False, "a glue stick")
@@ -445,8 +447,9 @@ def perform_solve_command(object_name):
                     else:
                         print_to_description(piece_slot_message)
                         puzzle_piece_inserted = True
-                puzzle_piece_1.carried = False
-                game_object.carried = False
+                for obj in [puzzle_piece_1, hint1, clue1, clue11, clue2, game_object]:
+                    obj.carried = False
+                    obj.visible = False
                 puzzle_with_one_piece_inserted.carried = True
                 refresh_objects_visible = True
         elif game_object.carried and game_object == puzzle_with_one_piece_inserted:
@@ -468,10 +471,10 @@ def perform_solve_command(object_name):
                     else:
                         print_to_description(piece_slot_message)
                         puzzle_piece_inserted = True
-                    puzzle_piece_2.carried = False
-                    game_object.carried = False
+                    for obj in [puzzle_piece_2, game_object, gold_bar, bar_clue]:
+                        obj.carried = False
+                        obj.visible = False
                     puzzle_with_two_pieces_inserted.carried = True
-                    puzzle_piece_2.visible = False
                     refresh_objects_visible = True
         elif game_object.carried and game_object == puzzle_with_two_pieces_inserted:
             answer = simpledialog.askstring("Input", "What would you like to put in the puzzle next?", parent=root)
@@ -549,8 +552,9 @@ def perform_unlock_command(object_name):
     if not (game_object is None):
         if game_object == safe and (game_object.visible and game_object.location == current_location):
             while not safe_open:
-                code = hex(simpledialog.askinteger("Code", "What is the code to the safe?", parent=root))
-                if code != 0x3ffa:
+                code = simpledialog.askinteger("Code", "What is the code to the safe?", parent=root)
+                encrypted_code = str(hex(code))
+                if encrypted_code != "0x3ffa":
                     print_to_description("Benny tries your code, but the safe won't open.")
                     answer = simpledialog.askstring("Input", "Would you like to try again?", parent=root)
                     if answer == "No":
@@ -581,24 +585,8 @@ def perform_decipher_command(message):
         else:
             deciphered_message = deciphered_message + letter
 
-    rectified_message = rectify_case(deciphered_message)
     print_to_description("Deciphered message:")
-    print_to_description(rectified_message)
-
-
-def rectify_case(input_text):
-    rectified_text = ""
-    reference_text = simpledialog.askstring("Reference", "Please input the text you wanted to decipher.", parent=root)
-    for idx, char in enumerate(input_text):
-        if idx < len(reference_text):
-            if reference_text[idx].isupper():
-                rectified_text += char.upper()
-            else:
-                rectified_text += char.lower()
-        else:
-            rectified_text += char.lower()  # Handles any extra characters in the input
-
-    return rectified_text
+    print_to_description(deciphered_message)
 
 
 def describe_current_location(current_location):
@@ -815,6 +803,9 @@ def describe_current_visible_objects():
 
     if hint_fragment_13.carried:
         fragment_clue.visible = True
+
+    if fragment_clue.carried:
+        glue_stick.visible = True
 
     for current_object in game_objects:
         if (current_object.location == current_location) and current_object.visible and not current_object.carried:
