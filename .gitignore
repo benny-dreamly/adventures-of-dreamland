@@ -4,6 +4,3 @@ __pycache__
 build
 dist
 AdventureGame.spec
-splitter.py
-stuff.txt
-timer.py
