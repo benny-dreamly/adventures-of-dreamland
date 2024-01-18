@@ -130,17 +130,13 @@ finished_puzzle = GameObject.GameObject("puzzle (4/4)", puzzle_with_three_pieces
 puzzle_piece_4 = GameObject.GameObject("puzzle piece 4", list_of_locations[21], True, False, False, "another puzzle piece...")
 key = GameObject.GameObject("key", finished_puzzle, True, False, False, "a golden key")
 magnifying_glass = GameObject.GameObject("magnifying glass", list_of_locations[19], True, False, False, "a magnifying glass")
-broom = GameObject.GameObject.GameObject("broom", list_of_locations[21], True, True, False, "a broom")
+broom = GameObject.GameObject("broom", list_of_locations[21], True, True, False, "a broom")
 bucket = GameObject.GameObject("bucket", list_of_locations[21], True, True, False, "an empty bucket")
 bucket_filled = GameObject.GameObject("water bucket", bucket, True, False, False, "a bucket filled with water")
 trapdoor = GameObject.GameObject("trapdoor", list_of_locations[16], False, False, False, "a trapdoor")
 water = GameObject.GameObject("water", list_of_locations[22], False, True, False, "water")
 lighter = GameObject.GameObject("lighter", list_of_locations[21], True, True, False, "a lighter, maybe you could light a fire with this?")
-game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue11, clue2, puzzle,
-                puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, key,
-                scroll, safe, gold_bar, bar_clue, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4,
-                hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10,
-                hint_fragment_11, hint_fragment_12, hint_fragment_13, fragment_clue, puzzle_piece_3, puzzle_with_three_pieces_inserted, glue_stick, hint3, door, finished_puzzle, magnifying_glass, broom, bucket, bucket_filled, trapdoor, lighter]
+game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue11, clue2, puzzle, puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, key, scroll, safe, gold_bar, bar_clue, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4, hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10, hint_fragment_11, hint_fragment_12, hint_fragment_13, fragment_clue, puzzle_piece_3, puzzle_with_three_pieces_inserted, glue_stick, hint3, door, finished_puzzle, magnifying_glass, broom, bucket, bucket_filled, trapdoor, lighter]
 
 def perform_command(verb, noun):
 
@@ -847,7 +843,7 @@ def build_interface():
         image_label.grid(row=0, column=0, rowspan=3, columnspan=1, padx=2, pady=2)
 
     description_widget = Text(root, width=60, height=10, relief=GROOVE, wrap='word')
-    description_widget.insert(1.0, "After the catastrophe that was the pandemic, Benny finds himself back in dreamland, but something seems wrong. It looks like Fala and Nodo have taken him prisoner! Now he has to use all of the knowledge he’s gathered throughout all of his various adventures in the past to escape.\nFala and Nodo have hidden various puzzles throughout the castle basement. Can you figure them out and help Benny escape before evil takes over the kingdom? You’re the kingdom’s only hope at rescuing the protector of Dreamland.\n"
+    description_widget.insert(1.0, "After the catastrophe that was the pandemic, Benny finds himself back in dreamland, but something seems wrong. It looks like Fala and Nodo have taken him prisoner! Now he has to use all of the knowledge he’s gathered throughout all of his various adventures in the past to escape.\nFala and Nodo have hidden various puzzles throughout the castle basement. Can you figure them out and help Benny escape before evil takes over the kingdom? You’re the kingdom’s only hope at rescuing the protector of Dreamland.\n")
     description_widget.config(state="disabled")
     if PORTRAIT_LAYOUT:
         description_widget.grid(row=1, column=0, columnspan=3, sticky=W, padx=2, pady=2)
