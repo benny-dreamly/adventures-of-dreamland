@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import simpledialog
 import textwrap
+import time
 from PIL import ImageTk, Image
 import GameObject
 
@@ -127,6 +128,11 @@ button_frame = None
 
 door_open = False
 safe_open = False
+trapdoor_open = False
+fire_lit = False
+benny_dead = False
+
+MAX_TIME_ELAPSED = 15
 
 refresh_location = True
 refresh_objects_visible = True
@@ -169,7 +175,7 @@ hint_fragment_11 = GameObject.GameObject("hint K", list_of_locations[17], True, 
 hint_fragment_12 = GameObject.GameObject("hint L", list_of_locations[18], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
 hint_fragment_13 = GameObject.GameObject("hint M", list_of_locations[19], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
 fragment_clue = GameObject.GameObject("cluee", list_of_locations[19], True, True, False, "more ripped looking paper...")
-puzzle_piece_3 = GameObject.GameObject("puzzle piece 3", list_of_locations[15], True, False, False, "another puzzle piece woo")
+puzzle_piece_3 = GameObject.GameObject("puzzle piece 3", list_of_locations[16], True, False, False, "another puzzle piece woo")
 puzzle_with_three_pieces_inserted = GameObject.GameObject("puzzle (3/4)", puzzle_with_two_pieces_inserted, True, False, False, "puzzle (3/4)")
 glue_stick = GameObject.GameObject("glue stick", list_of_locations[20], True, False, False, "a glue stick")
 hint3 = GameObject.GameObject("hint 3", None, True, False, False, "hint 3")
@@ -177,11 +183,18 @@ door = GameObject.GameObject("door", list_of_locations[19], False, True, False, 
 finished_puzzle = GameObject.GameObject("puzzle (4/4)", puzzle_with_three_pieces_inserted, True, False, False, "a finished puzzle, what does it do?")
 puzzle_piece_4 = GameObject.GameObject("puzzle piece 4", list_of_locations[21], True, False, False, "another puzzle piece...")
 key = GameObject.GameObject("key", finished_puzzle, True, False, False, "a golden key")
+magnifying_glass = GameObject.GameObject("magnifying glass", list_of_locations[19], True, False, False, "a magnifying glass")
+broom = GameObject.GameObject.GameObject("broom", list_of_locations[21], True, True, False, "a broom")
+bucket = GameObject.GameObject("bucket", list_of_locations[21], True, True, False, "an empty bucket")
+bucket_filled = GameObject.GameObject("water bucket", bucket, True, False, False, "a bucket filled with water")
+trapdoor = GameObject.GameObject("trapdoor", list_of_locations[16], False, False, False, "a trapdoor")
+water = GameObject.GameObject("water", list_of_locations[22], False, True, False, "water")
+lighter = GameObject.GameObject("lighter", list_of_locations[21], True, True, False, "a lighter, maybe you could light a fire with this?")
 game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue11, clue2, puzzle,
                 puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, key,
                 scroll, safe, gold_bar, bar_clue, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4,
                 hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10,
-                hint_fragment_11, hint_fragment_12, hint_fragment_13, fragment_clue, puzzle_piece_3, puzzle_with_three_pieces_inserted, glue_stick, hint3, door, finished_puzzle]
+                hint_fragment_11, hint_fragment_12, hint_fragment_13, fragment_clue, puzzle_piece_3, puzzle_with_three_pieces_inserted, glue_stick, hint3, door, finished_puzzle, magnifying_glass, broom, bucket, bucket_filled, trapdoor, lighter]
 
 
 def perform_command(verb, noun):
@@ -208,6 +221,8 @@ def perform_command(verb, noun):
         perform_decipher_command(noun)
     elif verb == "GLUE":
         perform_glue_command(noun)
+    elif verb == "USE":
+        perform_use_command(noun)
     else:
         print_to_description("unknown command")
 
@@ -411,6 +426,9 @@ def perform_open_command(object_name):
             print_to_description("Benny pulls on the handle and the safe opens!")
             set_current_image()
             game_object.description = "a small safe, with the door wide open"
+        if game_object == trapdoor and (game_object.visible and game_object.location == current_location) and broom.carried:
+            print_to_description("Benny pushes on the trapdoor with the end of the broom and it opens, revealing a puzzle piece.")
+            set_current_image()
         else:
             print_to_description("You can't open one of those.")
     else:
@@ -451,6 +469,8 @@ def perform_solve_command(object_name):
                     obj.carried = False
                     obj.visible = False
                 puzzle_with_one_piece_inserted.carried = True
+                list_of_commands.append("DECIPHER\n")
+                list_of_locations.append("SOLVE\n")
                 refresh_objects_visible = True
         elif game_object.carried and game_object == puzzle_with_one_piece_inserted:
             answer = simpledialog.askstring("Input", "What would you like to put in the puzzle next?", parent=root)
@@ -475,6 +495,7 @@ def perform_solve_command(object_name):
                         obj.carried = False
                         obj.visible = False
                     puzzle_with_two_pieces_inserted.carried = True
+                    list_of_commands.append("UNLOCK\n")
                     refresh_objects_visible = True
         elif game_object.carried and game_object == puzzle_with_two_pieces_inserted:
             answer = simpledialog.askstring("Input", "What would you like to put in the puzzle next?", parent=root)
@@ -499,6 +520,7 @@ def perform_solve_command(object_name):
                     game_object.carried = False
                     puzzle_with_three_pieces_inserted.carried = True
                     puzzle_piece_3.visible = False
+                    list_of_commands.append("GLUE\n")
                     refresh_objects_visible = True
         elif game_object.carried and game_object == puzzle_with_three_pieces_inserted:
             answer = simpledialog.askstring("Input", "What would you like to put in the puzzle next?", parent=root)
@@ -519,11 +541,12 @@ def perform_solve_command(object_name):
                     else:
                         print_to_description(piece_slot_message)
                         puzzle_piece_inserted = True
-                    puzzle_piece_4.carried = False
-                    game_object.carried = False
-                    finished_puzzle.carried = True
-                    puzzle_piece_4.visible = False
-                    refresh_objects_visible = True
+                puzzle_piece_4.carried = False
+                game_object.carried = False
+                puzzle_piece_4.visible = False
+                print_to_description("Benny watches as the puzzle transforms into a key. He can finally escape!!!")
+                key.carried = True
+                refresh_objects_visible = True
         else:
             print_to_description("You're missing something.")
     else:
@@ -563,6 +586,12 @@ def perform_unlock_command(object_name):
                     print_to_description("The code you provided Benny with worked! The safe is now unlocked.")
                     safe_open = True
             refresh_objects_visible = True
+        if game_object == door and (game_object.visible and game_object.location == current_location):
+            if key.carried:
+                door_open = True
+                set_current_image()
+            else:
+                "You don't have anything to unlock the door with."
         else:
             print_to_description("You can't unlock that!")
     else:
@@ -588,6 +617,48 @@ def perform_decipher_command(message):
     print_to_description("Deciphered message:")
     print_to_description(deciphered_message)
 
+def perform_fill_command(object_name):
+    game_object = get_game_object(object_name)
+    if not (game_object is None):
+        if game_object == bucket:
+            if current_location == 22:
+                print_to_description("Benny dips the bucket into the water and picks it all up, now his bucket is filled.")
+                bucket.carried = False
+                for obj in [bucket, water]:
+                    obj.visible = False
+                bucket_filled.carried = True
+            else:
+                print_to_description("You can't fill that here, there isn't any water to fill it.")
+        else:
+            print_to_description("You can't fill that!")
+
+def perform_use_command(object_name):
+    game_object = get_game_object(object_name)
+    global fire_lit
+    global refresh_objects_visible
+    if not (game_object is None):
+        if game_object == lighter:
+            if current_location == 22:
+                if broom.visible and broom.location == current_location:
+                    print_to_description("Benny lights the broom with the lighter and watches it burn. It seems to be burning quite quickly, and if he doesn't extinguish it soon, he will likely perish if he doesn't escape.")
+                    fire_lit = True
+                    broom.visible = False
+                else:
+                    print_to_description("There's nothing to light on fire.")
+            else:
+                print_to_description("The fire won't do anything here.")
+        else:
+            print_to_description("You can't light a fire with this.")
+    elif game_object == bucket_filled:
+        if current_location == 22 and fire_lit:
+            print_to_description("Benny throws the water onto the fire and manages to put it out. It seems like he has been rewarded for this, as he has managed to reveal another puzzle piece!")
+            fire_lit = False
+            puzzle_piece_4.visible = True
+            refresh_objects_visible = True
+        else:
+            print_to_description("The water won't do anything here!")
+    else:
+        print_to_description("You can't use that.")
 
 def describe_current_location(current_location):
     index = current_location - 1  # Adjust for 0-based indexing in Python lists
@@ -600,15 +671,10 @@ def describe_current_location(current_location):
 
 def set_current_image():
     image_mapping = {
-        1: 'blank-1.gif',
-        2: 'blank-2.gif',
-        3: 'blank-3.gif',
         4: 'hallway.tiff',
         5: 'hallway.tiff',
         13: 'hallway.tiff',
         15: 'hallway.tiff',
-        16: 'hallway.tiff',
-        17: 'hallway.tiff',
         18: 'hallway.tiff',
         6: 'right_corner.tiff',
         14: 'right_corner.tiff',
@@ -616,6 +682,11 @@ def set_current_image():
         19: 'left_corner.png',
         8: 'vault-1.tiff',
         9: 'vault-2.tiff',
+        17: 'hallway.tiff',
+        1: 'blank-1.gif',
+        2: 'blank-2.gif',
+        3: 'blank-3.gif',
+        16: 'hallway.tiff', if magnifying_glass.carried and not trapdoor_open elif 'hallway.tiff' else 'hallway.tiff',
         10: 'safe-open.tiff' if safe_open and puzzle_piece_2.visible else 'open-safe-no-piece.tiff' if puzzle_piece_2.carried and not puzzle_with_two_pieces_inserted.carried else 'safe-closed.tiff',
         11: 'vault-4.tiff' if gold_bar.visible and scroll_hint.visible else 'vault-4-no-hint.tiff' if gold_bar.visible and not scroll_hint.visible else 'vault-4-no-bar.tiff' if scroll_hint.visible and not gold_bar.visible else 'vault-4-no-bar-no-hint.tiff',
     }
@@ -728,9 +799,25 @@ def describe_current_inventory():
 
 def handle_special_condition():
     global end_of_game
+    global fire_lit
+    global benny_dead
 
-    if False:
+    cause_of_death = ""
+
+    if fire_lit and current_location == 22:
+        while fire_lit and not benny_dead:
+            time_elapsed = time.perf_counter()
+            if time_elapsed > MAX_TIME_ELAPSED:
+                cause_of_death = "a fire."
+                benny_dead = True
+
+    if benny_dead:
+        print_to_description("Benny has died due to " + cause_of_death)
         print_to_description("GAME OVER")
+        end_of_game = True
+
+    if current_location == 23:
+        print_to_description("You successfully helped Benny escape the castle basement! Congratulations.")
         end_of_game = True
 
 
@@ -806,6 +893,12 @@ def describe_current_visible_objects():
 
     if fragment_clue.carried:
         glue_stick.visible = True
+
+    if hint3.carried:
+        magnifying_glass.visible = True
+
+    if trapdoor_open:
+        puzzle_piece_3.visible = True
 
     for current_object in game_objects:
         if (current_object.location == current_location) and current_object.visible and not current_object.carried:
