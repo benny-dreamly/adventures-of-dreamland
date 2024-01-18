@@ -28,15 +28,10 @@ Puzzles are also items, as mentioned previously. Puzzles require you to find puz
 
 ### Keys 
 
-There is only one key in the game. In order to find that key, you have to find key fragments.
+There is only one key in the game. How do you find it? Can't tell you.
 
 Where's the key used? Can't tell you that. You'll have to figure that out yourself. 
 
-### Key Fragments
-
-Where do you find key fragments? I'm not going to tell you that, but you'll figure that out when you actually play the game. 
-
-How do you put the key fragments together into a key? I also can't tell you that, but I'll give you a ***hint***.
 
 ## Special Items
 
