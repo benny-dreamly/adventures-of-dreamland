@@ -36,89 +36,30 @@ location_names = [
     "Stairwell",
 ]
 location_descriptions = [
-    textwrap.dedent('''\
-        Benny wakes up in a dark room. He realizes that Fala and Nodo have locked him in the castle jail. 
-        Unfortunately, it seems like the great evil has possessed them and decided to lock him up for good. Luckily for 
-        him, the guards may have forgotten to lock the cell door behind them!
-
-        The room looks dilapidated, like nobody’s bothered to maintain it since there hasn’t been any prisoners for years. 
-        Cobwebs are scattered around the room, and it looks like the cell is bigger than he thought. There’s a table in the 
-        corner, with an old looking scroll that might be made from papyrus. Under the table, he can see a puzzle piece. 
-        It seems like the hidden puzzles he heard about when he was being transported into the cell were real. 
-        He might have a shot at escaping.
-    '''),
-    textwrap.dedent('''\
-        Unfortunately for Benny, in the next room he can’t see anything obvious. He thinks he might have to come back 
-        later in case there’s something hidden in the room that he can’t see right now. It feels like there might be 
-        something hidden in this room.
-    '''),
-    textwrap.dedent('''\
-        Benny realizes that this cell he’s in right now is really big. It still looks about the same as the other two 
-        rooms, lots of cobwebs and some various scattered furniture pieces. This room seems special, though. There’s a 
-        pedestal in the middle with a puzzle on it? Yep. Looks like a puzzle. Maybe this will help him escape?
-    '''),
-    textwrap.dedent('''\
-        Benny finds himself in a hallway, that doesn’t quite seem to have an end to it. He thinks nothing of it, 
-        as it appears just to be a hallway.
-    '''),
-    textwrap.dedent("Still looks like a hallway.\n"),
-    textwrap.dedent(
-        "At last, Benny finds a turn in the corridor. Maybe he’ll find something hidden in the next room?\n"),
-    textwrap.dedent('''\
-        Benny is still in a hallway, but it looks like he’s finally getting somewhere. He can see a room to his left. 
-        Maybe he should investigate it?
-    '''),
-    textwrap.dedent('''\
-        Benny finds himself in another room. It looks like it could be one of the vaults? Nope, just seems to look 
-        like some storage. Possibly an office? Nevermind, it really does look like one of the castle vaults. The dark and 
-        dingy brick hallways have been replaced with nice wood floors and well kept bricks instead. There’s a small 
-        counter in the room, which looks like it could have been used by someone that was keeping track of the items in 
-        the vault. It seems that there’s also some space behind the counter that seems to lead into another room.
-    '''),
-    textwrap.dedent('''\
-        Benny finds a little room with some shelves behind the counter, with a small box one of the shelves. There 
-        seems to be a room beside this one that looks to be the actual vault with all of the important valuables in it. 
-        No locked door or anything on the actual vault area either. Super strange when you consider there’s probably lots 
-        of fairly expensive items in it.
-    '''),
-    textwrap.dedent('''\
-        Benny finds himself in the actual heart of the vault. It looks like there’s lots of shelves with various 
-        precious minerals and lots of coins on the floor. He sees a small safe on one of the shelves, and it looks like 
-        he can open it. Unfortunately for him, he doesn’t yet have the combination for the safe. Maybe it will show 
-        itself in the next room?
-    '''),
-    textwrap.dedent('''\
-        There seems to be lots of gold and silver in this room too, but the Dream Diamond and lots of the kingdom’s 
-        valuables he’s recovered in the past are also in this part of the vault. Maybe there’s something important in 
-        here?
-
-        Oh look at that, he’s found a small engraving on one of the gold bars. Maybe he can grab it? There also 
-        seems to be a little piece of paper in the corner.
-    '''),
-    textwrap.dedent('''\
-        Benny finds himself at another corner, this time it’s a right turn. There sure is a very long hallway in this 
-        castle basement.
-    '''),
-    textwrap.dedent("Benny is still in a straight hallway, how long even is this?\n"),
-    textwrap.dedent("How can there be such a long hallway? It feels impractical.\n"),
-    textwrap.dedent("It's yet another straight hallway... Why?\n"),
-    textwrap.dedent("This hallway feels endless. When will it end?\n"),
-    textwrap.dedent("SERIOUSLY!?!? MORE HALLWAY!?!?\n"),
-    textwrap.dedent("WHAT THE HECK? THIS HALLWAY WILL NEVER END...\n"),
-    textwrap.dedent('''
-        Benny has finally arrived at yet another corner, this time it's another right turn... maybe this is the end of 
-        the hallway?\n'''),
-    textwrap.dedent('''At last, there seems to be a fork in the road, Benny can keep going straight into another 
-    room, or go right into yet another room, after unlocking the door which seems to be in the way. How is he going 
-    to get a key to open this door?\n'''),
-    textwrap.dedent('''Benny seems to have found a supply closet. There's a broom leaning on one of the walls, 
-    an empty bucket on the floor and a lighter also on the floor. It seems like there's some sort of puzzle in here? 
-    Possibly some kind of magic ritual? Benny is still slightly confused on how to solve this. The closet does seem 
-    to be a bit bigger though, so he'll probably be able to get a better picture of what he has to do.'''),
-    textwrap.dedent('''The closet seems to have a small tub of water in it. Maybe that will somehow be helpful?'''),
-    textwrap.dedent('''At last, Benny finds himself at the stairwell. He can escape now, thanks to you.''')
+    "Benny wakes up in a dark room. He realizes that Fala and Nodo have locked him in the castle jail. Unfortunately, it seems like the great evil has possessed them and decided to lock him up for good. Luckily for him, the guards may have forgotten to lock the cell door behind them!\nThe room looks dilapidated, like nobody’s bothered to maintain it since there hasn’t been any prisoners for years. Cobwebs are scattered around the room, and it looks like the cell is bigger than he thought. There’s a table in the corner, with an old looking scroll that might be made from papyrus. Under the table, he can see a puzzle piece. It seems like the hidden puzzles he heard about when he was being transported into the cell were real. He might have a shot at escaping.",
+    "Unfortunately for Benny, in the next room he can’t see anything obvious. He thinks he might have to come back later in case there’s something hidden in the room that he can’t see right now. It feels like there might be something hidden in this room.",
+    "Benny realizes that this cell he’s in right now is really big. It still looks about the same as the other two rooms, lots of cobwebs and some various scattered furniture pieces. This room seems special, though. There’s a pedestal in the middle with a puzzle on it? Yep. Looks like a puzzle. Maybe this will help him escape?",
+    "Benny finds himself in a hallway, that doesn’t quite seem to have an end to it. He thinks nothing of it, as it appears just to be a hallway.",
+    "Still looks like a hallway.\n",
+    "At last, Benny finds a turn in the corridor. Maybe he’ll find something hidden in the next room?\n",
+    "Benny is still in a hallway, but it looks like he’s finally getting somewhere. He can see a room to his left. Maybe he should investigate it?",
+    "Benny finds himself in another room. It looks like it could be one of the vaults? Nope, just seems to look like some storage. Possibly an office? Nevermind, it really does look like one of the castle vaults. The dark and dingy brick hallways have been replaced with nice wood floors and well kept bricks instead. There’s a small counter in the room, which looks like it could have been used by someone that was keeping track of the items in the vault. It seems that there’s also some space behind the counter that seems to lead into another room.",
+    "Benny finds a little room with some shelves behind the counter, with a small box one of the shelves. There seems to be a room beside this one that looks to be the actual vault with all of the important valuables in it. No locked door or anything on the actual vault area either. Super strange when you consider there’s probably lots of fairly expensive items in it.",
+    "Benny finds himself in the actual heart of the vault. It looks like there’s lots of shelves with various precious minerals and lots of coins on the floor. He sees a small safe on one of the shelves, and it looks like he can open it. Unfortunately for him, he doesn’t yet have the combination for the safe. Maybe it will show itself in the next room?",
+    "There seems to be lots of gold and silver in this room too, but the Dream Diamond and lots of the kingdom’s valuables he’s recovered in the past are also in this part of the vault. Maybe there’s something important in here?\n\nOh look at that, he’s found a small engraving on one of the gold bars. Maybe he can grab it? There also seems to be a little piece of paper in the corner.",
+    "Benny finds himself at another corner, this time it’s a right turn. There sure is a very long hallway in this castle basement.",
+    "Benny is still in a straight hallway, how long even is this?\n",
+    "How can there be such a long hallway? It feels impractical.\n",
+    "It's yet another straight hallway... Why?\n",
+    "This hallway feels endless. When will it end?\n",
+    "SERIOUSLY!?!? MORE HALLWAY!?!?\n",
+    "WHAT THE HECK? THIS HALLWAY WILL NEVER END...\n",
+    "Benny has finally arrived at yet another corner, this time it's another right turn... maybe this is the end of the hallway?\n",
+    "At last, there seems to be a fork in the road, Benny can keep going straight into another room, or go right into yet another room, after unlocking the door which seems to be in the way. How is he going to get a key to open this door?\n",
+    "Benny seems to have found a supply closet. There's a broom leaning on one of the walls, an empty bucket on the floor and a lighter also on the floor. It seems like there's some sort of puzzle in here? Possibly some kind of magic ritual? Benny is still slightly confused on how to solve this. The closet does seem to be a bit bigger though, so he'll probably be able to get a better picture of what he has to do.",
+    "The closet seems to have a small tub of water in it. Maybe that will somehow be helpful?",
+    "At last, Benny finds himself at the stairwell. He can escape now, thanks to you."
 ]
-
 
 command_widget = None
 image_label = None
@@ -201,7 +142,6 @@ game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue1
                 hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10,
                 hint_fragment_11, hint_fragment_12, hint_fragment_13, fragment_clue, puzzle_piece_3, puzzle_with_three_pieces_inserted, glue_stick, hint3, door, finished_puzzle, magnifying_glass, broom, bucket, bucket_filled, trapdoor, lighter]
 
-
 def perform_command(verb, noun):
 
     if verb in ["GO", "N", "S", "E", "W", "A", "D", "NORTH", "SOUTH", "EAST", "WEST"]:
@@ -231,7 +171,6 @@ def perform_command(verb, noun):
     else:
         print_to_description("unknown command")
 
-
 def perform_go_command(direction):
     global current_location
     global refresh_location
@@ -252,7 +191,6 @@ def perform_go_command(direction):
     else:
         current_location = new_location
         refresh_location = True
-
 
 def perform_get_command(object_name):
     global refresh_objects_visible
@@ -276,7 +214,6 @@ def perform_get_command(object_name):
     else:
         print_to_description("You don't see one of those here!")
 
-
 def perform_put_command(object_name):
     global refresh_objects_visible
     game_object = get_game_object(object_name)
@@ -292,7 +229,6 @@ def perform_put_command(object_name):
             refresh_objects_visible = True
     else:
         print_to_description("You are not carrying one of those!")
-
 
 def perform_look_command(object_name):
     global refresh_location
@@ -323,7 +259,6 @@ def perform_look_command(object_name):
             # not visible recognized
             print_to_description("You can't see one of those!")
 
-
 def perform_read_command(object_name):
     game_object = get_game_object(object_name)
 
@@ -331,20 +266,15 @@ def perform_read_command(object_name):
         if game_object == hint1:
             if hint1.carried:
                 print_to_description("hint #1:")
-                print_to_description('''Bw xcb bpm xchhtm xqmkm qv bpm xchhtm, gwc vmml bw xcb qb qv bpm xchhtm. Gwc 
-                uig ias: Pwe lw Q xcb bpm xqmkm qv bpm xchhtm? Zmil pqvb 2 bw nqoczm wcb pwe bw xcb bpm xchhtm xqmkm 
-                qv bpm nqzab xchhtm.''')
+                print_to_description("Bw xcb bpm xchhtm xqmkm qv bpm xchhtm, gwc vmml bw xcb qb qv bpm xchhtm. Gwc uig ias: Pwe lw Q xcb bpm xqmkm qv bpm xchhtm? Zmil pqvb 2 bw nqoczm wcb pwe bw xcb bpm xchhtm xqmkm qv bpm nqzab xchhtm.")
         elif game_object == clue1:
             if clue1.carried:
                 print_to_description("clue #1:")
-                print_to_description(
-                    "In order to read the hint, you need to know how to decipher it. Your clue is 8 salad.")
+                print_to_description("In order to read the hint, you need to know how to decipher it. Your clue is 8 salad.")
         elif game_object == clue2:
             if clue2.carried:
                 print_to_description("clue #2:")
-                print_to_description(
-                    '''Still confused after deciphering the first hint? I don't blame you. To progress, you need to 
-                    SOLVE the puzzle.''')
+                print_to_description("Still confused after deciphering the first hint? I don't blame you. To progress, you need to SOLVE the puzzle.")
         elif game_object == scroll:
             if scroll.carried:
                 show_popup_image("scroll.png")
@@ -360,10 +290,7 @@ def perform_read_command(object_name):
         elif game_object == clue11:
             if clue11.carried:
                 print_to_description("clue #1.5:")
-                print_to_description(
-                    '''Still having trouble figuring out how to decipher the hint? I don't blame you, it would 
-                    require some knowledge that only super nerdy people have. Luckily for you, there exists a way to 
-                    do it for you. Your clue is the word decipher.''')
+                print_to_description("Still having trouble figuring out how to decipher the hint? I don't blame you, it would require some knowledge that only super nerdy people have. Luckily for you, there exists a way to do it for you. Your clue is the word decipher.")
         elif game_object == hint_fragment_1:
             if hint_fragment_1.carried:
                 print_to_description("49 6E 20 6F 72 64 65 72 20 74 6F 20 66")
@@ -405,21 +332,14 @@ def perform_read_command(object_name):
                 print_to_description("6C 3F")
         elif game_object == fragment_clue:
             if fragment_clue.carried:
-                print_to_description('''Confused by all the random letters and numbers strewn around the hallway that 
-                    you've picked up? Can't blame you, but I can... this is how your computer stores the text in a text 
-                    document. (more specifically a .txt file)''')
+                print_to_description("Confused by all the random letters and numbers strewn around the hallway that you've picked up? Can't blame you, but I can... this is how your computer stores the text in a text document. (more specifically a .txt file)")
         elif game_object == hint3:
             if hint3.carried:
-                print_to_description('''49 6E 20 6F 72 64 65 72 20 74 6F 20 66 69 6E 64 20 77 68 61 74 20 79 6F 75 20 
-                6D 61 79 20 62 65 20 6C 6F 6F 6B 69 6E 67 20 66 6F 72 2C 20 69 74 20 6D 61 79 20 62 65 20 68 69 64 69 
-                6E 67 20 69 6E 20 70 6C 61 69 6E 20 73 69 67 68 74 2E 20 50 65 72 68 61 70 73 20 61 6C 6C 20 74 68 6F 
-                73 65 20 65 6D 70 74 79 20 68 61 6C 6C 77 61 79 73 20 79 6F 75 20 77 65 6E 74 20 70 61 73 74 20 77 65 
-                72 65 6E 27 74 20 73 6F 20 69 6E 73 69 67 6E 69 66 69 63 61 6E 74 20 61 74 20 61 6C 6C 3F''')
+                print_to_description("49 6E 20 6F 72 64 65 72 20 74 6F 20 66 69 6E 64 20 77 68 61 74 20 79 6F 75 20 6D 61 79 20 62 65 20 6C 6F 6F 6B 69 6E 67 20 66 6F 72 2C 20 69 74 20 6D 61 79 20 62 65 20 68 69 64 69 6E 67 20 69 6E 20 70 6C 61 69 6E 20 73 69 67 68 74 2E 20 50 65 72 68 61 70 73 20 61 6C 6C 20 74 68 6F 73 65 20 65 6D 70 74 79 20 68 61 6C 6C 77 61 79 73 20 79 6F 75 20 77 65 6E 74 20 70 61 73 74 20 77 65 72 65 6E 27 74 20 73 6F 20 69 6E 73 69 67 6E 69 66 69 63 61 6E 74 20 61 74 20 61 6C 6C 3F")
         else:
             print_to_description("You're not carrying anything readable")
     else:
         print_to_description("I am not sure which " + object_name + "you are referring to")
-
 
 def perform_open_command(object_name):
     global door_open
@@ -439,12 +359,10 @@ def perform_open_command(object_name):
     else:
         print_to_description("You don't see one of those here.")
 
-
 def perform_help_command(verb):
     print_to_description("here are the commands for the game:")
     for command in list_of_commands:
         print_to_description(command)
-
 
 def perform_solve_command(object_name):
     global refresh_objects_visible
@@ -470,9 +388,9 @@ def perform_solve_command(object_name):
                     else:
                         print_to_description(piece_slot_message)
                         puzzle_piece_inserted = True
-                for obj in [puzzle_piece_1, hint1, clue1, clue11, clue2, game_object]:
-                    obj.carried = False
-                    obj.visible = False
+                for item in [puzzle_piece_1, hint1, clue1, clue11, clue2, game_object]:
+                    item.carried = False
+                    item.visible = False
                 puzzle_with_one_piece_inserted.carried = True
                 list_of_commands.append("DECIPHER\n")
                 list_of_locations.append("SOLVE\n")
@@ -496,9 +414,9 @@ def perform_solve_command(object_name):
                     else:
                         print_to_description(piece_slot_message)
                         puzzle_piece_inserted = True
-                    for obj in [puzzle_piece_2, game_object, gold_bar, bar_clue]:
-                        obj.carried = False
-                        obj.visible = False
+                    for item in [puzzle_piece_2, game_object, gold_bar, bar_clue]:
+                        item.carried = False
+                        item.visible = False
                     puzzle_with_two_pieces_inserted.carried = True
                     list_of_commands.append("UNLOCK\n")
                     refresh_objects_visible = True
@@ -521,11 +439,10 @@ def perform_solve_command(object_name):
                     else:
                         print_to_description(piece_slot_message)
                         puzzle_piece_inserted = True
-                    puzzle_piece_3.carried = False
-                    game_object.carried = False
+                    for item in [game_object, puzzle_piece_3, hint3, fragment_clue, magnifying_glass]:
+                        item.carried = False
+                        item.visible = False
                     puzzle_with_three_pieces_inserted.carried = True
-                    puzzle_piece_3.visible = False
-                    list_of_commands.append("GLUE\n")
                     refresh_objects_visible = True
         elif game_object.carried and game_object == puzzle_with_three_pieces_inserted:
             answer = simpledialog.askstring("Input", "What would you like to put in the puzzle next?", parent=root)
@@ -546,9 +463,9 @@ def perform_solve_command(object_name):
                     else:
                         print_to_description(piece_slot_message)
                         puzzle_piece_inserted = True
-                puzzle_piece_4.carried = False
-                game_object.carried = False
-                puzzle_piece_4.visible = False
+                for item in [game_object, puzzle_piece_4, bucket_filled, lighter]:
+                    item.carried = False
+                    item.visible = False
                 print_to_description("Benny watches as the puzzle transforms into a key. He can finally escape!!!")
                 key.carried = True
                 refresh_objects_visible = True
@@ -557,21 +474,19 @@ def perform_solve_command(object_name):
     else:
         print_to_description("You can't do that.")
 
-
 def perform_glue_command(object_name):
     game_object = get_game_object(object_name)
     if not (game_object is None):
         if glue_stick.carried:
-            if all(obj.carried for obj in [game_object, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4, hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10, hint_fragment_11, hint_fragment_12, hint_fragment_13]) and game_object.glueable:
-                print_to_description('''Benny succeeds at gluing the fragments of this hint together. Maybe it will be a bit easier to decipher now?''')
-                for obj in [game_object, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4, hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10, hint_fragment_11, hint_fragment_12, hint_fragment_13]:
-                    obj.carried = False
+            if all(item.carried for item in [game_object, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4, hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10, hint_fragment_11, hint_fragment_12, hint_fragment_13]) and game_object.glueable:
+                print_to_description("Benny succeeds at gluing the fragments of this hint together. Maybe it will be a bit easier to decipher now?")
+                for item in [game_object, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4, hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10, hint_fragment_11, hint_fragment_12, hint_fragment_13]:
+                    item.carried = False
                 hint3.carried = True
         else:
             print_to_description("You're missing something.")
     else:
         print_to_description("You can't do that.")
-
 
 def perform_unlock_command(object_name):
     global safe_open
@@ -602,7 +517,6 @@ def perform_unlock_command(object_name):
     else:
         print_to_description("There's nothing to unlock.")
 
-
 def perform_decipher_command(message):
     message = message.upper()
     alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -629,8 +543,8 @@ def perform_fill_command(object_name):
             if current_location == 22:
                 print_to_description("Benny dips the bucket into the water and picks it all up, now his bucket is filled.")
                 bucket.carried = False
-                for obj in [bucket, water]:
-                    obj.visible = False
+                for item in [bucket, water]:
+                    item.visible = False
                 bucket_filled.carried = True
             else:
                 print_to_description("You can't fill that here, there isn't any water to fill it.")
@@ -673,7 +587,6 @@ def describe_current_location(current_location):
     else:
         print_to_description("unknown location: " + str(current_location))
 
-
 def set_current_image():
     image_mapping = {
         4: 'hallway.tiff',
@@ -700,7 +613,6 @@ def set_current_image():
     image_label.img = ImageTk.PhotoImage(file=f'res/images/{image_file}')
     image_label.config(image=image_label.img)
 
-
 def show_popup_image(image_file):
     popup = tkinter.Toplevel(root)
 
@@ -709,7 +621,6 @@ def show_popup_image(image_file):
     label = tkinter.Label(popup, image=img)
     label.image = img  # Keep a reference to the image to prevent garbage collection
     label.pack()
-
 
 def get_location_to_north(current_location):
     north_mappings = {
@@ -730,7 +641,6 @@ def get_location_to_north(current_location):
 
     return north_mappings.get(current_location, 0)
 
-
 def get_location_to_south(current_location):
     south_mappings = {
         1: 2,
@@ -747,7 +657,6 @@ def get_location_to_south(current_location):
     }
 
     return south_mappings.get(current_location, 0)
-
 
 def get_location_to_east(current_location):
     east_mappings = {
@@ -766,7 +675,6 @@ def get_location_to_east(current_location):
 
     return east_mappings.get(current_location, 0)
 
-
 def get_location_to_west(current_location):
     west_mappings = {
         4: 3,
@@ -784,7 +692,6 @@ def get_location_to_west(current_location):
 
     return west_mappings.get(current_location, 0)
 
-
 def describe_current_inventory():
     object_count = 0
     object_list = ""
@@ -800,7 +707,6 @@ def describe_current_inventory():
     inventory_widget.delete(1.0, END)
     inventory_widget.insert(1.0, inventory)
     inventory_widget.config(state="disabled")
-
 
 def handle_special_condition():
     global end_of_game
@@ -830,7 +736,6 @@ def handle_special_condition():
         print_to_description("You successfully helped Benny escape the castle basement! Congratulations.")
         end_of_game = True
 
-
 def get_game_object(object_name):
     sought_object = None
     for current_object in game_objects:
@@ -838,7 +743,6 @@ def get_game_object(object_name):
             sought_object = current_object
             break
     return sought_object
-
 
 def describe_current_visible_objects():
     object_count = 0
@@ -917,7 +821,6 @@ def describe_current_visible_objects():
 
     print_to_description("Benny sees " + (object_list + "." if object_count > 0 else "nothing special."))
 
-
 def build_interface():
     global command_widget
     global image_label
@@ -944,14 +847,7 @@ def build_interface():
         image_label.grid(row=0, column=0, rowspan=3, columnspan=1, padx=2, pady=2)
 
     description_widget = Text(root, width=60, height=10, relief=GROOVE, wrap='word')
-    description_widget.insert(1.0, textwrap.dedent('''\
-    After the catastrophe that was the pandemic, Benny finds himself back in dreamland, but something seems wrong. It 
-    looks like Fala and Nodo have taken him prisoner! Now he has to use all of the knowledge he’s gathered throughout 
-    all of his various adventures in the past to escape. 
-
-    Fala and Nodo have hidden various puzzles throughout the castle basement. Can you figure them out and help Benny 
-    escape before evil takes over the kingdom? You’re the kingdom’s only hope at rescuing the protector of Dreamland.\n
-    '''))
+    description_widget.insert(1.0, "After the catastrophe that was the pandemic, Benny finds himself back in dreamland, but something seems wrong. It looks like Fala and Nodo have taken him prisoner! Now he has to use all of the knowledge he’s gathered throughout all of his various adventures in the past to escape.\nFala and Nodo have hidden various puzzles throughout the castle basement. Can you figure them out and help Benny escape before evil takes over the kingdom? You’re the kingdom’s only hope at rescuing the protector of Dreamland.\n"
     description_widget.config(state="disabled")
     if PORTRAIT_LAYOUT:
         description_widget.grid(row=1, column=0, columnspan=3, sticky=W, padx=2, pady=2)
@@ -995,7 +891,6 @@ def build_interface():
     else:
         inventory_widget.grid(row=2, column=2, rowspan=2, padx=2, pady=2, sticky=W)
 
-
 def on_window_resize(event):
     global button_frame
 
@@ -1018,7 +913,6 @@ def on_window_resize(event):
 
         # Place the button frame below the text and input elements, center horizontally
         button_frame.grid(row=2, column=1, columnspan=1, padx=2, pady=10, sticky="nsew")
-
 
 def set_current_state():
     global refresh_location
@@ -1043,30 +937,25 @@ def set_current_state():
 
     command_widget.config(state=("disabled" if end_of_game else "normal"))
 
-
 def north_button_click():
     print_to_description("N", True)
     perform_command("NORTH", "")
     set_current_state()
-
 
 def south_button_click():
     print_to_description("S", True)
     perform_command("SOUTH", "")
     set_current_state()
 
-
 def east_button_click():
     print_to_description("E", True)
     perform_command("EAST", "")
     set_current_state()
 
-
 def west_button_click():
     print_to_description("WEST", True)
     perform_command("WEST", "")
     set_current_state()
-
 
 def return_key_enter(event):
     if event.widget == command_widget:
@@ -1081,7 +970,6 @@ def return_key_enter(event):
 
         set_current_state()
 
-
 def set_directions_to_move():
     move_to_north = (get_location_to_north(current_location) > 0) and not end_of_game
     move_to_south = (get_location_to_south(current_location) > 0) and not end_of_game
@@ -1093,7 +981,6 @@ def set_directions_to_move():
     east_button.config(state=("normal" if move_to_east else "disabled"))
     west_button.config(state=("normal" if move_to_west else "disabled"))
 
-
 def print_to_description(output, user_input=False):
     description_widget.config(state='normal')
     description_widget.insert(END, output)
@@ -1103,7 +990,6 @@ def print_to_description(output, user_input=False):
     description_widget.insert(END, '\n')
     description_widget.config(state='disabled')
     description_widget.see(END)
-
 
 def play_audio(filename, asynchronous=True, loop=True):
     import platform
@@ -1129,11 +1015,9 @@ def play_audio(filename, asynchronous=True, loop=True):
     else:
         print_to_description("unsupported platform")
 
-
 def main():
     build_interface()
     set_current_state()
     root.mainloop()
-
 
 main()
