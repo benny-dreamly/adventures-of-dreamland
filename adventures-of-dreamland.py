@@ -103,15 +103,20 @@ location_descriptions = [
     textwrap.dedent("How can there be such a long hallway? It feels impractical.\n"),
     textwrap.dedent("It's yet another straight hallway... Why?\n"),
     textwrap.dedent("This hallway feels endless. When will it end?\n"),
-    textwrap.dedent("more hallway"),
-    textwrap.dedent("more hallway"),
-    textwrap.dedent('''\
+    textwrap.dedent("SERIOUSLY!?!? MORE HALLWAY!?!?\n"),
+    textwrap.dedent("WHAT THE HECK? THIS HALLWAY WILL NEVER END...\n"),
+    textwrap.dedent('''
         Benny has finally arrived at yet another corner, this time it's another right turn... maybe this is the end of 
         the hallway?\n'''),
-    textwrap.dedent('''\
-        At last, there seems to be a fork in the road, Benny can keep going straight into another room, or go right 
-        into yet another room, after unlocking the door which seems to be in the way. How is he going to get a key to open this door?\n
-    ''')
+    textwrap.dedent('''At last, there seems to be a fork in the road, Benny can keep going straight into another 
+    room, or go right into yet another room, after unlocking the door which seems to be in the way. How is he going 
+    to get a key to open this door?\n'''),
+    textwrap.dedent('''Benny seems to have found a supply closet. There's a broom leaning on one of the walls, 
+    an empty bucket on the floor and a lighter also on the floor. It seems like there's some sort of puzzle in here? 
+    Possibly some kind of magic ritual? Benny is still slightly confused on how to solve this. The closet does seem 
+    to be a bit bigger though, so he'll probably be able to get a better picture of what he has to do.'''),
+    textwrap.dedent('''The closet seems to have a small tub of water in it. Maybe that will somehow be helpful?'''),
+    textwrap.dedent('''At last, Benny finds himself at the stairwell. He can escape now, thanks to you.''')
 ]
 
 
@@ -686,7 +691,7 @@ def set_current_image():
         1: 'blank-1.gif',
         2: 'blank-2.gif',
         3: 'blank-3.gif',
-        16: 'hallway.tiff', if magnifying_glass.carried and not trapdoor_open elif 'hallway.tiff' else 'hallway.tiff',
+        16: 'hallway.tiff' if magnifying_glass.carried and not trapdoor_open else 'hallway.tiff' if trapdoor_open and not puzzle_piece_3.carried else 'hallway.tiff' if trapdoor_open and puzzle_piece_3.carried else 'hallway.tiff',
         10: 'safe-open.tiff' if safe_open and puzzle_piece_2.visible else 'open-safe-no-piece.tiff' if puzzle_piece_2.carried and not puzzle_with_two_pieces_inserted.carried else 'safe-closed.tiff',
         11: 'vault-4.tiff' if gold_bar.visible and scroll_hint.visible else 'vault-4-no-hint.tiff' if gold_bar.visible and not scroll_hint.visible else 'vault-4-no-bar.tiff' if scroll_hint.visible and not gold_bar.visible else 'vault-4-no-bar-no-hint.tiff',
     }
@@ -813,6 +818,11 @@ def handle_special_condition():
 
     if benny_dead:
         print_to_description("Benny has died due to " + cause_of_death)
+        print_to_description("GAME OVER")
+        end_of_game = True
+
+    if not trapdoor_open and not broom.visible:
+        print_to_description("Benny can't continue to escape, as he used the broom to make a fire before using it for something else.")
         print_to_description("GAME OVER")
         end_of_game = True
 
