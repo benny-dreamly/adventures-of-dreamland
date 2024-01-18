@@ -77,6 +77,9 @@ safe_open = False
 trapdoor_open = False
 fire_lit = False
 benny_dead = False
+broom_destroyed = False
+fire_extinguished = False
+three_pieces_solved = False
 
 MAX_TIME_ELAPSED = 15
 
@@ -134,9 +137,10 @@ broom = GameObject.GameObject("broom", list_of_locations[21], True, True, False,
 bucket = GameObject.GameObject("bucket", list_of_locations[21], True, True, False, "an empty bucket")
 bucket_filled = GameObject.GameObject("water bucket", bucket, True, False, False, "a bucket filled with water")
 trapdoor = GameObject.GameObject("trapdoor", list_of_locations[16], False, False, False, "a trapdoor")
-water = GameObject.GameObject("water", list_of_locations[22], False, True, False, "water")
+water = GameObject.GameObject("water", list_of_locations[21], False, True, False, "water")
 lighter = GameObject.GameObject("lighter", list_of_locations[21], True, True, False, "a lighter, maybe you could light a fire with this?")
-game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue11, clue2, puzzle, puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, key, scroll, safe, gold_bar, bar_clue, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4, hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10, hint_fragment_11, hint_fragment_12, hint_fragment_13, fragment_clue, puzzle_piece_3, puzzle_with_three_pieces_inserted, glue_stick, hint3, door, finished_puzzle, magnifying_glass, broom, bucket, bucket_filled, trapdoor, lighter]
+game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue11, clue2, puzzle, puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, key, scroll, safe, gold_bar, bar_clue, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4, hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10, hint_fragment_11, hint_fragment_12, hint_fragment_13, fragment_clue, puzzle_piece_3, puzzle_with_three_pieces_inserted, glue_stick, hint3, door, finished_puzzle, magnifying_glass, broom, bucket, bucket_filled, trapdoor, lighter, water, puzzle_piece_4]
+
 
 def perform_command(verb, noun):
 
@@ -164,6 +168,8 @@ def perform_command(verb, noun):
         perform_glue_command(noun)
     elif verb == "USE":
         perform_use_command(noun)
+    elif verb == "FILL":
+        perform_fill_command(noun)
     else:
         print_to_description("unknown command")
 
@@ -340,6 +346,8 @@ def perform_read_command(object_name):
 def perform_open_command(object_name):
     global door_open
     global safe_open
+    global trapdoor_open
+    global refresh_objects_visible
     game_object = get_game_object(object_name)
 
     if not (game_object is None):
@@ -349,7 +357,8 @@ def perform_open_command(object_name):
             game_object.description = "a small safe, with the door wide open"
         if game_object == trapdoor and (game_object.visible and game_object.location == current_location) and broom.carried:
             print_to_description("Benny pushes on the trapdoor with the end of the broom and it opens, revealing a puzzle piece.")
-            set_current_image()
+            trapdoor_open = True
+            refresh_objects_visible = True
         else:
             print_to_description("You can't open one of those.")
     else:
@@ -362,6 +371,7 @@ def perform_help_command(verb):
 
 def perform_solve_command(object_name):
     global refresh_objects_visible
+    global three_pieces_solved
     game_object = get_game_object(object_name)
     piece_slot_message = "The piece slots into the puzzle, but you still haven't solved it."
     if not (game_object is None):
@@ -439,6 +449,7 @@ def perform_solve_command(object_name):
                         item.carried = False
                         item.visible = False
                     puzzle_with_three_pieces_inserted.carried = True
+                    three_pieces_solved = True
                     refresh_objects_visible = True
         elif game_object.carried and game_object == puzzle_with_three_pieces_inserted:
             answer = simpledialog.askstring("Input", "What would you like to put in the puzzle next?", parent=root)
@@ -478,6 +489,7 @@ def perform_glue_command(object_name):
                 print_to_description("Benny succeeds at gluing the fragments of this hint together. Maybe it will be a bit easier to decipher now?")
                 for item in [game_object, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4, hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10, hint_fragment_11, hint_fragment_12, hint_fragment_13]:
                     item.carried = False
+                    item.visible = False
                 hint3.carried = True
         else:
             print_to_description("You're missing something.")
@@ -487,6 +499,7 @@ def perform_glue_command(object_name):
 def perform_unlock_command(object_name):
     global safe_open
     global refresh_objects_visible
+    global door_open
     game_object = get_game_object(object_name)
     if not (game_object is None):
         if game_object == safe and (game_object.visible and game_object.location == current_location):
@@ -550,6 +563,8 @@ def perform_fill_command(object_name):
 def perform_use_command(object_name):
     game_object = get_game_object(object_name)
     global fire_lit
+    global fire_extinguished
+    global broom_destroyed
     global refresh_objects_visible
     if not (game_object is None):
         if game_object == lighter:
@@ -558,22 +573,26 @@ def perform_use_command(object_name):
                     print_to_description("Benny lights the broom with the lighter and watches it burn. It seems to be burning quite quickly, and if he doesn't extinguish it soon, he will likely perish if he doesn't escape.")
                     fire_lit = True
                     broom.visible = False
+                    lighter.carried = False
+                    lighter.visible = False
+                    broom_destroyed = True
                 else:
                     print_to_description("There's nothing to light on fire.")
             else:
                 print_to_description("The fire won't do anything here.")
+        elif game_object == bucket_filled:
+            if current_location == 22 and fire_lit:
+                print_to_description("Benny throws the water onto the fire and manages to put it out. It seems like he has been rewarded for this, as he has managed to reveal another puzzle piece!")
+                fire_lit = False
+                fire_extinguished = True
+                bucket_filled.carried = False
+                bucket.carried = True
+                puzzle_piece_4.visible = True
+                refresh_objects_visible = True
         else:
-            print_to_description("You can't light a fire with this.")
-    elif game_object == bucket_filled:
-        if current_location == 22 and fire_lit:
-            print_to_description("Benny throws the water onto the fire and manages to put it out. It seems like he has been rewarded for this, as he has managed to reveal another puzzle piece!")
-            fire_lit = False
-            puzzle_piece_4.visible = True
-            refresh_objects_visible = True
-        else:
-            print_to_description("The water won't do anything here!")
+            print_to_description("You can't use that.")
     else:
-        print_to_description("You can't use that.")
+        print_to_description("Invalid Object.")
 
 def describe_current_location(current_location):
     index = current_location - 1  # Adjust for 0-based indexing in Python lists
@@ -712,18 +731,16 @@ def handle_special_condition():
     cause_of_death = ""
 
     if fire_lit and current_location == 22:
-        while fire_lit and not benny_dead:
-            time_elapsed = time.perf_counter()
-            if time_elapsed > MAX_TIME_ELAPSED:
-                cause_of_death = "a fire."
-                benny_dead = True
+        if not bucket_filled.carried:
+            cause_of_death = "a fire."
+            benny_dead = True
 
     if benny_dead:
         print_to_description("Benny has died due to " + cause_of_death)
         print_to_description("GAME OVER")
         end_of_game = True
 
-    if not trapdoor_open and not broom.visible:
+    if broom_destroyed and not three_pieces_solved:
         print_to_description("Benny can't continue to escape, as he used the broom to make a fire before using it for something else.")
         print_to_description("GAME OVER")
         end_of_game = True
@@ -807,8 +824,14 @@ def describe_current_visible_objects():
     if hint3.carried:
         magnifying_glass.visible = True
 
-    if trapdoor_open:
+    if magnifying_glass.carried:
+        trapdoor.visible = True
+
+    if trapdoor_open and not puzzle_with_three_pieces_inserted.carried:
         puzzle_piece_3.visible = True
+
+    if fire_extinguished:
+        puzzle_piece_4.visible = True
 
     for current_object in game_objects:
         if (current_object.location == current_location) and current_object.visible and not current_object.carried:
