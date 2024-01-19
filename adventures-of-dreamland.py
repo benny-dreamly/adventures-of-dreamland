@@ -141,8 +141,6 @@ water = GameObject.GameObject("water", list_of_locations[21], False, True, False
 lighter = GameObject.GameObject("lighter", list_of_locations[21], True, True, False, "a lighter, maybe you could light a fire with this?")
 game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue11, clue2, puzzle, puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, key, scroll, safe, gold_bar, bar_clue, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4, hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10, hint_fragment_11, hint_fragment_12, hint_fragment_13, fragment_clue, puzzle_piece_3, puzzle_with_three_pieces_inserted, glue_stick, hint3, door, finished_puzzle, magnifying_glass, broom, bucket, bucket_filled, trapdoor, lighter, water, puzzle_piece_4]
 
-current_location = 10
-
 def perform_command(verb, noun):
 
     if verb in ["GO", "N", "S", "E", "W", "A", "D", "NORTH", "SOUTH", "EAST", "WEST"]:
@@ -615,12 +613,17 @@ def set_current_image():
         8: 'vault-1.tiff',
         9: 'vault-2.tiff',
         17: 'hallway.tiff',
-        1: 'blank-1.gif',
-        2: 'blank-2.gif',
-        3: 'blank-3.gif',
-        16: 'hallway.tiff' if magnifying_glass.carried and not trapdoor_open else 'hallway.tiff' if trapdoor_open and not puzzle_piece_3.carried else 'hallway.tiff' if trapdoor_open and puzzle_piece_3.carried else 'hallway.tiff',
+        1: 'cell_1.tiff',
+        2: 'cell_2.tiff',
+        3: 'cell_3.tiff',
+        16: 'hallway.tiff',
         10: 'safe-open.tiff' if safe_open and puzzle_piece_2.visible else 'open-safe-no-piece.tiff' if puzzle_piece_2.carried and not puzzle_with_two_pieces_inserted.carried else 'safe-closed.tiff',
         11: 'vault-4.tiff' if gold_bar.visible and scroll_hint.visible else 'vault-4-no-hint.tiff' if gold_bar.visible and not scroll_hint.visible else 'vault-4-no-bar.tiff' if scroll_hint.visible and not gold_bar.visible else 'vault-4-no-bar-no-hint.tiff',
+        7: 'hallway_one_door.tiff',
+        20: 'hallway_two_doors.tiff',
+        21: 'room_21.tiff',
+        22: 'room_22.tiff',
+        23: 'stairs.tiff'
     }
 
     image_file = image_mapping.get(current_location, 'missing.png')
