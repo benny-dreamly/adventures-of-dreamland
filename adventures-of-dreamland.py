@@ -2,9 +2,8 @@ import tkinter
 from tkinter import *
 from tkinter import ttk
 from tkinter import simpledialog
-import textwrap
-import time
 from PIL import ImageTk, Image
+import json
 import GameObject
 
 PORTRAIT_LAYOUT = True
@@ -169,6 +168,10 @@ def perform_command(verb, noun):
         perform_use_command(noun)
     elif verb == "FILL":
         perform_fill_command(noun)
+    elif verb == "SAVE":
+        save_game()
+    elif verb == "LOAD":
+        load_game()
     else:
         print_to_description("unknown command")
 
@@ -1035,6 +1038,44 @@ def play_audio(filename, asynchronous=True, loop=True):
             os.system('afplay res/audio/{}'.format(filename))
     else:
         print_to_description("unsupported platform")
+
+
+def save_game():
+    game_state = {
+        'current_location': current_location,
+        'game_objects': [obj.to_dict() for obj in game_objects]
+    }
+
+    with open('save_game.json', 'w') as save_file:
+        json.dump(game_state, save_file, indent=4)  # Add indent=4 for pretty printing
+
+    print_to_description("Game saved successfully!")
+
+
+def load_game():
+    global current_location
+    global game_objects
+
+    try:
+        with open('save_game.json', 'r') as save_file:
+            game_state = json.load(save_file)
+
+        current_location = game_state['current_location']
+
+        for obj_state, obj in zip(game_state['game_objects'], game_objects):
+            obj.name = obj_state['name']
+            obj.location = obj_state['location']  # Handle nested objects if needed
+            obj.movable = obj_state['movable']
+            obj.visible = obj_state['visible']
+            obj.carried = obj_state['carried']
+            obj.description = obj_state['description']
+            obj.glueable = obj_state['glueable']
+
+        print_to_description("Game loaded successfully!")
+        set_current_state()
+    except FileNotFoundError:
+        print_to_description("No save file found.")
+
 
 def main():
     build_interface()
