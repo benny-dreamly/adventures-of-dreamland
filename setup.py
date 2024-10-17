@@ -12,7 +12,7 @@ elif os.name == 'posix':
     base = 'Console'  # Generally leave as Console for macOS and Linux
 
 executables = [
-    Executable('adventures-of-dreamland.py', base=base, targetName='AdventuresOfDreamland.app')
+    Executable('adventures-of-dreamland.py', base=base)
 ]
 
 # Setup configuration
