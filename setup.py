@@ -4,13 +4,15 @@ import os
 # Add any files or assets your game needs (images, sounds, etc.)
 include_files = ['res/', 'save_game.json']  # Include necessary resource folders/files
 
-# Define base as "Win32GUI" if you're building for Windows and don't want a command window
+# Determine the base for the executable
 base = None
 if os.name == 'nt':
-    base = 'Win32GUI'  # Use 'Console' for console-based apps
+    base = 'Win32GUI'  # Use 'Console' for console-based apps on Windows
+elif os.name == 'posix':
+    base = 'Console'  # Generally leave as Console for macOS and Linux
 
 executables = [
-    Executable('adventures-of-dreamland.py', base=base)
+    Executable('adventures-of-dreamland.py', base=base, targetName='AdventuresOfDreamland.app')
 ]
 
 # Setup configuration
