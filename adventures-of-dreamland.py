@@ -924,7 +924,7 @@ def build_interface():
     south_button.config(command=south_button_click)
 
     east_button = ttk.Button(button_frame, text="E", width=5)
-    east_button.grid(row=1, column=2, padx=2, pady=2
+    east_button.grid(row=1, column=2, padx=2, pady=2)
 
     west_button = ttk.Button(button_frame, text="W", width=5)
     west_button.grid(row=1, column=0, padx=2, pady=2)
