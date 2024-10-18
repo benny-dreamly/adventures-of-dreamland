@@ -4,6 +4,7 @@ from tkinter import ttk
 from tkinter import simpledialog
 from PIL import ImageTk, Image
 import json
+import os
 import GameObject
 
 PORTRAIT_LAYOUT = True
@@ -87,6 +88,7 @@ refresh_objects_visible = True
 
 current_location = list_of_locations[0]
 end_of_game = False
+randomizer_mode = False  # Set to True when randomizer mode is activated
 
 playing = False
 
@@ -141,6 +143,7 @@ lighter = GameObject.GameObject("lighter", list_of_locations[21], True, True, Fa
 game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue11, clue2, puzzle, puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, key, scroll, safe, gold_bar, bar_clue, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4, hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10, hint_fragment_11, hint_fragment_12, hint_fragment_13, fragment_clue, puzzle_piece_3, puzzle_with_three_pieces_inserted, glue_stick, hint3, door, finished_puzzle, magnifying_glass, broom, bucket, bucket_filled, trapdoor, lighter, water, puzzle_piece_4]
 
 def perform_command(verb, noun):
+    global randomizer_mode
 
     if verb in ["GO", "N", "S", "E", "W", "A", "D", "NORTH", "SOUTH", "EAST", "WEST"]:
         perform_go_command(verb)
@@ -172,6 +175,12 @@ def perform_command(verb, noun):
         save_game()
     elif verb == "LOAD":
         load_game()
+    elif verb == "ACTIVATE" and noun == "RANDOMIZER":
+        randomizer_mode = True
+        print_to_description("Archipelago randomizer enabled. Have fun!")
+    elif verb == "DEACTIVATE" and noun == "RANDOMIZER":
+        randomizer_mode = False
+        print_to_description("Archipelago randomizer disabled. Please close the game if you would like to play another randomizer file, or vanilla.")
     else:
         print_to_description("unknown command")
 
@@ -215,6 +224,20 @@ def perform_get_command(object_name):
                 game_object.carried = True
                 game_object.visible = False
                 refresh_objects_visible = True
+
+                # If in randomizer mode, save the game, and track changes
+                if randomizer_mode:
+                    previous_file_name = get_new_save_file_name()  # Check the latest save
+                    previous_state = load_previous_state(previous_file_name)
+
+                    current_file_name = save_game()  # Save current state
+
+                    if previous_state:
+                        current_state = load_previous_state(current_file_name)
+                        changed_items = get_changed_items(previous_state, current_state)
+
+                        # Save state changes to a separate file
+                        save_state_changes_to_file(changed_items)
     else:
         print_to_description("You don't see one of those here!")
 
@@ -901,7 +924,23 @@ def build_interface():
     south_button.config(command=south_button_click)
 
     east_button = ttk.Button(button_frame, text="E", width=5)
-    east_button.grid(row=1, column=2, padx=2, pady=2)
+    east_button.grid(row=1, column=2, padx=2, pady=2)if randomizer_mode:
+                previous_file_name = get_new_save_file_name()  # Check the latest save
+                previous_state = load_previous_state(previous_file_name)
+
+                current_file_name = save_game()  # Save current state
+
+                if previous_state:
+                    current_state = load_previous_state(current_file_name)
+                    changed_items = get_changed_items(previous_state, current_state)
+
+                    # Save state changes to a separate file
+                    save_state_changes_to_file(changed_items)
+
+                    # Send the changes to the server
+                    send_state_changes_to_server(changed_items)
+
+                print_to_description("Game saved (randomizer mode).")
     east_button.config(command=east_button_click)
 
     west_button = ttk.Button(button_frame, text="W", width=5)
@@ -1039,6 +1078,12 @@ def play_audio(filename, asynchronous=True, loop=True):
     else:
         print_to_description("unsupported platform")
 
+def get_new_save_file_name(base_name="randomizer_save_game"):
+    i = 1
+    while os.path.exists(f'{base_name}_{i}.json'):
+        i += 1
+    return f'{base_name}_{i}.json'
+
 
 def save_game():
     game_state = {
@@ -1046,36 +1091,75 @@ def save_game():
         'game_objects': [obj.to_dict() for obj in game_objects]
     }
 
-    with open('save_game.json', 'w') as save_file:
-        json.dump(game_state, save_file, indent=4)  # Add indent=4 for pretty printing
+    if randomizer_mode:
+        file_name = get_new_save_file_name()  # Generate a unique file name for each save
+    else:
+        file_name = 'save_game.json'
 
-    print_to_description("Game saved successfully!")
+    with open(file_name, 'w') as save_file:
+        json.dump(game_state, save_file, indent=4)
+
+    print_to_description(f"Game saved to {file_name}!")
+    return file_name
 
 
 def load_game():
     global current_location
     global game_objects
 
+    # Load from a different file if in randomizer mode
+    file_name = 'randomizer_save_game.json' if randomizer_mode else 'save_game.json'
+
     try:
-        with open('save_game.json', 'r') as save_file:
+        with open(file_name, 'r') as save_file:
             game_state = json.load(save_file)
 
         current_location = game_state['current_location']
 
         for obj_state, obj in zip(game_state['game_objects'], game_objects):
             obj.name = obj_state['name']
-            obj.location = obj_state['location']  # Handle nested objects if needed
+            obj.location = obj_state['location']
             obj.movable = obj_state['movable']
             obj.visible = obj_state['visible']
             obj.carried = obj_state['carried']
             obj.description = obj_state['description']
             obj.glueable = obj_state['glueable']
 
-        print_to_description("Game loaded successfully!")
+        print_to_description(f"Game loaded from {file_name}!")
         set_current_state()
     except FileNotFoundError:
-        print_to_description("No save file found.")
+        print_to_description(f"No save file found at {file_name}.")
 
+
+def load_previous_state(file_name):
+    try:
+        with open(file_name, 'r') as save_file:
+            return json.load(save_file)
+    except FileNotFoundError:
+        return None
+
+
+def get_changed_items(previous_state, current_state):
+    changed_items = []
+
+    prev_objects = {obj['name']: obj for obj in previous_state['game_objects']}
+    curr_objects = {obj['name']: obj for obj in current_state['game_objects']}
+
+    for name, curr_obj in curr_objects.items():
+        prev_obj = prev_objects.get(name)
+        if prev_obj != curr_obj:
+            changed_items.append(curr_obj)
+
+    return changed_items
+
+
+def save_state_changes_to_file(changed_items):
+    if changed_items:
+        with open('state_changes.json', 'w') as changes_file:
+            json.dump(changed_items, changes_file, indent=4)
+        print_to_description("State changes saved to state_changes.json.")
+    else:
+        print_to_description("No state changes to save.")
 
 def main():
     build_interface()
