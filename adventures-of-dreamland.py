@@ -924,24 +924,7 @@ def build_interface():
     south_button.config(command=south_button_click)
 
     east_button = ttk.Button(button_frame, text="E", width=5)
-    east_button.grid(row=1, column=2, padx=2, pady=2)if randomizer_mode:
-                previous_file_name = get_new_save_file_name()  # Check the latest save
-                previous_state = load_previous_state(previous_file_name)
-
-                current_file_name = save_game()  # Save current state
-
-                if previous_state:
-                    current_state = load_previous_state(current_file_name)
-                    changed_items = get_changed_items(previous_state, current_state)
-
-                    # Save state changes to a separate file
-                    save_state_changes_to_file(changed_items)
-
-                    # Send the changes to the server
-                    send_state_changes_to_server(changed_items)
-
-                print_to_description("Game saved (randomizer mode).")
-    east_button.config(command=east_button_click)
+    east_button.grid(row=1, column=2, padx=2, pady=2
 
     west_button = ttk.Button(button_frame, text="W", width=5)
     west_button.grid(row=1, column=0, padx=2, pady=2)
