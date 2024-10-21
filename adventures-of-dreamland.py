@@ -5,6 +5,7 @@ from tkinter import simpledialog
 from PIL import ImageTk, Image
 import json
 import os
+from pathlib import Path
 import GameObject
 
 PORTRAIT_LAYOUT = True
@@ -89,6 +90,9 @@ refresh_objects_visible = True
 current_location = list_of_locations[0]
 end_of_game = False
 randomizer_mode = False  # Set to True when randomizer mode is activated
+
+SAVE_DIR = Path('saves')
+SAVE_DIR.mkdir(exist_ok=True)
 
 playing = False
 
@@ -1063,9 +1067,9 @@ def play_audio(filename, asynchronous=True, loop=True):
 
 def get_new_save_file_name(base_name="randomizer_save_game"):
     i = 1
-    while os.path.exists(f'{base_name}_{i}.json'):
+    while (SAVE_DIR / f'{base_name}_{i}.json').exists():
         i += 1
-    return f'{base_name}_{i}.json'
+    return SAVE_DIR / f'{base_name}_{i}.json'
 
 
 def save_game():
@@ -1075,15 +1079,18 @@ def save_game():
     }
 
     if randomizer_mode:
-        file_name = get_new_save_file_name()  # Generate a unique file name for each save
+        global SAVE_DIR
+        file_path = get_new_save_file_name()  # Generate a unique file name for each save
     else:
-        file_name = 'save_game.json'
+        file_path = SAVE_DIR / 'save_game.json'
 
-    with open(file_name, 'w') as save_file:
+
+
+    with open(file_path, 'w') as save_file:
         json.dump(game_state, save_file, indent=4)
 
-    print_to_description(f"Game saved to {file_name}!")
-    return file_name
+    print_to_description(f"Game saved to {file_path}!")
+    return file_path
 
 
 def load_game():
@@ -1092,9 +1099,10 @@ def load_game():
 
     # Load from a different file if in randomizer mode
     file_name = 'randomizer_save_game.json' if randomizer_mode else 'save_game.json'
+    file_path = SAVE_DIR / file_name
 
     try:
-        with open(file_name, 'r') as save_file:
+        with file_path.open('r') as save_file:
             game_state = json.load(save_file)
 
         current_location = game_state['current_location']
@@ -1108,15 +1116,16 @@ def load_game():
             obj.description = obj_state['description']
             obj.glueable = obj_state['glueable']
 
-        print_to_description(f"Game loaded from {file_name}!")
+        print_to_description(f"Game loaded from {file_path}!")
         set_current_state()
     except FileNotFoundError:
-        print_to_description(f"No save file found at {file_name}.")
+        print_to_description(f"No save file found at {file_path}.")
 
 
 def load_previous_state(file_name):
+    file_path = SAVE_DIR / file_name  # Use pathlib to construct the full path
     try:
-        with open(file_name, 'r') as save_file:
+        with file_path.open('r') as save_file:
             return json.load(save_file)
     except FileNotFoundError:
         return None
@@ -1137,12 +1146,14 @@ def get_changed_items(previous_state, current_state):
 
 
 def save_state_changes_to_file(changed_items):
+    state_change_file = SAVE_DIR / 'state_changes.json'  # Save state changes in the save directory
     if changed_items:
-        with open('state_changes.json', 'w') as changes_file:
+        with state_change_file.open('w') as changes_file:
             json.dump(changed_items, changes_file, indent=4)
-        print_to_description("State changes saved to state_changes.json.")
+        print_to_description(f"State changes saved to {state_change_file}.")
     else:
         print_to_description("No state changes to save.")
+
 
 def main():
     build_interface()
