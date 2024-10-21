@@ -176,7 +176,7 @@ def perform_command(verb, noun):
     elif verb == "FILL":
         perform_fill_command(noun)
     elif verb == "SAVE":
-        save_game()
+        save_game(verbose=True)
     elif verb == "LOAD":
         load_game()
     elif verb == "ACTIVATE" and noun == "RANDOMIZER":
@@ -224,6 +224,10 @@ def perform_get_command(object_name):
             if False:
                 print_to_description("special condition")
             else:
+                # Save the current state as the previous state before modifying it
+                if randomizer_mode:
+                    save_previous_state(verbose=False)
+
                 # pick up the object
                 game_object.carried = True
                 game_object.visible = False
@@ -1072,7 +1076,7 @@ def get_new_save_file_name(base_name="randomizer_save_game"):
     return SAVE_DIR / f'{base_name}_{i}.json'
 
 
-def save_game():
+def save_game(verbose=False):
     game_state = {
         'current_location': current_location,
         'game_objects': [obj.to_dict() for obj in game_objects]
@@ -1084,12 +1088,12 @@ def save_game():
     else:
         file_path = SAVE_DIR / 'save_game.json'
 
-
-
     with open(file_path, 'w') as save_file:
         json.dump(game_state, save_file, indent=4)
 
-    print_to_description(f"Game saved to {file_path}!")
+    if verbose:
+        print_to_description(f"Game saved to {file_path}!")
+
     return file_path
 
 
@@ -1154,6 +1158,19 @@ def save_state_changes_to_file(changed_items):
     else:
         print_to_description("No state changes to save.")
 
+
+def save_previous_state(verbose=False):
+    game_state = {
+        'current_location': current_location,
+        'game_objects': [obj.to_dict() for obj in game_objects]
+    }
+    previous_file_path = SAVE_DIR / 'previous_save_game.json'
+
+    with previous_file_path.open('w') as prev_save_file:
+        json.dump(game_state, prev_save_file, indent=4)
+
+    if verbose:
+        print_to_description(f"Previous game state saved to {previous_file_path}.")
 
 def main():
     build_interface()
