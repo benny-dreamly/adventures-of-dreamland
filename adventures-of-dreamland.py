@@ -225,8 +225,8 @@ def perform_get_command(object_name):
                 print_to_description("special condition")
             else:
                 # Save the current state as the previous state before modifying it
-                if randomizer_mode:
-                    save_previous_state(verbose=False)
+                # if randomizer_mode:
+                #     save_previous_state(verbose=False)
 
                 # pick up the object
                 game_object.carried = True
@@ -1159,18 +1159,18 @@ def save_state_changes_to_file(changed_items):
         print_to_description("No state changes to save.")
 
 
-def save_previous_state(verbose=False):
-    game_state = {
-        'current_location': current_location,
-        'game_objects': [obj.to_dict() for obj in game_objects]
-    }
-    previous_file_path = SAVE_DIR / 'previous_save_game.json'
-
-    with previous_file_path.open('w') as prev_save_file:
-        json.dump(game_state, prev_save_file, indent=4)
-
-    if verbose:
-        print_to_description(f"Previous game state saved to {previous_file_path}.")
+# def save_previous_state(verbose=False):
+#     game_state = {
+#         'current_location': current_location,
+#         'game_objects': [obj.to_dict() for obj in game_objects]
+#     }
+#     previous_file_path = SAVE_DIR / 'previous_save_game.json'
+#
+#     with previous_file_path.open('w') as prev_save_file:
+#         json.dump(game_state, prev_save_file, indent=4)
+#
+#     if verbose:
+#         print_to_description(f"Previous game state saved to {previous_file_path}.")
 
 def main():
     build_interface()
