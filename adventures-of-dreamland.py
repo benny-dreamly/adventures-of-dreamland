@@ -478,7 +478,7 @@ def perform_solve_command(object_name):
                     else:
                         print_to_description(piece_slot_message)
                         puzzle_piece_inserted = True
-                    for item in [game_object, puzzle_piece_3, hint3, fragment_clue, magnifying_glass]:
+                    for item in [game_object, puzzle_piece_3, hint3, fragment_clue, magnifying_glass, scroll, scroll_hint, glue_stick]:
                         item.carried = False
                         item.visible = False
                     puzzle_with_three_pieces_inserted.carried = True
@@ -503,7 +503,7 @@ def perform_solve_command(object_name):
                     else:
                         print_to_description(piece_slot_message)
                         puzzle_piece_inserted = True
-                for item in [game_object, puzzle_piece_4, bucket_filled, lighter]:
+                for item in [game_object, puzzle_piece_4, bucket_filled, lighter, bucket]:
                     item.carried = False
                     item.visible = False
                 print_to_description("Benny watches as the puzzle transforms into a key. He can finally escape!!!")
