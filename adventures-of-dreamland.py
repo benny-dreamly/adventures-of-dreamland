@@ -1059,12 +1059,6 @@ def play_audio(filename, asynchronous=True, loop=True):
     else:
         print_to_description("unsupported platform")
 
-def get_new_save_file_name(base_name="randomizer_save_game"):
-    i = 1
-    while (SAVE_DIR / f'{base_name}_{i}.json').exists():
-        i += 1
-    return SAVE_DIR / f'{base_name}_{i}.json'
-
 
 def save_game(verbose=False):
     game_state = {
@@ -1074,9 +1068,8 @@ def save_game(verbose=False):
 
     if randomizer_mode:
         global SAVE_DIR
-        file_path = get_new_save_file_name()  # Generate a unique file name for each save
     else:
-        file_path = SAVE_DIR / 'save_game.json'
+        file_path = SAVE_DIR / 'randomizer_save_game.json'
 
     with open(file_path, 'w') as save_file:
         json.dump(game_state, save_file, indent=4)
