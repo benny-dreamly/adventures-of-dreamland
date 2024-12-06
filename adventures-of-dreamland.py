@@ -235,17 +235,7 @@ def perform_get_command(object_name):
 
                 # If in randomizer mode, save the game, and track changes
                 if randomizer_mode:
-                    previous_file_name = get_new_save_file_name()  # Check the latest save
-                    previous_state = load_previous_state(previous_file_name)
-
                     current_file_name = save_game()  # Save current state
-
-                    if previous_state:
-                        current_state = load_previous_state(current_file_name)
-                        changed_items = get_changed_items(previous_state, current_state)
-
-                        # Save state changes to a separate file
-                        save_state_changes_to_file(changed_items)
     else:
         print_to_description("You don't see one of those here!")
 
@@ -1125,52 +1115,6 @@ def load_game():
     except FileNotFoundError:
         print_to_description(f"No save file found at {file_path}.")
 
-
-def load_previous_state(file_name):
-    file_path = SAVE_DIR / file_name  # Use pathlib to construct the full path
-    try:
-        with file_path.open('r') as save_file:
-            return json.load(save_file)
-    except FileNotFoundError:
-        return None
-
-
-def get_changed_items(previous_state, current_state):
-    changed_items = []
-
-    prev_objects = {obj['name']: obj for obj in previous_state['game_objects']}
-    curr_objects = {obj['name']: obj for obj in current_state['game_objects']}
-
-    for name, curr_obj in curr_objects.items():
-        prev_obj = prev_objects.get(name)
-        if prev_obj != curr_obj:
-            changed_items.append(curr_obj)
-
-    return changed_items
-
-
-def save_state_changes_to_file(changed_items):
-    state_change_file = SAVE_DIR / 'state_changes.json'  # Save state changes in the save directory
-    if changed_items:
-        with state_change_file.open('w') as changes_file:
-            json.dump(changed_items, changes_file, indent=4)
-        print_to_description(f"State changes saved to {state_change_file}.")
-    else:
-        print_to_description("No state changes to save.")
-
-
-# def save_previous_state(verbose=False):
-#     game_state = {
-#         'current_location': current_location,
-#         'game_objects': [obj.to_dict() for obj in game_objects]
-#     }
-#     previous_file_path = SAVE_DIR / 'previous_save_game.json'
-#
-#     with previous_file_path.open('w') as prev_save_file:
-#         json.dump(game_state, prev_save_file, indent=4)
-#
-#     if verbose:
-#         print_to_description(f"Previous game state saved to {previous_file_path}.")
 
 def main():
     build_interface()
