@@ -6,6 +6,7 @@ from PIL import ImageTk, Image
 import json
 import os
 from pathlib import Path
+import platform
 import GameObject
 
 PORTRAIT_LAYOUT = True
@@ -1036,7 +1037,6 @@ def print_to_description(output, user_input=False):
     description_widget.see(END)
 
 def play_audio(filename, asynchronous=True, loop=True):
-    import platform
     operating_system = platform.system()
 
     if operating_system == 'Linux':
