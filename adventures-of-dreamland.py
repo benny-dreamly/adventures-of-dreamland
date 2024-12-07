@@ -1079,7 +1079,7 @@ def save_game(verbose=False):
     }
 
     if randomizer_mode:
-        global SAVE_DIR
+        file_path = SAVE_DIR / 'randomizer_save_game.json'
     else:
         file_path = SAVE_DIR / 'randomizer_save_game.json'
 
