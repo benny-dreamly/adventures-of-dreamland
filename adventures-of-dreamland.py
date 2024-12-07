@@ -3,9 +3,9 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import simpledialog
 from PIL import ImageTk, Image
+from pathlib import Path
 import json
 import os
-from pathlib import Path
 import platform
 import GameObject
 
