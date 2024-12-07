@@ -101,9 +101,7 @@ def get_save_file_path():
     save_path.mkdir(parents=True, exist_ok=True)
     return save_path
 
-
 SAVE_DIR = get_save_file_path()
-
 
 playing = False
 
