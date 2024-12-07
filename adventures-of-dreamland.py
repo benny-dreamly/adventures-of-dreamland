@@ -1069,10 +1069,14 @@ def play_audio(filename, asynchronous=True, loop=True):
     else:
         print_to_description("unsupported platform")
 
-
 def save_game(verbose=False):
     game_state = {
         'current_location': current_location,
+        'door_open': door_open,
+        'safe_open': safe_open,
+        'trapdoor_open': trapdoor_open,
+        'fire_lit': fire_lit,
+        'fire_extinguished': fire_extinguished,
         'game_objects': [obj.to_dict() for obj in game_objects]
     }
 
@@ -1094,6 +1098,11 @@ def save_game(verbose=False):
 
 def load_game():
     global current_location
+    global door_open
+    global safe_open
+    global trapdoor_open
+    global fire_lit
+    global fire_extinguished
     global game_objects
 
     # Load from a different file if in randomizer mode
@@ -1105,6 +1114,11 @@ def load_game():
             game_state = json.load(save_file)
 
         current_location = game_state['current_location']
+        door_open = game_state['door_open']
+        safe_open = game_state['safe_open']
+        trapdoor_open = game_state['trapdoor_open']
+        fire_lit = game_state['fire_lit']
+        fire_extinguished = game_state['fire_extinguished']
 
         for obj_state, obj in zip(game_state['game_objects'], game_objects):
             obj.name = obj_state['name']
