@@ -1078,10 +1078,12 @@ def save_game(verbose=False):
         'game_objects': [obj.to_dict() for obj in game_objects]
     }
 
+    file_name = 'randomizer_save_game.json' if randomizer_mode else 'save_game.json'
+
     if randomizer_mode:
-        file_path = SAVE_DIR / 'randomizer_save_game.json'
+        file_path = SAVE_DIR / file_name
     else:
-        file_path = SAVE_DIR / 'randomizer_save_game.json'
+        file_path = SAVE_DIR / file_name
 
     with open(file_path, 'w') as save_file:
         json.dump(game_state, save_file, indent=4)
