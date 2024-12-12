@@ -92,14 +92,20 @@ current_location = list_of_locations[0]
 end_of_game = False
 randomizer_mode = False  # Set to True when randomizer mode is activated
 
-def get_save_file_path():
+def get_game_directory_path():
     system = platform.system()
     if system == 'Windows':
-        save_path = Path(os.getenv('LOCALAPPDATA')) / "adventuresofdreamland" / "saves"
+        game_path = Path(os.getenv('LOCALAPPDATA')) / "adventuresofdreamland"
     elif system == 'Darwin':
-        save_path = Path.home() / "Library" / "Application Support" / "adventuresofdreamland" / "saves"
+        game_path = Path.home() / "Library" / "Application Support" / "adventuresofdreamland"
     else:
-        save_path = Path.home() / ".local" / "share" / "adventuresofdreamland" / "saves"
+        game_path = Path.home() / ".local" / "share" / "adventuresofdreamland"
+    game_path.mkdir(parents=True, exist_ok=True)
+    return game_path
+
+def get_save_file_path():
+    game_path = get_game_directory_path()
+    save_path = game_path / "saves"
     save_path.mkdir(parents=True, exist_ok=True)
     return save_path
 
