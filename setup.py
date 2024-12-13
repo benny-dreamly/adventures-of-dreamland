@@ -19,7 +19,7 @@ executables = [
 setup(
     name='Adventures of Dreamland',
     version='1.0',
-    description='A game where you help Benny escape!',
+    description='Adventures of Dreamland',
     options={
         'build_exe': {
             'packages': ['tkinter', 'PIL'],  # Include any additional packages your game needs
