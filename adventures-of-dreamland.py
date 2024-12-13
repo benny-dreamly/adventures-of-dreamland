@@ -8,6 +8,7 @@ import json
 import os
 import platform
 import GameObject
+import time
 
 PORTRAIT_LAYOUT = True
 
@@ -252,7 +253,7 @@ def perform_get_command(object_name):
 
                 # If in randomizer mode, save the game, and track changes
                 if randomizer_mode:
-                    current_file_name = save_game()  # Save current state
+                    save_game()  # Save current state
     else:
         print_to_description("You don't see one of those here!")
 
@@ -269,6 +270,8 @@ def perform_put_command(object_name):
             game_object.carried = False
             game_object.visible = True
             refresh_objects_visible = True
+            if randomizer_mode:
+                save_game()  # Save current state
     else:
         print_to_description("You are not carrying one of those!")
 
@@ -404,6 +407,9 @@ def perform_open_command(object_name):
     else:
         print_to_description("You don't see one of those here.")
 
+    if randomizer_mode:
+        save_game()
+
 def perform_help_command(verb):
     print_to_description("here are the commands for the game:")
     for command in list_of_commands:
@@ -521,6 +527,9 @@ def perform_solve_command(object_name):
     else:
         print_to_description("You can't do that.")
 
+    if randomizer_mode:
+        save_game()
+
 def perform_glue_command(object_name):
     game_object = get_game_object(object_name)
     if not (game_object is None):
@@ -535,6 +544,9 @@ def perform_glue_command(object_name):
             print_to_description("You're missing something.")
     else:
         print_to_description("You can't do that.")
+
+    if randomizer_mode:
+        save_game()
 
 def perform_unlock_command(object_name):
     global safe_open
@@ -563,6 +575,9 @@ def perform_unlock_command(object_name):
                 "You don't have anything to unlock the door with."
     else:
         print_to_description("There's nothing to unlock.")
+
+    if randomizer_mode:
+        save_game()
 
 def perform_decipher_command(message):
     message = message.upper()
@@ -598,6 +613,9 @@ def perform_fill_command(object_name):
         else:
             print_to_description("You can't fill that!")
 
+        if randomizer_mode:
+            save_game()
+
 def perform_use_command(object_name):
     game_object = get_game_object(object_name)
     global fire_lit
@@ -631,6 +649,9 @@ def perform_use_command(object_name):
             print_to_description("You can't use that.")
     else:
         print_to_description("Invalid Object.")
+
+    if randomizer_mode:
+        save_game()
 
 def describe_current_location(current_location):
     index = current_location - 1  # Adjust for 0-based indexing in Python lists
