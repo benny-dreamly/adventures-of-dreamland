@@ -2,7 +2,7 @@ from cx_Freeze import setup, Executable
 import os
 
 # Add any files or assets your game needs (images, sounds, etc.)
-include_files = ['res/', 'save_game.json']  # Include necessary resource folders/files
+include_files = ['res/']  # Include necessary resource folders/files
 
 # Determine the base for the executable
 base = None
