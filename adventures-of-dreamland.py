@@ -462,54 +462,55 @@ def perform_decipher_command(message):
     print_to_description("Deciphered message:")
     print_to_description(deciphered_message)
 
-def perform_fill_command(object_name):
-    game_object = get_game_object(object_name)
-    if not (game_object is None):
-        if game_object == bucket:
-            if current_location == 22:
-                print_to_description("Benny dips the bucket into the water and picks it all up, now his bucket is filled.")
-                bucket.carried = False
-                for item in [bucket, water]:
-                    item.visible = False
-                bucket_filled.carried = True
-            else:
-                print_to_description("You can't fill that here, there isn't any water to fill it.")
-        else:
-            print_to_description("You can't fill that!")
+def perform_fill_command(obj_name):
+    obj = state.get_object(obj_name)
+    if not obj:
+        print_to_description("You can't fill that!")
+        return
 
-def perform_use_command(object_name):
-    game_object = get_game_object(object_name)
-    global fire_lit
-    global fire_extinguished
-    global broom_destroyed
-    global refresh_objects_visible
-    if not (game_object is None):
-        if game_object == lighter:
-            if current_location == 22:
-                if broom.visible and broom.location == current_location:
-                    print_to_description("Benny lights the broom with the lighter and watches it burn. It seems to be burning quite quickly, and if he doesn't extinguish it soon, he will likely perish if he doesn't escape.")
-                    fire_lit = True
-                    broom.visible = False
-                    lighter.carried = False
-                    lighter.visible = False
-                    broom_destroyed = True
-                else:
-                    print_to_description("There's nothing to light on fire.")
-            else:
-                print_to_description("The fire won't do anything here.")
-        elif game_object == bucket_filled:
-            if current_location == 22 and fire_lit:
-                print_to_description("Benny throws the water onto the fire and manages to put it out. It seems like he has been rewarded for this, as he has managed to reveal another puzzle piece!")
-                fire_lit = False
-                fire_extinguished = True
-                bucket_filled.carried = False
-                bucket.carried = True
-                puzzle_piece_4.visible = True
-                refresh_objects_visible = True
-        else:
-            print_to_description("You can't use that.")
+    bucket = state.get_object("bucket")
+    bucket_filled = state.get_object("bucket_filled")
+    water = state.get_object("water")
+
+    if obj == bucket and state.current_location == 22:
+        print_to_description("Benny dips the bucket into the water and fills it.")
+        bucket.carried = False
+        bucket.visible = False
+        water.visible = False
+        bucket_filled.carried = True
     else:
+        print_to_description("You can't fill that here, there isn't any water to fill it.")
+
+def perform_use_command(obj_name):
+    obj = state.get_object(obj_name)
+    if not obj:
         print_to_description("Invalid Object.")
+        return
+
+    if obj.name.upper() == "LIGHTER":
+        if state.current_location == 22:
+            broom = state.get_object("broom")
+            if broom.visible and broom.location == state.current_location:
+                print_to_description("Benny lights the broom with the lighter and watches it burn. If he doesn't extinguish it soon, he could perish!")
+                state.set_flag("fire_lit", True)
+                broom.visible = False
+                state.remove_from_inventory(obj)  # lighter no longer carried
+                state.set_flag("broom_destroyed", True)
+            else:
+                print_to_description("There's nothing to light on fire.")
+        else:
+            print_to_description("The fire won't do anything here.")
+    elif obj.name.upper() == "BUCKET_FILLED":
+        if state.current_location == 22 and state.get_flag("fire_lit"):
+            print_to_description("Benny throws the water onto the fire and manages to put it out. A puzzle piece is now revealed!")
+            state.set_flag("fire_lit", False)
+            state.set_flag("fire_extinguished", True)
+            state.remove_from_inventory(obj)
+            state.add_to_inventory(state.get_object("bucket"))
+        else:
+            print_to_description("You can't use that here.")
+    else:
+        print_to_description("You can't use that.")
 
 def describe_current_location(current_location):
     data = LOCATIONS.get(current_location)
