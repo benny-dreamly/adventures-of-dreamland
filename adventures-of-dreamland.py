@@ -430,32 +430,45 @@ def perform_glue_command(object_name):
         print_to_description("You can't do that.")
 
 def perform_unlock_command(object_name):
-    global safe_open
-    global refresh_objects_visible
-    global door_open
-    game_object = get_game_object(object_name)
-    if not (game_object is None):
-        if game_object == safe and (game_object.visible and game_object.location == current_location):
-            while not safe_open:
+    """Handle unlocking safes or doors using state-driven logic."""
+    game_object = state.get_object(object_name)
+
+    if game_object is None:
+        print_to_description("There's nothing to unlock.")
+        return
+
+    # Unlock the safe
+    if game_object.name.upper() == "SAFE" and game_object.visible and game_object.location == state.current_location:
+        safe_obj = game_object  # just for clarity
+        if not state.get_flag("safe_open"):
+            while True:
                 code = simpledialog.askinteger("Code", "What is the code to the safe?", parent=root)
-                encrypted_code = str(hex(code))
+                if code is None:
+                    break  # user cancelled input
+                encrypted_code = hex(code)
                 if encrypted_code != "0x3ffa":
                     print_to_description("Benny tries your code, but the safe won't open.")
-                    answer = simpledialog.askstring("Input", "Would you like to try again?", parent=root)
-                    if answer == "No":
+                    retry = simpledialog.askstring("Input", "Would you like to try again?", parent=root)
+                    if retry is None or retry.lower() == "no":
                         break
                 else:
                     print_to_description("The code you provided Benny with worked! The safe is now unlocked.")
-                    safe_open = True
-            refresh_objects_visible = True
-        if game_object == door and (game_object.visible and game_object.location == current_location):
-            if key.carried:
-                door_open = True
-                set_current_image()
-            else:
-                "You don't have anything to unlock the door with."
+                    state.set_flag("safe_open", True)
+                    break
+        state.refresh_objects_visible = True
+
+    # Unlock the door
+    elif game_object.name.upper() == "DOOR" and game_object.visible and game_object.location == state.current_location:
+        key_obj = state.get_object("key")
+        if key_obj and state.has_in_inventory(key_obj):
+            state.set_flag("door_open", True)
+            set_current_image()
+            print_to_description("You unlock the door with the key.")
+        else:
+            print_to_description("You don't have anything to unlock the door with.")
+
     else:
-        print_to_description("There's nothing to unlock.")
+        print_to_description("You can't unlock that.")
 
 def perform_decipher_command(message):
     message = message.upper()
