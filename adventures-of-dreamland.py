@@ -289,6 +289,45 @@ def perform_help_command(_):
     print_to_description("Available commands:")
     print_to_description(", ".join(list_of_commands))
 
+PUZZLE_STAGES = [
+    {
+        "puzzle": "puzzle",
+        "piece": "puzzle_piece_1",
+        "next_puzzle": "puzzle_with_one_piece_inserted",
+        "remove_objects": ["puzzle_piece_1", "hint1", "clue1", "clue11", "clue2", "puzzle"],
+        "slot": 1,
+        "next_commands": ["DECIPHER", "SOLVE"]
+    },
+    {
+        "puzzle": "puzzle_with_one_piece_inserted",
+        "piece": "puzzle_piece_2",
+        "next_puzzle": "puzzle_with_two_pieces_inserted",
+        "remove_objects": ["puzzle_piece_2", "puzzle_with_one_piece_inserted", "gold_bar", "bar_clue"],
+        "slot": 2,
+        "next_commands": ["UNLOCK"]
+    },
+    {
+        "puzzle": "puzzle_with_two_pieces_inserted",
+        "piece": "puzzle_piece_3",
+        "next_puzzle": "puzzle_with_three_pieces_inserted",
+        "remove_objects": ["puzzle_with_two_pieces_inserted", "puzzle_piece_3", "hint3", "fragment_clue", "magnifying_glass"],
+        "slot": 3,
+        "set_flag": ("three_pieces_solved", True)
+    },
+    {
+        "puzzle": "puzzle_with_three_pieces_inserted",
+        "piece": "puzzle_piece_4",
+        "next_puzzle": None,
+        "remove_objects": ["puzzle_with_three_pieces_inserted", "puzzle_piece_4", "bucket_filled", "lighter"],
+        "slot": 4,
+        "final_action": lambda: (
+            print_to_description("Benny watches as the puzzle transforms into a key. He can finally escape!!!"),
+            state.add_to_inventory(state.get_object("key"))
+        )
+    }
+]
+
+
 def perform_solve_command(object_name):
     """Handles inserting puzzle pieces into the puzzle dynamically."""
     game_object = state.get_object(object_name)
@@ -296,47 +335,8 @@ def perform_solve_command(object_name):
         print_to_description("You can't do that.")
         return
 
-    # Define the puzzle stages in order
-    puzzle_stages = [
-        {
-            "puzzle": "puzzle",
-            "piece": "puzzle_piece_1",
-            "next_puzzle": "puzzle_with_one_piece_inserted",
-            "remove_objects": ["puzzle_piece_1", "hint1", "clue1", "clue11", "clue2", "puzzle"],
-            "slot": 1,
-            "next_commands": ["DECIPHER", "SOLVE"]
-        },
-        {
-            "puzzle": "puzzle_with_one_piece_inserted",
-            "piece": "puzzle_piece_2",
-            "next_puzzle": "puzzle_with_two_pieces_inserted",
-            "remove_objects": ["puzzle_piece_2", "puzzle_with_one_piece_inserted", "gold_bar", "bar_clue"],
-            "slot": 2,
-            "next_commands": ["UNLOCK"]
-        },
-        {
-            "puzzle": "puzzle_with_two_pieces_inserted",
-            "piece": "puzzle_piece_3",
-            "next_puzzle": "puzzle_with_three_pieces_inserted",
-            "remove_objects": ["puzzle_with_two_pieces_inserted", "puzzle_piece_3", "hint3", "fragment_clue", "magnifying_glass"],
-            "slot": 3,
-            "set_flag": ("three_pieces_solved", True)
-        },
-        {
-            "puzzle": "puzzle_with_three_pieces_inserted",
-            "piece": "puzzle_piece_4",
-            "next_puzzle": None,
-            "remove_objects": ["puzzle_with_three_pieces_inserted", "puzzle_piece_4", "bucket_filled", "lighter"],
-            "slot": 4,
-            "final_action": lambda: (
-                print_to_description("Benny watches as the puzzle transforms into a key. He can finally escape!!!"),
-                state.get_object("key").__setattr__("carried", True)
-            )
-        },
-    ]
-
     # Find the stage that matches the current puzzle object
-    stage = next((s for s in puzzle_stages if state.get_object(s["puzzle"]) == game_object), None)
+    stage = next((s for s in PUZZLE_STAGES if state.get_object(s["puzzle"]) == game_object), None)
     if not stage:
         print_to_description("You're missing something.")
         return
