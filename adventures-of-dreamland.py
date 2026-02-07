@@ -814,15 +814,16 @@ def return_key_enter(event):
         set_current_state()
 
 def set_directions_to_move():
-    move_to_north = (get_location_to_north(current_location) > 0) and not end_of_game
-    move_to_south = (get_location_to_south(current_location) > 0) and not end_of_game
-    move_to_east = (get_location_to_east(current_location) > 0) and not end_of_game
-    move_to_west = (get_location_to_west(current_location) > 0) and not end_of_game
+    """Enable or disable movement buttons based on available directions and game state."""
+    move_to_north = get_location_to_north(state.current_location) > 0 and not state.end_of_game
+    move_to_south = get_location_to_south(state.current_location) > 0 and not state.end_of_game
+    move_to_east = get_location_to_east(state.current_location) > 0 and not state.end_of_game
+    move_to_west = get_location_to_west(state.current_location) > 0 and not state.end_of_game
 
-    north_button.config(state=("normal" if move_to_north else "disabled"))
-    south_button.config(state=("normal" if move_to_south else "disabled"))
-    east_button.config(state=("normal" if move_to_east else "disabled"))
-    west_button.config(state=("normal" if move_to_west else "disabled"))
+    north_button.config(state="normal" if move_to_north else "disabled")
+    south_button.config(state="normal" if move_to_south else "disabled")
+    east_button.config(state="normal" if move_to_east else "disabled")
+    west_button.config(state="normal" if move_to_west else "disabled")
 
 def print_to_description(output, user_input=False):
     description_widget.config(state='normal')
