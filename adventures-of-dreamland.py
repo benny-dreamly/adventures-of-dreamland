@@ -11,6 +11,73 @@ from locations_data import LOCATIONS
 from objects_data import OBJECT_DEFS
 from objects_builder import build_objects
 
+class GameState:
+    def __init__(self):
+        # Location and game flow
+        self.current_location = Location.CELL_1
+        self.end_of_game = False
+        self.playing = False
+
+        # Object state flags
+        self.object_flags = {
+            "door_open": False,
+            "safe_open": False,
+            "trapdoor_open": False,
+            "fire_lit": False,
+            "benny_dead": False,
+            "broom_destroyed": False,
+            "fire_extinguished": False,
+            "three_pieces_solved": False
+        }
+
+        # Refresh flags
+        self.refresh_location = True
+        self.refresh_objects_visible = True
+
+        # Inventory
+        self.inventory = []
+
+        # Game objects
+        self.objects = build_objects(OBJECT_DEFS)
+        self.game_objects = list(self.objects.values())
+
+    # Helper methods
+    def get_object(self, name):
+        """Return the object by name (case-insensitive)."""
+        name = name.upper()
+        for obj in self.game_objects:
+            if obj.name.upper() == name:
+                return obj
+        return None
+
+    def is_carried(self, obj):
+        return getattr(obj, "carried", False)
+
+    def set_flag(self, flag_name, value=True):
+        if flag_name in self.object_flags:
+            self.object_flags[flag_name] = value
+
+    def get_flag(self, flag_name):
+        return self.object_flags.get(flag_name, False)
+
+    def add_to_inventory(self, obj):
+        if obj not in self.inventory:
+            self.inventory.append(obj)
+            obj.carried = True
+            obj.visible = False
+
+    def remove_from_inventory(self, obj):
+        if obj in self.inventory:
+            self.inventory.remove(obj)
+            obj.carried = False
+            obj.visible = True
+
+    def has_in_inventory(self, obj_or_name):
+        if isinstance(obj_or_name, str):
+            return any(o.name.upper() == obj_or_name.upper() for o in self.inventory)
+        return obj_or_name in self.inventory
+
+
 PORTRAIT_LAYOUT = True
 
 command_widget = None
@@ -24,73 +91,10 @@ west_button = None
 root = None
 button_frame = None
 
-door_open = False
-safe_open = False
-trapdoor_open = False
-fire_lit = False
-benny_dead = False
-broom_destroyed = False
-fire_extinguished = False
-three_pieces_solved = False
-
 MAX_TIME_ELAPSED = 15
 
-refresh_location = True
-refresh_objects_visible = True
-
-current_location = Location.CELL_1
-end_of_game = False
-
-playing = False
 
 list_of_commands = ["GO", "N", "S", "E", "W", "NORTH", "SOUTH", "EAST", "WEST", "GET", "READ", "OPEN", "HELP"]
-
-objects = build_objects(OBJECT_DEFS)
-game_objects = list(objects.values())
-
-puzzle_piece_1 = objects["puzzle_piece_1"]
-puzzle_piece_2 = objects["puzzle_piece_2"]
-puzzle_piece_3 = objects["puzzle_piece_3"]
-puzzle_piece_4 = objects["puzzle_piece_4"]
-hint1 = objects["hint1"]
-hint3 = objects["hint3"]
-scroll_hint = objects["scroll_hint"]
-clue1 = objects["clue1"]
-clue11 = objects["clue11"]
-clue2 = objects["clue2"]
-bar_clue = objects["bar_clue"]
-puzzle = objects["puzzle"]
-puzzle_with_one_piece_inserted = objects["puzzle_1"]
-puzzle_with_two_pieces_inserted = objects["puzzle_2"]
-puzzle_with_three_pieces_inserted = objects["puzzle_3"]
-finished_puzzle = objects["finished_puzzle"]
-key = objects["key"]
-scroll = objects["scroll"]
-gold_bar = objects["gold_bar"]
-glue_stick = objects["glue_stick"]
-magnifying_glass = objects["magnifying_glass"]
-broom = objects["broom"]
-bucket = objects["bucket"]
-bucket_filled = objects["bucket_filled"]
-lighter = objects["lighter"]
-hint_fragment_1 = objects["hint_fragment_1"]
-hint_fragment_2 = objects["hint_fragment_2"]
-hint_fragment_3 = objects["hint_fragment_3"]
-hint_fragment_4 = objects["hint_fragment_4"]
-hint_fragment_5 = objects["hint_fragment_5"]
-hint_fragment_6 = objects["hint_fragment_6"]
-hint_fragment_7 = objects["hint_fragment_7"]
-hint_fragment_8 = objects["hint_fragment_8"]
-hint_fragment_9 = objects["hint_fragment_9"]
-hint_fragment_10 = objects["hint_fragment_10"]
-hint_fragment_11 = objects["hint_fragment_11"]
-hint_fragment_12 = objects["hint_fragment_12"]
-hint_fragment_13 = objects["hint_fragment_13"]
-fragment_clue = objects["fragment_clue"]
-safe = objects["safe"]
-door = objects["door"]
-trapdoor = objects["trapdoor"]
-water = objects["water"]
 
 def perform_command(verb, noun):
 
@@ -124,31 +128,30 @@ def perform_command(verb, noun):
         print_to_description("unknown command")
 
 def perform_go_command(direction):
-    global current_location
     global refresh_location
 
     if direction in ["N", "NORTH", "W"]:
-        new_location = get_location_to_north(current_location)
+        new_location = get_location_to_north(state.current_location)
     elif direction in ["S", "SOUTH"]:
-        new_location = get_location_to_south(current_location)
+        new_location = get_location_to_south(state.current_location)
     elif direction in ["E", "EAST", "D"]:
-        new_location = get_location_to_east(current_location)
+        new_location = get_location_to_east(state.current_location)
     elif direction in ["W", "WEST", "A"]:
-        new_location = get_location_to_west(current_location)
+        new_location = get_location_to_west(state.current_location)
     else:
         new_location = 0
 
     if new_location == 0:
         print_to_description("You can't go that way!")
     else:
-        current_location = new_location
+        state.current_location = new_location
         refresh_location = True
 
 def perform_get_command(object_name):
     global refresh_objects_visible
     game_object = get_game_object(object_name)
     if not (game_object is None):
-        if game_object.location != current_location or not game_object.visible:
+        if game_object.location != state.current_location or not game_object.visible:
             print_to_description("You don't see one of those here!")
         elif not game_object.movable:
             print_to_description("You can't pick it up!")
@@ -175,7 +178,7 @@ def perform_put_command(object_name):
             print_to_description("You are not carrying one of those.")
         else:
             # put down the object
-            game_object.location = current_location
+            game_object.location = state.current_location
             game_object.carried = False
             game_object.visible = True
             refresh_objects_visible = True
@@ -190,7 +193,7 @@ def perform_look_command(object_name):
 
     if not (game_object is None):
 
-        if game_object.carried or game_object.visible and game_object.location == current_location:
+        if game_object.carried or game_object.visible and game_object.location == state.current_location:
             print_to_description(game_object.description)
         else:
             # recognized but not visible
@@ -229,21 +232,21 @@ def perform_read_command(object_name):
 
 
 def perform_open_command(object_name):
-    global door_open
-    global safe_open
-    global trapdoor_open
-    global refresh_objects_visible
-    game_object = get_game_object(object_name)
+    game_object = state.get_object(object_name)
 
     if not (game_object is None):
-        if game_object == safe and (game_object.visible and game_object.location == current_location) and safe_open:
+        safe = state.get_object("safe")
+        trapdoor = state.get_object("trapdoor")
+        broom = state.get_object("broom")
+
+        if game_object == safe and (game_object.visible and game_object.location == state.current_location) and state.get_flag("safe_open"):
             print_to_description("Benny pulls on the handle and the safe opens!")
             set_current_image()
             game_object.description = "a small safe, with the door wide open"
-        if game_object == trapdoor and (game_object.visible and game_object.location == current_location) and broom.carried:
+        elif game_object == trapdoor and (game_object.visible and game_object.location == state.current_location) and broom.carried:
             print_to_description("Benny pushes on the trapdoor with the end of the broom and it opens, revealing a puzzle piece.")
-            trapdoor_open = True
-            refresh_objects_visible = True
+            state.set_flag("trapdoor_open", True)
+            state.refresh_objects_visible = True
         else:
             print_to_description("You can't open one of those.")
     else:
@@ -937,4 +940,5 @@ def main():
     set_current_state()
     root.mainloop()
 
+state = GameState()
 main()
