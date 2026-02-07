@@ -139,6 +139,19 @@ class GameState:
             print_to_description("You successfully helped Benny escape the castle basement! Congratulations.")
             self.end_of_game = True
 
+    def describe_visible_objects(self):
+        """Update the description widget with objects visible in the current location."""
+        if not description_widget:
+            return
+
+        visible_objs = [
+            obj.name for obj in self.game_objects
+            if obj.visible and not obj.carried and obj.location == self.current_location
+        ]
+
+        if visible_objs:
+            print_to_description("You can see here: " + ", ".join(visible_objs))
+
 
 
 PORTRAIT_LAYOUT = True
@@ -548,7 +561,7 @@ def set_current_image():
         23: 'stairs.tiff'
     }
 
-    image_file = image_mapping.get(current_location, 'missing.png')
+    image_file = image_mapping.get(state.current_location, 'missing.png')
     image_label.img = ImageTk.PhotoImage(file=f'res/images/{image_file}')
     image_label.config(image=image_label.img)
 
@@ -632,19 +645,18 @@ def get_location_to_west(current_location):
     return west_mappings.get(current_location, 0)
 
 def describe_current_inventory():
-    object_count = 0
-    object_list = ""
+    """Show the player's current inventory in the inventory_widget."""
+    if not inventory_widget:
+        return  # in case the UI isn't built yet
 
-    for current_object in game_objects:
-        if current_object.carried:
-            object_list = object_list + ("," if object_count > 0 else "") + current_object.name
-            object_count = object_count + 1
-
-    inventory = "You are carrying: " + (object_list if object_count > 0 else "nothing")
+    if not state.inventory:
+        inventory_text = "You are carrying: nothing"
+    else:
+        inventory_text = "You are carrying: " + ", ".join(obj.name for obj in state.inventory)
 
     inventory_widget.config(state="normal")
     inventory_widget.delete(1.0, END)
-    inventory_widget.insert(1.0, inventory)
+    inventory_widget.insert(1.0, inventory_text)
     inventory_widget.config(state="disabled")
 
 
@@ -746,27 +758,27 @@ def on_window_resize(event):
         button_frame.grid(row=2, column=1, columnspan=1, padx=2, pady=10, sticky="nsew")
 
 def set_current_state():
-    global refresh_location
-    global refresh_objects_visible
-
-    if refresh_location:
-        describe_current_location(current_location)
+    """Update all UI elements to match the current game state."""
+    if state.refresh_location:
+        describe_current_location(state.current_location)
         set_current_image()
 
-    if refresh_location or refresh_objects_visible:
+    if state.refresh_location or state.refresh_objects_visible:
         set_current_image()
-        describe_current_visible_objects()
+        state.describe_visible_objects()
 
-    handle_special_condition()
+    state.handle_special_conditions()
     set_directions_to_move()
 
-    if not end_of_game:
+    if not state.end_of_game:
         describe_current_inventory()
 
-    refresh_location = False
-    refresh_objects_visible = False
+    # Reset refresh flags
+    state.refresh_location = False
+    state.refresh_objects_visible = False
 
-    command_widget.config(state=("disabled" if end_of_game else "normal"))
+    # Enable or disable command input based on game state
+    command_widget.config(state=("disabled" if state.end_of_game else "normal"))
 
 def north_button_click():
     print_to_description("N", True)
