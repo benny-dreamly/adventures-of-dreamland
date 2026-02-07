@@ -202,25 +202,12 @@ def perform_command(verb, noun):
         print_to_description("unknown command")
 
 def perform_go_command(direction):
-    mappings = {
-        "N": get_location_to_north,
-        "NORTH": get_location_to_north,
-        "S": get_location_to_south,
-        "SOUTH": get_location_to_south,
-        "E": get_location_to_east,
-        "EAST": get_location_to_east,
-        "W": get_location_to_west,
-        "WEST": get_location_to_west,
-    }
-
-    func = mappings.get(direction)
-    if func:
-        new_location = func(state.current_location)
-        if new_location == 0:
-            print_to_description("You can't go that way!")
-        else:
-            state.current_location = new_location
-            state.refresh_location = True
+    new_location = get_location(direction, state.current_location)
+    if new_location == 0:
+        print_to_description("You can't go that way!")
+    else:
+        state.current_location = new_location
+        state.refresh_location = True
 
 def perform_get_command(obj_name):
     obj = state.get_object(obj_name)
@@ -631,75 +618,24 @@ def show_popup_image(image_file):
     label.image = img  # Keep a reference to the image to prevent garbage collection
     label.pack()
 
-def get_location_to_north(current_location):
-    north_mappings = {
-        3: 2,
-        2: 1,
-        6: 7,
-        7: 12,
-        9: 10,
-        15: 14,
-        16: 15,
-        17: 16,
-        18: 17,
-        19: 18,
-    }
+# Unified direction mappings
+DIRECTION_MAPS = {
+    "NORTH": {3:2, 2:1, 6:7, 7:12, 9:10, 15:14, 16:15, 17:16, 18:17, 19:18},
+    "SOUTH": {1:2, 2:3, 7:6, 10:9, 12:7, 14:15, 15:16, 16:17, 17:18, 18:19, 23:20},
+    "EAST":  {3:4, 4:5, 5:6, 8:7, 9:8, 10:11, 12:13, 13:14, 20:19, 21:20, 22:21},
+    "WEST":  {4:3, 5:4, 6:5, 7:8, 8:9, 11:10, 13:12, 14:13, 19:20, 20:21, 21:22}
+}
 
-    if current_location == 20 and state.get_flag("door_open"):
+def get_location(direction, current_location):
+    """Return the next location in the given direction or 0 if impossible."""
+    direction = direction.upper()
+    mapping = DIRECTION_MAPS.get(direction, {})
+
+    # Handle special cases
+    if direction == "NORTH" and current_location == 20 and state.get_flag("door_open"):
         return 23
 
-    return north_mappings.get(current_location, 0)
-
-def get_location_to_south(current_location):
-    south_mappings = {
-        1: 2,
-        2: 3,
-        7: 6,
-        10: 9,
-        12: 7,
-        14: 15,
-        15: 16,
-        16: 17,
-        17: 18,
-        18: 19,
-        23: 20,
-    }
-
-    return south_mappings.get(current_location, 0)
-
-def get_location_to_east(current_location):
-    east_mappings = {
-        3: 4,
-        4: 5,
-        5: 6,
-        8: 7,
-        9: 8,
-        10: 11,
-        12: 13,
-        13: 14,
-        20: 19,
-        21: 20,
-        22: 21,
-    }
-
-    return east_mappings.get(current_location, 0)
-
-def get_location_to_west(current_location):
-    west_mappings = {
-        4: 3,
-        5: 4,
-        6: 5,
-        7: 8,
-        8: 9,
-        11: 10,
-        13: 12,
-        14: 13,
-        19: 20,
-        20: 21,
-        21: 22,
-    }
-
-    return west_mappings.get(current_location, 0)
+    return mapping.get(current_location, 0)
 
 def describe_current_inventory():
     """Show the player's current inventory in the inventory_widget."""
