@@ -5,7 +5,7 @@ from tkinter import simpledialog
 import textwrap
 import time
 from PIL import ImageTk, Image
-import GameObject
+import services
 from location_ids import Location
 from locations_data import LOCATIONS
 from objects_data import OBJECT_DEFS
@@ -994,6 +994,11 @@ def play_audio(filename, asynchronous=True, loop=True):
 
 def main():
     build_interface()
+
+    services.register_ui(
+        print_to_description,
+        show_popup_image
+    )
     set_current_state()
     root.mainloop()
 
