@@ -167,6 +167,7 @@ west_button = None
 root = None
 button_frame = None
 
+playing = False
 MAX_TIME_ELAPSED = 15
 
 def perform_command(verb, noun):
@@ -535,33 +536,64 @@ def describe_current_location(current_location):
         print_to_description(f"Unknown location: {current_location}")
 
 def set_current_image():
-    image_mapping = {
-        4: 'hallway.tiff',
-        5: 'hallway.tiff',
-        13: 'hallway.tiff',
-        15: 'hallway.tiff',
-        18: 'hallway.tiff',
-        6: 'right_corner.tiff',
-        14: 'right_corner.tiff',
-        12: 'left_corner.png',
-        19: 'left_corner.png',
-        8: 'vault-1.tiff',
-        9: 'vault-2.tiff',
-        17: 'hallway.tiff',
+    """Update the image_label based on the current location and relevant object flags."""
+    loc = state.current_location
+
+    # Predefined static images
+    static_images = {
         1: 'cell_1.tiff',
         2: 'cell_2.tiff',
         3: 'cell_3.tiff',
-        16: 'hallway.tiff',
-        10: 'safe-open.tiff' if safe_open and puzzle_piece_2.visible else 'open-safe-no-piece.tiff' if puzzle_piece_2.carried and not puzzle_with_two_pieces_inserted.carried else 'safe-closed.tiff',
-        11: 'vault-4.tiff' if gold_bar.visible and scroll_hint.visible else 'vault-4-no-hint.tiff' if gold_bar.visible and not scroll_hint.visible else 'vault-4-no-bar.tiff' if scroll_hint.visible and not gold_bar.visible else 'vault-4-no-bar-no-hint.tiff',
+        4: 'hallway.tiff',
+        5: 'hallway.tiff',
+        6: 'right_corner.tiff',
         7: 'hallway_one_door.tiff',
+        8: 'vault-1.tiff',
+        9: 'vault-2.tiff',
+        12: 'left_corner.png',
+        13: 'hallway.tiff',
+        14: 'right_corner.tiff',
+        15: 'hallway.tiff',
+        16: 'hallway.tiff',
+        17: 'hallway.tiff',
+        18: 'hallway.tiff',
+        19: 'left_corner.png',
         20: 'hallway_two_doors.tiff',
         21: 'room_21.tiff',
         22: 'room_22.tiff',
         23: 'stairs.tiff'
     }
 
-    image_file = image_mapping.get(state.current_location, 'missing.png')
+    # Start with a static default if it exists
+    image_file = static_images.get(loc, 'missing.png')
+
+    # Dynamic images based on objects or flags
+    if loc == 10:  # Safe room
+        safe = state.get_object("safe")
+        puzzle2 = state.get_object("puzzle_piece_2")
+        puzzle_inserted = state.get_object("puzzle_with_two_pieces_inserted")
+
+        if state.get_flag("safe_open") and puzzle2.visible:
+            image_file = 'safe-open.tiff'
+        elif puzzle2.carried and not puzzle_inserted.carried:
+            image_file = 'open-safe-no-piece.tiff'
+        else:
+            image_file = 'safe-closed.tiff'
+
+    elif loc == 11:  # Vault room
+        gold_bar = state.get_object("gold_bar")
+        scroll_hint = state.get_object("scroll_hint")
+
+        if gold_bar.visible and scroll_hint.visible:
+            image_file = 'vault-4.tiff'
+        elif gold_bar.visible:
+            image_file = 'vault-4-no-hint.tiff'
+        elif scroll_hint.visible:
+            image_file = 'vault-4-no-bar.tiff'
+        else:
+            image_file = 'vault-4-no-bar-no-hint.tiff'
+
+    # Apply the image to the label
     image_label.img = ImageTk.PhotoImage(file=f'res/images/{image_file}')
     image_label.config(image=image_label.img)
 
