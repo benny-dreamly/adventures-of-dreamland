@@ -645,7 +645,7 @@ def get_location_to_north(current_location):
         19: 18,
     }
 
-    if current_location == 20 and state.door_open:
+    if current_location == 20 and state.get_flag("door_open"):
         return 23
 
     return north_mappings.get(current_location, 0)
