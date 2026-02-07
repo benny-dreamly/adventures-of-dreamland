@@ -6,10 +6,10 @@ import textwrap
 import time
 from PIL import ImageTk, Image
 import GameObject
+from location_ids import Location
 
 PORTRAIT_LAYOUT = True
 
-list_of_locations = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
 location_names = [
     "Cell (Room 1)\n",
     "Cell (Room 2)\n",
@@ -86,59 +86,59 @@ MAX_TIME_ELAPSED = 15
 refresh_location = True
 refresh_objects_visible = True
 
-current_location = list_of_locations[0]
+current_location = Location.CELL_1
 end_of_game = False
 
 playing = False
 
 list_of_commands = ["GO", "N", "S", "E", "W", "NORTH", "SOUTH", "EAST", "WEST", "GET", "READ", "OPEN", "HELP"]
 
-puzzle_piece_1 = GameObject.GameObject("puzzle piece 1", list_of_locations[0], True, True, False, "puzzle piece 1")
-hint1 = GameObject.GameObject("hint 1", list_of_locations[0], True, False, False, "hint #1")
-clue1 = GameObject.GameObject("clue 1", list_of_locations[1], True, False, False, "clue #1")
-clue11 = GameObject.GameObject("clue 1-2", list_of_locations[0], True, False, False, "clue #1.5")
-clue2 = GameObject.GameObject("clue 2", list_of_locations[2], True, False, False,
+puzzle_piece_1 = GameObject.GameObject("puzzle piece 1", Location.CELL_1, True, True, False, "puzzle piece 1")
+hint1 = GameObject.GameObject("hint 1", Location.CELL_1, True, False, False, "hint #1")
+clue1 = GameObject.GameObject("clue 1", Location.CELL_2, True, False, False, "clue #1")
+clue11 = GameObject.GameObject("clue 1-2", Location.CELL_1, True, False, False, "clue #1.5")
+clue2 = GameObject.GameObject("clue 2", Location.CELL_3, True, False, False,
                               "clue #2 (ONLY READ ONCE HINT 1 IS SOLVED)")
-puzzle = GameObject.GameObject("puzzle", list_of_locations[2], True, True, False, "puzzle")
+puzzle = GameObject.GameObject("puzzle", Location.CELL_3, True, True, False, "puzzle")
 puzzle_with_one_piece_inserted = GameObject.GameObject("puzzle (1/4)", puzzle, True, False, False, "puzzle")
 puzzle_with_two_pieces_inserted = GameObject.GameObject("puzzle (2/4)", puzzle_with_one_piece_inserted, True, False,
                                                         False, "puzzle")
-scroll = GameObject.GameObject("scroll", list_of_locations[0], True, True, False, "an ancient papyrus scroll")
-scroll_hint = GameObject.GameObject("hint", list_of_locations[10], True, True, False, "huh")
-safe = GameObject.GameObject("safe", list_of_locations[9], False, True, False, "a small safe")
-gold_bar = GameObject.GameObject("gold bar", list_of_locations[10], True, True, False,
+scroll = GameObject.GameObject("scroll", Location.CELL_1, True, True, False, "an ancient papyrus scroll")
+scroll_hint = GameObject.GameObject("hint", Location.VAULT_4, True, True, False, "huh")
+safe = GameObject.GameObject("safe", Location.VAULT_3, False, True, False, "a small safe")
+gold_bar = GameObject.GameObject("gold bar", Location.VAULT_4, True, True, False,
                                  "a gold bar with an engraving in it")
-bar_clue = GameObject.GameObject("clue", list_of_locations[10], True, False, False, "clue")
-puzzle_piece_2 = GameObject.GameObject("puzzle piece 2", list_of_locations[9], True, False, False, "puzzle piece 2")
-hint_fragment_1 = GameObject.GameObject("hint A", list_of_locations[3], True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_2 = GameObject.GameObject("hint B", list_of_locations[4], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_3 = GameObject.GameObject("hint C", list_of_locations[5], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_4 = GameObject.GameObject("hint D", list_of_locations[6], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_5 = GameObject.GameObject("hint E", list_of_locations[11], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_6 = GameObject.GameObject("hint F", list_of_locations[12], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_7 = GameObject.GameObject("hint G", list_of_locations[13], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_8 = GameObject.GameObject("hint H", list_of_locations[14], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_9 = GameObject.GameObject("hint I", list_of_locations[15], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_10 = GameObject.GameObject("hint J", list_of_locations[16], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_11 = GameObject.GameObject("hint K", list_of_locations[17], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_12 = GameObject.GameObject("hint L", list_of_locations[18], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_13 = GameObject.GameObject("hint M", list_of_locations[19], True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-fragment_clue = GameObject.GameObject("cluee", list_of_locations[19], True, True, False, "more ripped looking paper...")
-puzzle_piece_3 = GameObject.GameObject("puzzle piece 3", list_of_locations[16], True, False, False, "another puzzle piece woo")
+bar_clue = GameObject.GameObject("clue", Location.VAULT_4, True, False, False, "clue")
+puzzle_piece_2 = GameObject.GameObject("puzzle piece 2", Location.VAULT_3, True, False, False, "puzzle piece 2")
+hint_fragment_1 = GameObject.GameObject("hint A", Location.HALLWAY_1, True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_2 = GameObject.GameObject("hint B", Location.HALLWAY_2, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_3 = GameObject.GameObject("hint C", Location.HALLWAY_3, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_4 = GameObject.GameObject("hint D", Location.HALLWAY_4, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_5 = GameObject.GameObject("hint E", Location.HALLWAY_5, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_6 = GameObject.GameObject("hint F", Location.HALLWAY_6, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_7 = GameObject.GameObject("hint G", Location.HALLWAY_7, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_8 = GameObject.GameObject("hint H", Location.HALLWAY_8, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_9 = GameObject.GameObject("hint I", Location.HALLWAY_9, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_10 = GameObject.GameObject("hint J", Location.HALLWAY_10, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_11 = GameObject.GameObject("hint K", Location.HALLWAY_11, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_12 = GameObject.GameObject("hint L", Location.HALLWAY_12, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+hint_fragment_13 = GameObject.GameObject("hint M", Location.HALLWAY_13, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
+fragment_clue = GameObject.GameObject("cluee", Location.HALLWAY_13, True, True, False, "more ripped looking paper...")
+puzzle_piece_3 = GameObject.GameObject("puzzle piece 3", Location.HALLWAY_10, True, False, False, "another puzzle piece woo")
 puzzle_with_three_pieces_inserted = GameObject.GameObject("puzzle (3/4)", puzzle_with_two_pieces_inserted, True, False, False, "puzzle (3/4)")
-glue_stick = GameObject.GameObject("glue stick", list_of_locations[20], True, False, False, "a glue stick")
+glue_stick = GameObject.GameObject("glue stick", Location.SUPPLY_1, True, False, False, "a glue stick")
 hint3 = GameObject.GameObject("hint 3", None, True, False, False, "hint 3")
-door = GameObject.GameObject("door", list_of_locations[19], False, True, False, "a large door...")
+door = GameObject.GameObject("door", Location.HALLWAY_13, False, True, False, "a large door...")
 finished_puzzle = GameObject.GameObject("puzzle (4/4)", puzzle_with_three_pieces_inserted, True, False, False, "a finished puzzle, what does it do?")
-puzzle_piece_4 = GameObject.GameObject("puzzle piece 4", list_of_locations[21], True, False, False, "another puzzle piece...")
+puzzle_piece_4 = GameObject.GameObject("puzzle piece 4", Location.SUPPLY_2, True, False, False, "another puzzle piece...")
 key = GameObject.GameObject("key", finished_puzzle, True, False, False, "a golden key")
-magnifying_glass = GameObject.GameObject("magnifying glass", list_of_locations[19], True, False, False, "a magnifying glass")
-broom = GameObject.GameObject("broom", list_of_locations[21], True, True, False, "a broom")
-bucket = GameObject.GameObject("bucket", list_of_locations[21], True, True, False, "an empty bucket")
+magnifying_glass = GameObject.GameObject("magnifying glass", Location.HALLWAY_13, True, False, False, "a magnifying glass")
+broom = GameObject.GameObject("broom", Location.SUPPLY_2, True, True, False, "a broom")
+bucket = GameObject.GameObject("bucket", Location.SUPPLY_2, True, True, False, "an empty bucket")
 bucket_filled = GameObject.GameObject("water bucket", bucket, True, False, False, "a bucket filled with water")
-trapdoor = GameObject.GameObject("trapdoor", list_of_locations[16], False, False, False, "a trapdoor")
-water = GameObject.GameObject("water", list_of_locations[21], False, True, False, "water")
-lighter = GameObject.GameObject("lighter", list_of_locations[21], True, True, False, "a lighter, maybe you could light a fire with this?")
+trapdoor = GameObject.GameObject("trapdoor", Location.HALLWAY_10, False, False, False, "a trapdoor")
+water = GameObject.GameObject("water", Location.SUPPLY_2, False, True, False, "water")
+lighter = GameObject.GameObject("lighter", Location.SUPPLY_2, True, True, False, "a lighter, maybe you could light a fire with this?")
 game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue11, clue2, puzzle, puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, key, scroll, safe, gold_bar, bar_clue, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4, hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10, hint_fragment_11, hint_fragment_12, hint_fragment_13, fragment_clue, puzzle_piece_3, puzzle_with_three_pieces_inserted, glue_stick, hint3, door, finished_puzzle, magnifying_glass, broom, bucket, bucket_filled, trapdoor, lighter, water, puzzle_piece_4]
 
 def perform_command(verb, noun):
@@ -398,7 +398,7 @@ def perform_solve_command(object_name):
                     item.visible = False
                 puzzle_with_one_piece_inserted.carried = True
                 list_of_commands.append("DECIPHER\n")
-                list_of_locations.append("SOLVE\n")
+                list_of_commands.append("SOLVE\n")
                 refresh_objects_visible = True
         elif game_object.carried and game_object == puzzle_with_one_piece_inserted:
             answer = simpledialog.askstring("Input", "What would you like to put in the puzzle next?", parent=root)
