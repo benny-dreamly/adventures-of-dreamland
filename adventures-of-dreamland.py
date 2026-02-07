@@ -77,6 +77,69 @@ class GameState:
             return any(o.name.upper() == obj_or_name.upper() for o in self.inventory)
         return obj_or_name in self.inventory
 
+    # --- Object & Puzzle Logic ---
+
+    def update_visibility(self):
+        """Update object visibility based on carried items, puzzle progression, and flags."""
+
+        # Puzzle piece chain progression
+        if self.has_in_inventory("PUZZLE_PIECE_1") and self.get_object("puzzle").carried:
+            self.get_object("hint1").visible = True
+        if self.get_object("hint1").carried:
+            self.get_object("clue1").visible = True
+        if self.get_object("clue1").carried:
+            self.get_object("clue11").visible = True
+        if self.get_object("clue11").carried:
+            self.get_object("clue2").visible = True
+
+        # Safe logic: second puzzle piece appears after opening safe
+        if self.get_flag("safe_open") and not self.get_object("puzzle_with_two_pieces_inserted").carried:
+            self.get_object("puzzle_piece_2").visible = True
+
+        # Glue fragments
+        if all(self.has_in_inventory(f"hint_fragment_{i}") for i in range(1, 14)):
+            self.get_object("glue_stick").visible = True
+
+        # Magnifying glass reveals trapdoor
+        if self.get_object("hint3").carried:
+            self.get_object("magnifying_glass").visible = True
+        if self.get_object("magnifying_glass").carried:
+            self.get_object("trapdoor").visible = True
+
+        # Trapdoor puzzle piece
+        if self.get_flag("trapdoor_open") and not self.get_object("puzzle_with_three_pieces_inserted").carried:
+            self.get_object("puzzle_piece_3").visible = True
+
+        # Fire extinguished unlocks final piece
+        if self.get_flag("fire_extinguished"):
+            self.get_object("puzzle_piece_4").visible = True
+
+    def handle_special_conditions(self):
+        """Check for game-over conditions or winning."""
+        cause_of_death = ""
+
+        # Fire kills Benny if bucket not used
+        if self.get_flag("fire_lit") and self.current_location == 22 and not self.has_in_inventory("BUCKET_FILLED"):
+            cause_of_death = "a fire."
+            self.set_flag("benny_dead", True)
+
+        # Deaths
+        if self.get_flag("benny_dead"):
+            print_to_description("Benny has died due to " + cause_of_death)
+            print_to_description("GAME OVER")
+            self.end_of_game = True
+
+        if self.get_flag("broom_destroyed") and not self.get_flag("three_pieces_solved"):
+            print_to_description("Benny can't continue to escape, as he used the broom to make a fire before using it for something else.")
+            print_to_description("GAME OVER")
+            self.end_of_game = True
+
+        # Win condition
+        if self.current_location == 23:
+            print_to_description("You successfully helped Benny escape the castle basement! Congratulations.")
+            self.end_of_game = True
+
+
 
 PORTRAIT_LAYOUT = True
 
@@ -583,122 +646,6 @@ def describe_current_inventory():
     inventory_widget.insert(1.0, inventory)
     inventory_widget.config(state="disabled")
 
-def handle_special_condition():
-    global end_of_game
-    global fire_lit
-    global benny_dead
-
-    cause_of_death = ""
-
-    if fire_lit and current_location == 22:
-        if not bucket_filled.carried:
-            cause_of_death = "a fire."
-            benny_dead = True
-
-    if benny_dead:
-        print_to_description("Benny has died due to " + cause_of_death)
-        print_to_description("GAME OVER")
-        end_of_game = True
-
-    if broom_destroyed and not three_pieces_solved:
-        print_to_description("Benny can't continue to escape, as he used the broom to make a fire before using it for something else.")
-        print_to_description("GAME OVER")
-        end_of_game = True
-
-    if current_location == 23:
-        print_to_description("You successfully helped Benny escape the castle basement! Congratulations.")
-        end_of_game = True
-
-def get_game_object(object_name):
-    sought_object = None
-    for current_object in game_objects:
-        if current_object.name.upper() == object_name:
-            sought_object = current_object
-            break
-    return sought_object
-
-def describe_current_visible_objects():
-    object_count = 0
-    object_list = ""
-
-    if puzzle_piece_1.carried and puzzle.carried:
-        hint1.visible = True
-
-    if hint1.carried:
-        clue1.visible = True
-
-    if clue1.carried:
-        clue11.visible = True
-
-    if clue11.carried:
-        clue2.visible = True
-
-    if gold_bar.carried:
-        bar_clue.visible = True
-
-    if safe_open and not puzzle_with_two_pieces_inserted.carried:
-        puzzle_piece_2.visible = True
-
-    if hint_fragment_1.carried:
-        hint_fragment_2.visible = True
-
-    if hint_fragment_2.carried:
-        hint_fragment_3.visible = True
-
-    if hint_fragment_3.carried:
-        hint_fragment_4.visible = True
-
-    if hint_fragment_4.carried:
-        hint_fragment_5.visible = True
-
-    if hint_fragment_5.carried:
-        hint_fragment_6.visible = True
-
-    if hint_fragment_6.carried:
-        hint_fragment_7.visible = True
-
-    if hint_fragment_7.carried:
-        hint_fragment_8.visible = True
-
-    if hint_fragment_8.carried:
-        hint_fragment_9.visible = True
-
-    if hint_fragment_9.carried:
-        hint_fragment_10.visible = True
-
-    if hint_fragment_10.carried:
-        hint_fragment_11.visible = True
-
-    if hint_fragment_11.carried:
-        hint_fragment_12.visible = True
-
-    if hint_fragment_12.carried:
-        hint_fragment_13.visible = True
-
-    if hint_fragment_13.carried:
-        fragment_clue.visible = True
-
-    if fragment_clue.carried:
-        glue_stick.visible = True
-
-    if hint3.carried:
-        magnifying_glass.visible = True
-
-    if magnifying_glass.carried:
-        trapdoor.visible = True
-
-    if trapdoor_open and not puzzle_with_three_pieces_inserted.carried:
-        puzzle_piece_3.visible = True
-
-    if fire_extinguished:
-        puzzle_piece_4.visible = True
-
-    for current_object in game_objects:
-        if (current_object.location == current_location) and current_object.visible and not current_object.carried:
-            object_list = object_list + (" and " if object_count > 0 else "") + current_object.name
-            object_count = object_count + 1
-
-    print_to_description("Benny sees " + (object_list + "." if object_count > 0 else "nothing special."))
 
 def build_interface():
     global command_widget
