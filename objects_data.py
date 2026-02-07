@@ -33,6 +33,10 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "clue #1",
+        "on_read": read_text(
+            "clue #1:",
+            "In order to read the hint, you need to know how to decipher it. Your clue is 8 salad."
+        )
     },
     {
         "id": "clue11",
@@ -42,6 +46,10 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "clue #1.5",
+        "on_read": read_text(
+            "clue #1.5:",
+            "Still having trouble figuring out how to decipher the hint? I don't blame you, it would require some knowledge that only super nerdy people have. Luckily for you, there exists a way to do it for you. Your clue is the word decipher."
+        )
     },
     {
         "id": "clue2",
@@ -51,6 +59,10 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "clue #2 (ONLY READ ONCE HINT 1 IS SOLVED)",
+        "on_read": read_text(
+            "clue #2:",
+            "Still confused after deciphering the first hint? I don't blame you. To progress, you need to SOLVE the puzzle."
+        )
     },
     {
         "id": "puzzle",
@@ -71,17 +83,6 @@ OBJECT_DEFS = [
         "description": "puzzle",
     },
     {
-        "id": "puzzle_2",
-        "name": "puzzle (2/4)",
-        "location": "puzzle_1",
-        "movable": True,
-        "visible": False,
-        "carried": False,
-        "description": "puzzle",
-    },
-
-    # --- Vault ---
-    {
         "id": "scroll",
         "name": "scroll",
         "location": Location.CELL_1,
@@ -89,7 +90,10 @@ OBJECT_DEFS = [
         "visible": True,
         "carried": False,
         "description": "an ancient papyrus scroll",
+        "on_read": read_image("scroll.png")
     },
+
+    # --- Vault ---
     {
         "id": "scroll_hint",
         "name": "hint",
@@ -98,6 +102,7 @@ OBJECT_DEFS = [
         "visible": True,
         "carried": False,
         "description": "huh",
+        "on_read": read_image("scroll_key.png")
     },
     {
         "id": "safe",
@@ -116,6 +121,7 @@ OBJECT_DEFS = [
         "visible": True,
         "carried": False,
         "description": "a gold bar with an engraving in it",
+        "on_read": read_text("Coins, Minerals, Gold, Silver")
     },
     {
         "id": "bar_clue",
@@ -125,6 +131,7 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "clue",
+        "on_read": read_text("Coins, Minerals, Gold, Silver")
     },
     {
         "id": "puzzle_piece_2",
@@ -134,6 +141,15 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "puzzle piece 2",
+    },
+    {
+        "id": "puzzle_2",
+        "name": "puzzle (2/4)",
+        "location": "puzzle_1",
+        "movable": True,
+        "visible": False,
+        "carried": False,
+        "description": "puzzle",
     },
 
     # --- Hallway hint fragments ---
@@ -159,6 +175,7 @@ OBJECT_DEFS = [
         "visible": True,
         "carried": False,
         "description": "more ripped looking paper...",
+        "on_read": read_text("Confused by all the random letters and numbers strewn around the hallway that you've picked up? Can't blame you, but I can... this is how your computer stores the text in a text document. (more specifically a .txt file)")
     },
 
     {
@@ -199,6 +216,7 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "hint 3",
+        "on_read": read_text("49 6E 20 6F 72 64 65 72 20 74 6F 20 66 69 6E 64 20 77 68 61 74 20 79 6F 75 20 6D 61 79 20 62 65 20 6C 6F 6F 6B 69 6E 67 20 66 6F 72 2C 20 69 74 20 6D 61 79 20 62 65 20 68 69 64 69 6E 67 20 69 6E 20 70 6C 61 69 6E 20 73 69 67 68 74 2E 20 50 65 72 68 61 70 73 20 61 6C 6C 20 74 68 6F 73 65 20 65 6D 70 74 79 20 68 61 6C 6C 77 61 79 73 20 79 6F 75 20 77 65 6E 74 20 70 61 73 74 20 77 65 72 65 6E 27 74 20 73 6F 20 69 6E 73 69 67 6E 69 66 69 63 61 6E 74 20 61 74 20 61 6C 6C 3F")
     },
     {
         "id": "door",

@@ -220,28 +220,25 @@ def perform_read_command(object_name):
                 hint1.on_read()
         elif game_object == clue1:
             if clue1.carried:
-                print_to_description("clue #1:")
-                print_to_description("In order to read the hint, you need to know how to decipher it. Your clue is 8 salad.")
+                clue1.on_read()
         elif game_object == clue2:
             if clue2.carried:
-                print_to_description("clue #2:")
-                print_to_description("Still confused after deciphering the first hint? I don't blame you. To progress, you need to SOLVE the puzzle.")
+                clue2.on_read()
         elif game_object == scroll:
             if scroll.carried:
-                show_popup_image("scroll.png")
+                scroll.on_read()
         elif game_object == scroll_hint:
             if scroll_hint.carried:
-                show_popup_image("scroll_key.png")
+                scroll_hint.on_read()
         elif game_object == gold_bar:
             if gold_bar.carried:
-                print_to_description("Coins, Minerals, Gold, Silver")
+                gold_bar.on_read()
         elif game_object == bar_clue:
             if bar_clue.carried:
-                print_to_description("sounds like you've found a code!")
+                bar_clue.on_read()
         elif game_object == clue11:
             if clue11.carried:
-                print_to_description("clue #1.5:")
-                print_to_description("Still having trouble figuring out how to decipher the hint? I don't blame you, it would require some knowledge that only super nerdy people have. Luckily for you, there exists a way to do it for you. Your clue is the word decipher.")
+                clue11.on_read()
         elif game_object == hint_fragment_1:
             if hint_fragment_1.carried:
                 print_to_description("49 6E 20 6F 72 64 65 72 20 74 6F 20 66")
@@ -283,10 +280,10 @@ def perform_read_command(object_name):
                 print_to_description("6C 3F")
         elif game_object == fragment_clue:
             if fragment_clue.carried:
-                print_to_description("Confused by all the random letters and numbers strewn around the hallway that you've picked up? Can't blame you, but I can... this is how your computer stores the text in a text document. (more specifically a .txt file)")
+                fragment_clue.on_read()
         elif game_object == hint3:
             if hint3.carried:
-                print_to_description("49 6E 20 6F 72 64 65 72 20 74 6F 20 66 69 6E 64 20 77 68 61 74 20 79 6F 75 20 6D 61 79 20 62 65 20 6C 6F 6F 6B 69 6E 67 20 66 6F 72 2C 20 69 74 20 6D 61 79 20 62 65 20 68 69 64 69 6E 67 20 69 6E 20 70 6C 61 69 6E 20 73 69 67 68 74 2E 20 50 65 72 68 61 70 73 20 61 6C 6C 20 74 68 6F 73 65 20 65 6D 70 74 79 20 68 61 6C 6C 77 61 79 73 20 79 6F 75 20 77 65 6E 74 20 70 61 73 74 20 77 65 72 65 6E 27 74 20 73 6F 20 69 6E 73 69 67 6E 69 66 69 63 61 6E 74 20 61 74 20 61 6C 6C 3F")
+                hint3.on_read()
         else:
             print_to_description("You're not carrying anything readable")
     else:
