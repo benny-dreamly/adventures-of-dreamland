@@ -214,80 +214,19 @@ def perform_look_command(object_name):
 def perform_read_command(object_name):
     game_object = get_game_object(object_name)
 
-    if not (game_object is None):
-        if game_object == hint1:
-            if hint1.carried:
-                hint1.on_read()
-        elif game_object == clue1:
-            if clue1.carried:
-                clue1.on_read()
-        elif game_object == clue2:
-            if clue2.carried:
-                clue2.on_read()
-        elif game_object == scroll:
-            if scroll.carried:
-                scroll.on_read()
-        elif game_object == scroll_hint:
-            if scroll_hint.carried:
-                scroll_hint.on_read()
-        elif game_object == gold_bar:
-            if gold_bar.carried:
-                gold_bar.on_read()
-        elif game_object == bar_clue:
-            if bar_clue.carried:
-                bar_clue.on_read()
-        elif game_object == clue11:
-            if clue11.carried:
-                clue11.on_read()
-        elif game_object == hint_fragment_1:
-            if hint_fragment_1.carried:
-                print_to_description("49 6E 20 6F 72 64 65 72 20 74 6F 20 66")
-        elif game_object == hint_fragment_2:
-            if hint_fragment_2.carried:
-                print_to_description("69 6E 64 20 77 68 61 74 20 79 6F 75 20")
-        elif game_object == hint_fragment_3:
-            if hint_fragment_3.carried:
-                print_to_description("6D 61 79 20 62 65 20 6C 6F 6F 6B 69 6E")
-        elif game_object == hint_fragment_4:
-            if hint_fragment_4.carried:
-                print_to_description("67 20 66 6F 72 2C 20 69 74 20 6D 61 79")
-        elif game_object == hint_fragment_5:
-            if hint_fragment_5.carried:
-                print_to_description("20 62 65 20 68 69 64 69 6E 67 20 69 6E")
-        elif game_object == hint_fragment_6:
-            if hint_fragment_6.carried:
-                print_to_description("20 70 6C 61 69 6E 20 73 69 67 68 74 2E")
-        elif game_object == hint_fragment_7:
-            if hint_fragment_7.carried:
-                print_to_description("20 50 65 72 68 61 70 73 20 61 6C 6C 20")
-        elif game_object == hint_fragment_8:
-            if hint_fragment_8.carried:
-                print_to_description("74 68 6F 73 65 20 65 6D 70 74 79 20 68")
-        elif game_object == hint_fragment_9:
-            if hint_fragment_9.carried:
-                print_to_description("61 6C 6C 77 61 79 73 20 79 6F 75 20 77")
-        elif game_object == hint_fragment_10:
-            if hint_fragment_10.carried:
-                print_to_description("65 6E 74 20 70 61 73 74 20 77 65 72 65")
-        elif game_object == hint_fragment_11:
-            if hint_fragment_11.carried:
-                print_to_description("6E 27 74 20 73 6F 20 69 6E 73 69 67 6E")
-        elif game_object == hint_fragment_12:
-            if hint_fragment_12.carried:
-                print_to_description("69 66 69 63 61 6E 74 20 61 74 20 61 6C")
-        elif game_object == hint_fragment_13:
-            if hint_fragment_13.carried:
-                print_to_description("6C 3F")
-        elif game_object == fragment_clue:
-            if fragment_clue.carried:
-                fragment_clue.on_read()
-        elif game_object == hint3:
-            if hint3.carried:
-                hint3.on_read()
-        else:
-            print_to_description("You're not carrying anything readable")
+    if game_object is None:
+        print_to_description(f"I am not sure which {object_name} you are referring to")
+        return
+
+    if not getattr(game_object, "carried", False):
+        print_to_description("You're not carrying anything readable")
+        return
+
+    if hasattr(game_object, "on_read") and callable(game_object.on_read):
+        game_object.on_read()
     else:
-        print_to_description("I am not sure which " + object_name + "you are referring to")
+        print_to_description("There's nothing readable about this.")
+
 
 def perform_open_command(object_name):
     global door_open
