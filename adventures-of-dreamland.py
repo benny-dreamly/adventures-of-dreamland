@@ -7,59 +7,9 @@ import time
 from PIL import ImageTk, Image
 import GameObject
 from location_ids import Location
+from locations_data import LOCATIONS
 
 PORTRAIT_LAYOUT = True
-
-location_names = [
-    "Cell (Room 1)\n",
-    "Cell (Room 2)\n",
-    "Cell (Room 3)\n",
-    "Hallway (Room 1)\n",
-    "Hallway (Room 2)\n",
-    "Hallway (Room 3)\n",
-    "Hallway (Room 4)\n",
-    "Vault (Room 1)\n",
-    "Vault (Room 2)\n",
-    "Vault (Room 3)\n",
-    "Vault (Room 4)\n",
-    "Hallway (Room 5)\n",
-    "Hallway (Room 6)\n",
-    "Hallway (Room 7)\n",
-    "Hallway (Room 8)\n",
-    "Hallway (Room 9)\n",
-    "Hallway (Room 10)\n",
-    "Hallway (Room 11)\n",
-    "Hallway (Room 12)\n",
-    "Hallway (Room 13)\n",
-    "Supply Closet (Room 1)",
-    "Supply Closet (Room 2)",
-    "Stairwell",
-]
-location_descriptions = [
-    "Benny wakes up in a dark room. He realizes that Fala and Nodo have locked him in the castle jail. Unfortunately, it seems like the great evil has possessed them and decided to lock him up for good. Luckily for him, the guards may have forgotten to lock the cell door behind them!\nThe room looks dilapidated, like nobody’s bothered to maintain it since there hasn’t been any prisoners for years. Cobwebs are scattered around the room, and it looks like the cell is bigger than he thought. There’s a table in the corner, with an old looking scroll that might be made from papyrus. Under the table, he can see a puzzle piece. It seems like the hidden puzzles he heard about when he was being transported into the cell were real. He might have a shot at escaping.\n",
-    "Unfortunately for Benny, in the next room he can’t see anything obvious. He thinks he might have to come back later in case there’s something hidden in the room that he can’t see right now. It feels like there might be something hidden in this room.\n",
-    "Benny realizes that this cell he’s in right now is really big. It still looks about the same as the other two rooms, lots of cobwebs and some various scattered furniture pieces. This room seems special, though. There’s a pedestal in the middle with a puzzle on it? Yep. Looks like a puzzle. Maybe this will help him escape?\n",
-    "Benny finds himself in a hallway, that doesn’t quite seem to have an end to it. He thinks nothing of it, as it appears just to be a hallway.\n",
-    "Still looks like a hallway.\n",
-    "At last, Benny finds a turn in the corridor. Maybe he’ll find something hidden in the next room?\n",
-    "Benny is still in a hallway, but it looks like he’s finally getting somewhere. He can see a room to his left. Maybe he should investigate it?\n",
-    "Benny finds himself in another room. It looks like it could be one of the vaults? Nope, just seems to look like some storage. Possibly an office? Nevermind, it really does look like one of the castle vaults. The dark and dingy brick hallways have been replaced with nice wood floors and well kept bricks instead. There’s a small counter in the room, which looks like it could have been used by someone that was keeping track of the items in the vault. It seems that there’s also some space behind the counter that seems to lead into another room.\n",
-    "Benny finds a little room with some shelves behind the counter, with a small box one of the shelves. There seems to be a room beside this one that looks to be the actual vault with all of the important valuables in it. No locked door or anything on the actual vault area either. Super strange when you consider there’s probably lots of fairly expensive items in it.\n",
-    "Benny finds himself in the actual heart of the vault. It looks like there’s lots of shelves with various precious minerals and lots of coins on the floor. He sees a small safe on one of the shelves, and it looks like he can open it. Unfortunately for him, he doesn’t yet have the combination for the safe. Maybe it will show itself in the next room?\n",
-    "There seems to be lots of gold and silver in this room too, but the Dream Diamond and lots of the kingdom’s valuables he’s recovered in the past are also in this part of the vault. Maybe there’s something important in here?\n\nOh look at that, he’s found a small engraving on one of the gold bars. Maybe he can grab it? There also seems to be a little piece of paper in the corner.\n",
-    "Benny finds himself at another corner, this time it’s a right turn. There sure is a very long hallway in this castle basement.\n",
-    "Benny is still in a straight hallway, how long even is this?\n",
-    "How can there be such a long hallway? It feels impractical.\n",
-    "It's yet another straight hallway... Why?\n",
-    "This hallway feels endless. When will it end?\n",
-    "SERIOUSLY!?!? MORE HALLWAY!?!?\n",
-    "WHAT THE HECK? THIS HALLWAY WILL NEVER END...\n",
-    "Benny has finally arrived at yet another corner, this time it's another right turn... maybe this is the end of the hallway?\n",
-    "At last, there seems to be a fork in the road, Benny can keep going straight into another room, or go right into yet another room, after unlocking the door which seems to be in the way. How is he going to get a key to open this door?\n",
-    "Benny seems to have found a supply closet. There's a broom leaning on one of the walls, an empty bucket on the floor and a lighter also on the floor. It seems like there's some sort of puzzle in here? Possibly some kind of magic ritual? Benny is still slightly confused on how to solve this. The closet does seem to be a bit bigger though, so he'll probably be able to get a better picture of what he has to do.\n",
-    "The closet seems to have a small tub of water in it. Maybe that will somehow be helpful?\n",
-    "At last, Benny finds himself at the stairwell. He can escape now, thanks to you.\n"
-]
 
 command_widget = None
 image_label = None
@@ -592,12 +542,13 @@ def perform_use_command(object_name):
         print_to_description("Invalid Object.")
 
 def describe_current_location(current_location):
-    index = current_location - 1  # Adjust for 0-based indexing in Python lists
-    if 0 <= index < len(location_names):
-        print_to_description(location_names[index])
-        print_to_description(location_descriptions[index])
+    data = LOCATIONS.get(current_location)
+
+    if data:
+        print_to_description(data.name)
+        print_to_description(data.desc)
     else:
-        print_to_description("unknown location: " + str(current_location))
+        print_to_description(f"Unknown location: {current_location}")
 
 def set_current_image():
     image_mapping = {
