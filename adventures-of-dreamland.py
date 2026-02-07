@@ -415,19 +415,39 @@ def perform_solve_command(object_name):
         print_to_description("You can't do that.")
 
 def perform_glue_command(object_name):
-    game_object = get_game_object(object_name)
-    if not (game_object is None):
-        if glue_stick.carried:
-            if all(item.carried for item in [game_object, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4, hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10, hint_fragment_11, hint_fragment_12, hint_fragment_13]) and game_object.glueable:
-                print_to_description("Benny succeeds at gluing the fragments of this hint together. Maybe it will be a bit easier to decipher now?")
-                for item in [game_object, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4, hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10, hint_fragment_11, hint_fragment_12, hint_fragment_13]:
-                    item.carried = False
-                    item.visible = False
-                hint3.carried = True
-        else:
-            print_to_description("You're missing something.")
-    else:
+    """Glue fragments together if the player has the glue stick and all pieces."""
+    game_object = state.get_object(object_name)
+
+    if game_object is None:
         print_to_description("You can't do that.")
+        return
+
+    glue_stick = state.get_object("glue_stick")
+    if not glue_stick or not glue_stick.carried:
+        print_to_description("You're missing something.")
+        return
+
+    # Gather all hint fragments dynamically
+    fragments = [state.get_object(f"hint_fragment_{i}") for i in range(1, 14)]
+
+    if all(f and f.carried for f in fragments) and getattr(game_object, "glueable", False):
+        print_to_description(
+            "Benny succeeds at gluing the fragments of this hint together. "
+            "Maybe it will be a bit easier to decipher now?"
+        )
+        # Remove fragments and original object from inventory/visibility
+        for item in fragments + [game_object]:
+            if item:
+                item.carried = False
+                item.visible = False
+
+        # Place the completed hint into inventory
+        hint3 = state.get_object("hint3")
+        if hint3:
+            hint3.carried = True
+        state.refresh_objects_visible = True
+    else:
+        print_to_description("You don't have all the pieces or this can't be glued.")
 
 def perform_unlock_command(object_name):
     """Handle unlocking safes or doors using state-driven logic."""
