@@ -8,6 +8,8 @@ from PIL import ImageTk, Image
 import GameObject
 from location_ids import Location
 from locations_data import LOCATIONS
+from objects_data import OBJECT_DEFS
+from objects_builder import build_objects
 
 PORTRAIT_LAYOUT = True
 
@@ -43,53 +45,52 @@ playing = False
 
 list_of_commands = ["GO", "N", "S", "E", "W", "NORTH", "SOUTH", "EAST", "WEST", "GET", "READ", "OPEN", "HELP"]
 
-puzzle_piece_1 = GameObject.GameObject("puzzle piece 1", Location.CELL_1, True, True, False, "puzzle piece 1")
-hint1 = GameObject.GameObject("hint 1", Location.CELL_1, True, False, False, "hint #1")
-clue1 = GameObject.GameObject("clue 1", Location.CELL_2, True, False, False, "clue #1")
-clue11 = GameObject.GameObject("clue 1-2", Location.CELL_1, True, False, False, "clue #1.5")
-clue2 = GameObject.GameObject("clue 2", Location.CELL_3, True, False, False,
-                              "clue #2 (ONLY READ ONCE HINT 1 IS SOLVED)")
-puzzle = GameObject.GameObject("puzzle", Location.CELL_3, True, True, False, "puzzle")
-puzzle_with_one_piece_inserted = GameObject.GameObject("puzzle (1/4)", puzzle, True, False, False, "puzzle")
-puzzle_with_two_pieces_inserted = GameObject.GameObject("puzzle (2/4)", puzzle_with_one_piece_inserted, True, False,
-                                                        False, "puzzle")
-scroll = GameObject.GameObject("scroll", Location.CELL_1, True, True, False, "an ancient papyrus scroll")
-scroll_hint = GameObject.GameObject("hint", Location.VAULT_4, True, True, False, "huh")
-safe = GameObject.GameObject("safe", Location.VAULT_3, False, True, False, "a small safe")
-gold_bar = GameObject.GameObject("gold bar", Location.VAULT_4, True, True, False,
-                                 "a gold bar with an engraving in it")
-bar_clue = GameObject.GameObject("clue", Location.VAULT_4, True, False, False, "clue")
-puzzle_piece_2 = GameObject.GameObject("puzzle piece 2", Location.VAULT_3, True, False, False, "puzzle piece 2")
-hint_fragment_1 = GameObject.GameObject("hint A", Location.HALLWAY_1, True, True, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_2 = GameObject.GameObject("hint B", Location.HALLWAY_2, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_3 = GameObject.GameObject("hint C", Location.HALLWAY_3, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_4 = GameObject.GameObject("hint D", Location.HALLWAY_4, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_5 = GameObject.GameObject("hint E", Location.HALLWAY_5, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_6 = GameObject.GameObject("hint F", Location.HALLWAY_6, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_7 = GameObject.GameObject("hint G", Location.HALLWAY_7, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_8 = GameObject.GameObject("hint H", Location.HALLWAY_8, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_9 = GameObject.GameObject("hint I", Location.HALLWAY_9, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_10 = GameObject.GameObject("hint J", Location.HALLWAY_10, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_11 = GameObject.GameObject("hint K", Location.HALLWAY_11, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_12 = GameObject.GameObject("hint L", Location.HALLWAY_12, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-hint_fragment_13 = GameObject.GameObject("hint M", Location.HALLWAY_13, True, False, False, "a small piece of ripped paper, it looks like it has some writing on it.", True)
-fragment_clue = GameObject.GameObject("cluee", Location.HALLWAY_13, True, True, False, "more ripped looking paper...")
-puzzle_piece_3 = GameObject.GameObject("puzzle piece 3", Location.HALLWAY_10, True, False, False, "another puzzle piece woo")
-puzzle_with_three_pieces_inserted = GameObject.GameObject("puzzle (3/4)", puzzle_with_two_pieces_inserted, True, False, False, "puzzle (3/4)")
-glue_stick = GameObject.GameObject("glue stick", Location.SUPPLY_1, True, False, False, "a glue stick")
-hint3 = GameObject.GameObject("hint 3", None, True, False, False, "hint 3")
-door = GameObject.GameObject("door", Location.HALLWAY_13, False, True, False, "a large door...")
-finished_puzzle = GameObject.GameObject("puzzle (4/4)", puzzle_with_three_pieces_inserted, True, False, False, "a finished puzzle, what does it do?")
-puzzle_piece_4 = GameObject.GameObject("puzzle piece 4", Location.SUPPLY_2, True, False, False, "another puzzle piece...")
-key = GameObject.GameObject("key", finished_puzzle, True, False, False, "a golden key")
-magnifying_glass = GameObject.GameObject("magnifying glass", Location.HALLWAY_13, True, False, False, "a magnifying glass")
-broom = GameObject.GameObject("broom", Location.SUPPLY_2, True, True, False, "a broom")
-bucket = GameObject.GameObject("bucket", Location.SUPPLY_2, True, True, False, "an empty bucket")
-bucket_filled = GameObject.GameObject("water bucket", bucket, True, False, False, "a bucket filled with water")
-trapdoor = GameObject.GameObject("trapdoor", Location.HALLWAY_10, False, False, False, "a trapdoor")
-water = GameObject.GameObject("water", Location.SUPPLY_2, False, True, False, "water")
-lighter = GameObject.GameObject("lighter", Location.SUPPLY_2, True, True, False, "a lighter, maybe you could light a fire with this?")
-game_objects = [puzzle_piece_1, puzzle_piece_2, hint1, scroll_hint, clue1, clue11, clue2, puzzle, puzzle_with_one_piece_inserted, puzzle_with_two_pieces_inserted, key, scroll, safe, gold_bar, bar_clue, hint_fragment_1, hint_fragment_2, hint_fragment_3, hint_fragment_4, hint_fragment_5, hint_fragment_6, hint_fragment_7, hint_fragment_8, hint_fragment_9, hint_fragment_10, hint_fragment_11, hint_fragment_12, hint_fragment_13, fragment_clue, puzzle_piece_3, puzzle_with_three_pieces_inserted, glue_stick, hint3, door, finished_puzzle, magnifying_glass, broom, bucket, bucket_filled, trapdoor, lighter, water, puzzle_piece_4]
+objects = build_objects(OBJECT_DEFS)
+game_objects = list(objects.values())
+
+puzzle_piece_1 = objects["puzzle_piece_1"]
+puzzle_piece_2 = objects["puzzle_piece_2"]
+puzzle_piece_3 = objects["puzzle_piece_3"]
+puzzle_piece_4 = objects["puzzle_piece_4"]
+hint1 = objects["hint1"]
+hint3 = objects["hint3"]
+scroll_hint = objects["scroll_hint"]
+clue1 = objects["clue1"]
+clue11 = objects["clue11"]
+clue2 = objects["clue2"]
+bar_clue = objects["bar_clue"]
+puzzle = objects["puzzle"]
+puzzle_with_one_piece_inserted = objects["puzzle_with_one_piece_inserted"]
+puzzle_with_two_pieces_inserted = objects["puzzle_with_two_pieces_inserted"]
+puzzle_with_three_pieces_inserted = objects["puzzle_with_three_pieces_inserted"]
+finished_puzzle = objects["finished_puzzle"]
+key = objects["key"]
+scroll = objects["scroll"]
+gold_bar = objects["gold_bar"]
+glue_stick = objects["glue_stick"]
+magnifying_glass = objects["magnifying_glass"]
+broom = objects["broom"]
+bucket = objects["bucket"]
+bucket_filled = objects["bucket_filled"]
+lighter = objects["lighter"]
+hint_fragment_1 = objects["hint_fragment_1"]
+hint_fragment_2 = objects["hint_fragment_2"]
+hint_fragment_3 = objects["hint_fragment_3"]
+hint_fragment_4 = objects["hint_fragment_4"]
+hint_fragment_5 = objects["hint_fragment_5"]
+hint_fragment_6 = objects["hint_fragment_6"]
+hint_fragment_7 = objects["hint_fragment_7"]
+hint_fragment_8 = objects["hint_fragment_8"]
+hint_fragment_9 = objects["hint_fragment_9"]
+hint_fragment_10 = objects["hint_fragment_10"]
+hint_fragment_11 = objects["hint_fragment_11"]
+hint_fragment_12 = objects["hint_fragment_12"]
+hint_fragment_13 = objects["hint_fragment_13"]
+fragment_clue = objects["fragment_clue"]
+safe = objects["safe"]
+door = objects["door"]
+trapdoor = objects["trapdoor"]
+water = objects["water"]
 
 def perform_command(verb, noun):
 
