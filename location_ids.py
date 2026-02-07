@@ -1,5 +1,9 @@
 from enum import IntEnum
+from dataclasses import dataclass
 
+# -----------------
+# Enum (IDs only)
+# -----------------
 
 class Location(IntEnum):
 
@@ -33,3 +37,12 @@ class Location(IntEnum):
     SUPPLY_1 = 21
     SUPPLY_2 = 22
     STAIRWELL = 23
+
+# -----------------
+# Dataclass (data only)
+# -----------------
+
+@dataclass(frozen=True)
+class LocationData:
+    name: str
+    desc: str
