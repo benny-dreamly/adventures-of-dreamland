@@ -1,7 +1,7 @@
 import services
 
 def read_text(*lines):
-    def action(obj):
+    def action():
         if services.print_fn is None:
             raise RuntimeError("UI not registered")
         for line in lines:
@@ -10,7 +10,7 @@ def read_text(*lines):
 
 
 def read_image(image_name):
-    def action(obj):
+    def action():
         if services.show_image_fn is None:
             raise RuntimeError("UI not registered")
         services.show_image_fn(image_name)

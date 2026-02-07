@@ -13,6 +13,7 @@ def build_objects(object_defs):
             d["carried"],
             d["description"],
             d.get("glueable", False),
+            d.get("on_read", None),
         )
         objects[d["id"]] = obj
 

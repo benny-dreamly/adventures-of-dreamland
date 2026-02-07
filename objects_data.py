@@ -1,4 +1,5 @@
 from location_ids import Location
+from read_actions import *
 
 OBJECT_DEFS = [
     # --- Cell objects ---
@@ -19,6 +20,10 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "hint #1",
+        "on_read": read_text(
+            "hint #1:",
+            "Bw xcb bpm xchhtm xqmkm qv bpm xchhtm, gwc vmml bw xcb qb qv bpm xchhtm. Gwc uig ias: Pwe lw Q xcb bpm xqmkm qv bpm xchhtm? Zmil pqvb 2 bw nqoczm wcb pwe bw xcb bpm xchhtm xqmkm qv bpm nqzab xchhtm."
+        )
     },
     {
         "id": "clue1",

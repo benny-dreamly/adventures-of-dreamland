@@ -217,8 +217,7 @@ def perform_read_command(object_name):
     if not (game_object is None):
         if game_object == hint1:
             if hint1.carried:
-                print_to_description("hint #1:")
-                print_to_description("Bw xcb bpm xchhtm xqmkm qv bpm xchhtm, gwc vmml bw xcb qb qv bpm xchhtm. Gwc uig ias: Pwe lw Q xcb bpm xqmkm qv bpm xchhtm? Zmil pqvb 2 bw nqoczm wcb pwe bw xcb bpm xchhtm xqmkm qv bpm nqzab xchhtm.")
+                hint1.on_read()
         elif game_object == clue1:
             if clue1.carried:
                 print_to_description("clue #1:")
