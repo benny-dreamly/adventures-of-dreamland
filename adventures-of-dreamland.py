@@ -959,7 +959,7 @@ def set_directions_to_move():
 
 def print_to_description(output, user_input=False):
     description_widget.config(state='normal')
-    description_widget.insert(END, output)
+    description_widget.insert(END, output + "\n")
     if user_input:
         description_widget.tag_add("blue_text", CURRENT + " linestart", END + "-1c")
         description_widget.tag_configure("blue_text", foreground='blue')
