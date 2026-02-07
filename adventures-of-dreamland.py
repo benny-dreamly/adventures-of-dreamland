@@ -303,116 +303,108 @@ def perform_help_command(_):
     print_to_description(", ".join(list_of_commands))
 
 def perform_solve_command(object_name):
-    global refresh_objects_visible
-    global three_pieces_solved
-    game_object = get_game_object(object_name)
-    piece_slot_message = "The piece slots into the puzzle, but you still haven't solved it."
-    if not (game_object is None):
-        if game_object.carried and game_object == puzzle:
-            answer = simpledialog.askstring("Input", "What would you like to put in the puzzle first?", parent=root)
-            if not puzzle_piece_1.carried:
-                print_to_description("It looks like you don't have anything to put into the puzzle.")
-            elif answer != "puzzle piece 1":
-                print_to_description("Unfortunately, it looks like it doesn't fit in the puzzle.")
-            else:
-                puzzle_piece_inserted = False
-                while not puzzle_piece_inserted:
-                    slot = simpledialog.askinteger("Input", "Which slot would you like to put your piece in?",
-                                                   parent=root)
-                    if slot != 1:
-                        print_to_description("The piece won't fit, no matter how you rotate it.")
-                        answer = simpledialog.askstring("Input", "Would you like to try again?", parent=root)
-                        if answer == "No":
-                            break
-                    else:
-                        print_to_description(piece_slot_message)
-                        puzzle_piece_inserted = True
-                for item in [puzzle_piece_1, hint1, clue1, clue11, clue2, game_object]:
-                    item.carried = False
-                    item.visible = False
-                puzzle_with_one_piece_inserted.carried = True
-                list_of_commands.append("DECIPHER\n")
-                list_of_commands.append("SOLVE\n")
-                refresh_objects_visible = True
-        elif game_object.carried and game_object == puzzle_with_one_piece_inserted:
-            answer = simpledialog.askstring("Input", "What would you like to put in the puzzle next?", parent=root)
-            if not puzzle_piece_2.carried:
-                print_to_description("It looks like you don't have anything to put into the puzzle.")
-            elif answer != "puzzle piece 2":
-                print_to_description("Unfortunately, it looks like it doesn't fit in the puzzle.")
-            else:
-                puzzle_piece_inserted = False
-                while not puzzle_piece_inserted:
-                    slot = simpledialog.askinteger("Input", "Which slot would you like to put your piece in?",
-                                                   parent=root)
-                    if slot != 2:
-                        print_to_description("The piece won't fit, no matter how you rotate it.")
-                        answer = simpledialog.askstring("Input", "Would you like to try again?", parent=root)
-                        if answer == "No":
-                            break
-                    else:
-                        print_to_description(piece_slot_message)
-                        puzzle_piece_inserted = True
-                    for item in [puzzle_piece_2, game_object, gold_bar, bar_clue]:
-                        item.carried = False
-                        item.visible = False
-                    puzzle_with_two_pieces_inserted.carried = True
-                    list_of_commands.append("UNLOCK\n")
-                    refresh_objects_visible = True
-        elif game_object.carried and game_object == puzzle_with_two_pieces_inserted:
-            answer = simpledialog.askstring("Input", "What would you like to put in the puzzle next?", parent=root)
-            if not puzzle_piece_3.carried:
-                print_to_description("It looks like you don't have anything to put into the puzzle.")
-            elif answer != "puzzle piece 3":
-                print_to_description("Unfortunately, it looks like it doesn't fit in the puzzle.")
-            else:
-                puzzle_piece_inserted = False
-                while not puzzle_piece_inserted:
-                    slot = simpledialog.askinteger("Input", "Which slot would you like to put your piece in?",
-                                                   parent=root)
-                    if slot != 3:
-                        print_to_description("The piece won't fit, no matter how you rotate it.")
-                        answer = simpledialog.askstring("Input", "Would you like to try again?", parent=root)
-                        if answer == "No":
-                            break
-                    else:
-                        print_to_description(piece_slot_message)
-                        puzzle_piece_inserted = True
-                    for item in [game_object, puzzle_piece_3, hint3, fragment_clue, magnifying_glass]:
-                        item.carried = False
-                        item.visible = False
-                    puzzle_with_three_pieces_inserted.carried = True
-                    three_pieces_solved = True
-                    refresh_objects_visible = True
-        elif game_object.carried and game_object == puzzle_with_three_pieces_inserted:
-            answer = simpledialog.askstring("Input", "What would you like to put in the puzzle next?", parent=root)
-            if not puzzle_piece_4.carried:
-                print_to_description("It looks like you don't have anything to put into the puzzle.")
-            elif answer != "puzzle piece 4":
-                print_to_description("Unfortunately, it looks like it doesn't fit in the puzzle.")
-            else:
-                puzzle_piece_inserted = False
-                while not puzzle_piece_inserted:
-                    slot = simpledialog.askinteger("Input", "Which slot would you like to put your piece in?",
-                                                   parent=root)
-                    if slot != 4:
-                        print_to_description("The piece won't fit, no matter how you rotate it.")
-                        answer = simpledialog.askstring("Input", "Would you like to try again?", parent=root)
-                        if answer == "No":
-                            break
-                    else:
-                        print_to_description(piece_slot_message)
-                        puzzle_piece_inserted = True
-                for item in [game_object, puzzle_piece_4, bucket_filled, lighter]:
-                    item.carried = False
-                    item.visible = False
-                print_to_description("Benny watches as the puzzle transforms into a key. He can finally escape!!!")
-                key.carried = True
-                refresh_objects_visible = True
-        else:
-            print_to_description("You're missing something.")
-    else:
+    """Handles inserting puzzle pieces into the puzzle dynamically."""
+    game_object = state.get_object(object_name)
+    if not game_object:
         print_to_description("You can't do that.")
+        return
+
+    # Define the puzzle stages in order
+    puzzle_stages = [
+        {
+            "puzzle": "puzzle",
+            "piece": "puzzle_piece_1",
+            "next_puzzle": "puzzle_with_one_piece_inserted",
+            "remove_objects": ["puzzle_piece_1", "hint1", "clue1", "clue11", "clue2", "puzzle"],
+            "slot": 1,
+            "next_commands": ["DECIPHER", "SOLVE"]
+        },
+        {
+            "puzzle": "puzzle_with_one_piece_inserted",
+            "piece": "puzzle_piece_2",
+            "next_puzzle": "puzzle_with_two_pieces_inserted",
+            "remove_objects": ["puzzle_piece_2", "puzzle_with_one_piece_inserted", "gold_bar", "bar_clue"],
+            "slot": 2,
+            "next_commands": ["UNLOCK"]
+        },
+        {
+            "puzzle": "puzzle_with_two_pieces_inserted",
+            "piece": "puzzle_piece_3",
+            "next_puzzle": "puzzle_with_three_pieces_inserted",
+            "remove_objects": ["puzzle_with_two_pieces_inserted", "puzzle_piece_3", "hint3", "fragment_clue", "magnifying_glass"],
+            "slot": 3,
+            "set_flag": ("three_pieces_solved", True)
+        },
+        {
+            "puzzle": "puzzle_with_three_pieces_inserted",
+            "piece": "puzzle_piece_4",
+            "next_puzzle": None,
+            "remove_objects": ["puzzle_with_three_pieces_inserted", "puzzle_piece_4", "bucket_filled", "lighter"],
+            "slot": 4,
+            "final_action": lambda: (
+                print_to_description("Benny watches as the puzzle transforms into a key. He can finally escape!!!"),
+                state.get_object("key").__setattr__("carried", True)
+            )
+        },
+    ]
+
+    # Find the stage that matches the current puzzle object
+    stage = next((s for s in puzzle_stages if state.get_object(s["puzzle"]) == game_object), None)
+    if not stage:
+        print_to_description("You're missing something.")
+        return
+
+    piece_obj = state.get_object(stage["piece"])
+    if not piece_obj or not piece_obj.carried:
+        print_to_description("It looks like you don't have anything to put into the puzzle.")
+        return
+
+    answer = simpledialog.askstring("Input", f"What would you like to put in the puzzle?", parent=root)
+    if answer != stage["piece"].replace("_", " "):
+        print_to_description("Unfortunately, it looks like it doesn't fit in the puzzle.")
+        return
+
+    # Ask for the slot number until correct
+    inserted = False
+    while not inserted:
+        slot = simpledialog.askinteger("Input", "Which slot would you like to put your piece in?", parent=root)
+        if slot != stage["slot"]:
+            print_to_description("The piece won't fit, no matter how you rotate it.")
+            retry = simpledialog.askstring("Input", "Would you like to try again?", parent=root)
+            if retry.lower() == "no":
+                return
+        else:
+            print_to_description("The piece slots into the puzzle, but you still haven't solved it.")
+            inserted = True
+
+    # Remove all relevant objects from inventory/visibility
+    for obj_name in stage.get("remove_objects", []):
+        obj = state.get_object(obj_name)
+        if obj:
+            obj.carried = False
+            obj.visible = False
+
+    # Set next puzzle state or handle final action
+    next_puzzle_name = stage.get("next_puzzle")
+    if next_puzzle_name:
+        next_puzzle = state.get_object(next_puzzle_name)
+        if next_puzzle:
+            next_puzzle.carried = True
+
+    # Set any flags
+    if "set_flag" in stage:
+        flag_name, value = stage["set_flag"]
+        setattr(state, flag_name, value)
+
+    # Execute final action if defined
+    if "final_action" in stage:
+        stage["final_action"]()
+
+    # Add next commands if any
+    for cmd in stage.get("next_commands", []):
+        state.list_of_commands.append(cmd + "\n")
+
+    state.refresh_objects_visible = True
 
 def perform_glue_command(object_name):
     """Glue fragments together if the player has the glue stick and all pieces."""
@@ -653,7 +645,7 @@ def get_location_to_north(current_location):
         19: 18,
     }
 
-    if current_location == 20 and door_open:
+    if current_location == 20 and state.door_open:
         return 23
 
     return north_mappings.get(current_location, 0)
