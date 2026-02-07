@@ -93,9 +93,6 @@ button_frame = None
 
 MAX_TIME_ELAPSED = 15
 
-
-list_of_commands = ["GO", "N", "S", "E", "W", "NORTH", "SOUTH", "EAST", "WEST", "GET", "READ", "OPEN", "HELP"]
-
 def perform_command(verb, noun):
 
     if verb in ["GO", "N", "S", "E", "W", "A", "D", "NORTH", "SOUTH", "EAST", "WEST"]:
@@ -128,94 +125,64 @@ def perform_command(verb, noun):
         print_to_description("unknown command")
 
 def perform_go_command(direction):
-    global refresh_location
+    mappings = {
+        "N": get_location_to_north,
+        "NORTH": get_location_to_north,
+        "S": get_location_to_south,
+        "SOUTH": get_location_to_south,
+        "E": get_location_to_east,
+        "EAST": get_location_to_east,
+        "W": get_location_to_west,
+        "WEST": get_location_to_west,
+    }
 
-    if direction in ["N", "NORTH", "W"]:
-        new_location = get_location_to_north(state.current_location)
-    elif direction in ["S", "SOUTH"]:
-        new_location = get_location_to_south(state.current_location)
-    elif direction in ["E", "EAST", "D"]:
-        new_location = get_location_to_east(state.current_location)
-    elif direction in ["W", "WEST", "A"]:
-        new_location = get_location_to_west(state.current_location)
-    else:
-        new_location = 0
-
-    if new_location == 0:
-        print_to_description("You can't go that way!")
-    else:
-        state.current_location = new_location
-        refresh_location = True
-
-def perform_get_command(object_name):
-    global refresh_objects_visible
-    game_object = get_game_object(object_name)
-    if not (game_object is None):
-        if game_object.location != state.current_location or not game_object.visible:
-            print_to_description("You don't see one of those here!")
-        elif not game_object.movable:
-            print_to_description("You can't pick it up!")
-        elif game_object.carried:
-            print_to_description("You are already carrying it")
+    func = mappings.get(direction)
+    if func:
+        new_location = func(state.current_location)
+        if new_location == 0:
+            print_to_description("You can't go that way!")
         else:
-            # handle special conditions
-            if False:
-                print_to_description("special condition")
-            else:
-                # pick up the object
-                game_object.carried = True
-                game_object.visible = False
-                refresh_objects_visible = True
-    else:
+            state.current_location = new_location
+            state.refresh_location = True
+
+def perform_get_command(obj_name):
+    obj = state.get_object(obj_name)
+    if not obj:
         print_to_description("You don't see one of those here!")
+        return
+    if obj.location != state.current_location or not obj.visible:
+        print_to_description("You don't see one of those here!")
+        return
+    if not getattr(obj, "movable", False):
+        print_to_description("You can't pick it up!")
+        return
+    if obj.carried:
+        print_to_description("You are already carrying it")
+        return
+    state.add_to_inventory(obj)
+    state.refresh_objects_visible = True
 
-def perform_put_command(object_name):
-    global refresh_objects_visible
-    game_object = get_game_object(object_name)
-
-    if not (game_object is None):
-        if not game_object.carried:
-            print_to_description("You are not carrying one of those.")
-        else:
-            # put down the object
-            game_object.location = state.current_location
-            game_object.carried = False
-            game_object.visible = True
-            refresh_objects_visible = True
-    else:
+def perform_put_command(obj_name):
+    obj = state.get_object(obj_name)
+    if not obj:
         print_to_description("You are not carrying one of those!")
+        return
+    if not obj.carried:
+        print_to_description("You are not carrying one of those!")
+        return
+    state.remove_from_inventory(obj)
+    obj.location = state.current_location
+    state.refresh_objects_visible = True
 
-def perform_look_command(object_name):
-    global refresh_location
-    global refresh_objects_visible
-
-    game_object = get_game_object(object_name)
-
-    if not (game_object is None):
-
-        if game_object.carried or game_object.visible and game_object.location == state.current_location:
-            print_to_description(game_object.description)
-        else:
-            # recognized but not visible
-            print_to_description("You can't see one of those!")
-
-        # special cases - when certain objects are looked at, others are revealed!
-        if game_object == safe and safe_open:
-            print_to_description("Benny sees a puzzle piece in the safe. Maybe he can grab it?")
-            global refresh_objects_visible
-            refresh_objects_visible = True
-
+def perform_look_command(obj_name):
+    obj = state.get_object(obj_name)
+    if obj and (obj.carried or (obj.visible and obj.location == state.current_location)):
+        print_to_description(obj.description)
     else:
-        if object_name == "":
-            # generic LOOK
-            refresh_location = True
-            refresh_objects_visible = True
-        else:
-            # not visible recognized
-            print_to_description("You can't see one of those!")
+        print_to_description("You can't see one of those!")
 
 def perform_read_command(object_name):
-    game_object = get_game_object(object_name)
+    game_object = state.get_object(object_name)
 
     if game_object is None:
         print_to_description(f"I am not sure which {object_name} you are referring to")
@@ -252,10 +219,11 @@ def perform_open_command(object_name):
     else:
         print_to_description("You don't see one of those here.")
 
-def perform_help_command(verb):
-    print_to_description("here are the commands for the game:")
-    for command in list_of_commands:
-        print_to_description(command)
+list_of_commands = ["GO", "N", "S", "E", "W", "NORTH", "SOUTH", "EAST", "WEST", "GET", "READ", "OPEN", "HELP"]
+
+def perform_help_command(_):
+    print_to_description("Available commands:")
+    print_to_description(", ".join(list_of_commands))
 
 def perform_solve_command(object_name):
     global refresh_objects_visible
