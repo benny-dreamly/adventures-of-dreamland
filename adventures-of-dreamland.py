@@ -325,9 +325,9 @@ def perform_go_command(direction):
         state.refresh_location = True
 
 def perform_get_command(obj_name):
-    input = normalize_input(obj_name)
-    obj = state.get_object(input)
-    if not obj or not can_take(input):
+    input_text = normalize_input(obj_name)
+    obj = state.get_object(input_text)
+    if not obj or not can_take(input_text):
         print_to_description("You can't pick that up!")
         return
 
