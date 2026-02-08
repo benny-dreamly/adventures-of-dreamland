@@ -153,7 +153,7 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "puzzle piece 2",
-        "visibility_condition": lambda game: game.get_flag("safe_open") and not game.get_object("puzzle_with_two_pieces_inserted").carried
+        "visibility_condition": lambda game: game.get_flag("safe_open") and not game.get_object("puzzle_2").carried
     },
     {
         "id": "puzzle_2",
