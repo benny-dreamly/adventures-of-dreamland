@@ -30,7 +30,10 @@ def build_objects(object_defs):
     for d in object_defs:
         loc = d["location"]
         if isinstance(loc, str):
-            objects[d["id"]].location = objects[loc]
+            if loc in objects:  # if it's another object
+                objects[d["id"]].location = objects[loc]
+            else:  # otherwise assume it's a room
+                objects[d["id"]].location = rooms[loc]  # <-- you need a rooms dict
 
     return objects, name_to_id
 
