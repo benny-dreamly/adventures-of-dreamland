@@ -432,7 +432,7 @@ PUZZLE_STAGES = [
     {
         "puzzle": "puzzle_1",
         "piece": "puzzle_piece_2",
-        "next_puzzle": "puzzle_with_two_pieces_inserted",
+        "next_puzzle": "puzzle_2",
         "remove_objects": ["puzzle_piece_2", "puzzle_1", "gold_bar", "bar_clue"],
         "slot": 2,
         "next_commands": ["UNLOCK"]
@@ -440,7 +440,7 @@ PUZZLE_STAGES = [
     {
         "puzzle": "puzzle_2",
         "piece": "puzzle_piece_3",
-        "next_puzzle": "puzzle_with_three_pieces_inserted",
+        "next_puzzle": "puzzle_3",
         "remove_objects": ["puzzle_2", "puzzle_piece_3", "hint3", "fragment_clue", "magnifying_glass"],
         "slot": 3,
         "set_flag": ("three_pieces_solved", True)
