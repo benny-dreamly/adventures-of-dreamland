@@ -96,9 +96,9 @@ class GameState:
     def is_visible(self, obj, current_location):
         """Return True if object should be visible in the current room."""
 
-        # Always visible if carried
+        # Inventory objects are not room-visible
         if obj.carried:
-            return True
+            return False
 
         # Locked by progression? never visible by location alone
         if getattr(obj, "progression_locked", False):
