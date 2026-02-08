@@ -476,7 +476,7 @@ def perform_solve_command(object_name):
     for obj_name in stage.get("remove_objects", []):
         obj = state.get_object(obj_name)
         if obj:
-            obj.carried = False
+            state.remove_from_inventory(obj)
             obj.visible = False
 
     # Set next puzzle state or handle final action
@@ -484,7 +484,9 @@ def perform_solve_command(object_name):
     if next_puzzle_name:
         next_puzzle = state.get_object(next_puzzle_name)
         if next_puzzle:
-            next_puzzle.carried = True
+            # Instead of carried=True, just make it visible in the room
+            next_puzzle.carried = False
+            next_puzzle.visible = True
 
     # Set any flags
     if "set_flag" in stage:
