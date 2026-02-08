@@ -26,14 +26,14 @@ def build_objects(object_defs):
         norm_name = normalize(d["name"])
         name_to_id[norm_name] = d["id"]
 
-    # Pass 2: resolve string-based locations
+    # --- Pass 2: resolve string-based locations ---
     for d in object_defs:
         loc = d["location"]
         if isinstance(loc, str):
-            if loc in objects:  # if it's another object
-                objects[d["id"]].location = objects[loc]
-            else:  # otherwise assume it's a room
-                objects[d["id"]].location = rooms[loc]  # <-- you need a rooms dict
+            if loc not in objects:
+                raise KeyError(f"Object '{d['id']}' references unknown location '{loc}'")
+            objects[d["id"]].location = objects[loc]
+        # If location is None or a real Location enum, leave as-is
 
     return objects, name_to_id
 
