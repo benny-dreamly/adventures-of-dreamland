@@ -880,7 +880,6 @@ def set_current_state():
     if state.refresh_location or state.refresh_objects_visible:
         state.update_visibility()
         set_current_image()
-        #describe_current_visible_objects()
         state.describe_visible_objects()
 
     state.handle_special_conditions()
