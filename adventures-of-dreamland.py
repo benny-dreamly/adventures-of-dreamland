@@ -152,7 +152,47 @@ class GameState:
         if visible_objs:
             print_to_description("You can see here: " + ", ".join(visible_objs))
 
+# --- Object Interaction Helpers ---
 
+def get_obj(name, must_be_visible=True, must_be_in_inventory=False):
+    """
+    Return the object by name if it meets the requirements.
+
+    Args:
+        name (str): object name
+        must_be_visible (bool): only return if visible in current location
+        must_be_in_inventory (bool): only return if carried
+
+    Returns:
+        Object or None
+    """
+    obj = state.get_object(name)
+    if not obj:
+        return None
+    if must_be_visible and not obj.visible:
+        return None
+    if must_be_in_inventory and not obj.carried:
+        return None
+    return obj
+
+def is_carried(name):
+    """Check if the object is currently in the player's inventory."""
+    obj = state.get_object(name)
+    return obj.carried if obj else False
+
+def in_inventory(name):
+    """Check if an object (by name or object) is in the inventory."""
+    return state.has_in_inventory(name)
+
+def can_take(name):
+    """Check if the player can pick up an object."""
+    obj = get_obj(name)
+    return obj is not None and getattr(obj, "movable", False) and not obj.carried
+
+def can_use(name):
+    """Check if an object can be used in the current location."""
+    obj = get_obj(name, must_be_in_inventory=True)
+    return obj is not None
 
 PORTRAIT_LAYOUT = True
 
