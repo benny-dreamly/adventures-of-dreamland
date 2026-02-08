@@ -1,15 +1,18 @@
 import tkinter
+import json
 from tkinter import *
 from tkinter import ttk
 from tkinter import simpledialog
-import textwrap
-import time
 from PIL import ImageTk, Image
+from pathlib import Path
 import services
 from location_ids import Location
 from locations_data import LOCATIONS
 from objects_data import OBJECT_DEFS
 from objects_builder import build_objects
+
+SAVE_DIR = Path("saves")
+SAVE_DIR.mkdir(exist_ok=True)
 
 class GameState:
     def __init__(self):
@@ -886,6 +889,60 @@ def play_audio(filename, asynchronous=True, loop=True):
             os.system('afplay res/audio/{}'.format(filename))
     else:
         print_to_description("unsupported platform")
+
+def save_game(filename="savefile.json"):
+    """
+    Save the current game state to a JSON file.
+    """
+    data = {
+        "current_location": state.current_location,
+        "object_flags": state.object_flags,
+        "inventory": [obj.name for obj in state.inventory],
+        "objects": {
+            obj.name: {
+                "carried": obj.carried,
+                "visible": obj.visible,
+                "location": obj.location
+            } for obj in state.game_objects
+        }
+    }
+    save_path = SAVE_DIR / filename
+    with open(save_path, "w") as f:
+        json.dump(data, f, indent=4)
+    print_to_description(f"Game saved to {save_path}")
+
+def load_game(filename="savefile.json"):
+    """
+    Load a saved game state from a JSON file.
+    """
+    save_path = SAVE_DIR / filename
+    if not save_path.exists():
+        print_to_description("Save file not found!")
+        return
+
+    with open(save_path, "r") as f:
+        data = json.load(f)
+
+    # Restore basic state
+    state.current_location = data.get("current_location", state.current_location)
+    state.object_flags = data.get("object_flags", state.object_flags)
+
+    # Restore objects
+    for obj in state.game_objects:
+        obj_data = data["objects"].get(obj.name, {})
+        obj.carried = obj_data.get("carried", False)
+        obj.visible = obj_data.get("visible", True)
+        obj.location = obj_data.get("location", obj.location)
+
+    # Restore inventory list
+    state.inventory = [state.get_object(name) for name in data.get("inventory", [])]
+
+    # Refresh UI
+    state.refresh_location = True
+    state.refresh_objects_visible = True
+    set_current_state()
+    print_to_description(f"Game loaded from {save_path}")
+
 
 def main():
     build_interface()
