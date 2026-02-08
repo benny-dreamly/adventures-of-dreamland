@@ -325,6 +325,7 @@ def perform_go_command(direction):
         state.refresh_location = True
 
 def perform_get_command(obj_name):
+    print(f"received object: {obj_name}")
     input_text = normalize_input(obj_name)
     obj = state.get_object(input_text)
     if not obj or not can_take(input_text):
