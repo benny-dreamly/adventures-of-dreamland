@@ -477,8 +477,9 @@ def perform_solve_command(object_name):
         print_to_description("It looks like you don't have anything to put into the puzzle.")
         return
 
+    # Ask for the piece to insert
     answer = simpledialog.askstring("Input", f"What would you like to put in the puzzle?", parent=root)
-    if answer != stage["piece"].replace("_", " "):
+    if answer.replace(" ", "_").lower() != stage["piece"].lower():
         print_to_description("Unfortunately, it looks like it doesn't fit in the puzzle.")
         return
 
@@ -489,7 +490,7 @@ def perform_solve_command(object_name):
         if slot != stage["slot"]:
             print_to_description("The piece won't fit, no matter how you rotate it.")
             retry = simpledialog.askstring("Input", "Would you like to try again?", parent=root)
-            if retry.lower() == "no":
+            if retry is None or retry.lower() == "no":
                 return
         else:
             print_to_description("The piece slots into the puzzle, but you still haven't solved it.")
@@ -508,10 +509,10 @@ def perform_solve_command(object_name):
         if next_puzzle:
             state.give_to_player(next_puzzle)
 
-    # Set any flags
+    # Set any flags correctly
     if "set_flag" in stage:
         flag_name, value = stage["set_flag"]
-        setattr(state, flag_name, value)
+        state.set_flag(flag_name, value)  # ✅ correct way
 
     # Execute final action if defined
     if "final_action" in stage:
@@ -519,9 +520,12 @@ def perform_solve_command(object_name):
 
     # Add next commands if any
     for cmd in stage.get("next_commands", []):
-        list_of_commands.append(cmd + "\n")
+        if cmd not in list_of_commands:
+            list_of_commands.append(cmd)
 
+    # Refresh visibility for UI update
     state.refresh_objects_visible = True
+    set_current_state()
 
 def perform_glue_command(object_name):
     """Glue fragments together if the player has the glue stick and all pieces."""
@@ -646,8 +650,9 @@ def perform_use_command(obj_name):
         if state.current_location == 22 and broom and broom.visible:
             print_to_description("Benny lights the broom with the lighter and watches it burn!")
             state.set_flag("fire_lit", True)
-            broom.visible = False
             state.remove_from_inventory(obj)
+            state.remove_from_inventory(broom)
+            broom.visible = False
             state.set_flag("broom_destroyed", True)
         else:
             print_to_description("There's nothing to light on fire.")
@@ -658,6 +663,7 @@ def perform_use_command(obj_name):
             state.set_flag("fire_lit", False)
             state.set_flag("fire_extinguished", True)
             state.remove_from_inventory(obj)
+
             bucket = get_obj("bucket")
             if bucket:
                 state.add_to_inventory(bucket)
@@ -666,6 +672,10 @@ def perform_use_command(obj_name):
 
     else:
         print_to_description("You can't use that.")
+
+    # Refresh visibility for UI update
+    state.refresh_objects_visible = True
+    set_current_state()
 
 def describe_current_location(current_location):
     data = LOCATIONS.get(current_location)
