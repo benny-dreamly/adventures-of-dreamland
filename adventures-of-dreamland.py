@@ -9,17 +9,14 @@ import services
 from location_ids import Location
 from locations_data import LOCATIONS
 from objects_data import OBJECT_DEFS
-from objects_builder import build_objects
+from objects_builder import build_objects, normalize
 
 SAVE_DIR = Path("saves")
 SAVE_DIR.mkdir(exist_ok=True)
 
 def normalize_input(text):
-    """
-    Convert user input into lowercase, replace spaces with underscores,
-    so it matches object IDs like 'puzzle_piece_1'.
-    """
-    return text.strip().lower().replace(" ", "_")
+    """Normalize input to lowercase and remove spaces/underscores for matching."""
+    return text.strip().lower().replace(" ", "").replace("_", "")
 
 
 class GameState:
@@ -49,7 +46,7 @@ class GameState:
         self.inventory = []
 
         # Game objects
-        self.objects = build_objects(OBJECT_DEFS)
+        self.objects, self.name_to_id = build_objects(OBJECT_DEFS)
         self.game_objects = list(self.objects.values())
 
     # Helper methods
@@ -58,6 +55,15 @@ class GameState:
         if not obj:
             print(f"[WARNING] Object '{obj_id}' not found!")
         return obj
+
+    def get_object_by_name(self, name):
+        """Get object by player-typed name (normalized)."""
+        norm_name = normalize(name)
+        obj_id = self.name_to_id.get(norm_name)
+        if not obj_id:
+            print(f"[WARNING] Object '{name}' not found!")
+            return None
+        return self.objects[obj_id]
 
     def is_carried(self, obj):
         return getattr(obj, "carried", False)

@@ -1,33 +1,38 @@
 from GameObject import GameObject
 
+def normalize(text):
+    """Normalize text for robust lookup (lowercase, remove spaces/underscores)."""
+    return text.lower().replace(" ", "").replace("_", "")
+
 def build_objects(object_defs):
     objects = {}
+    name_to_id = {}
 
-    # --- Pass 1: create all objects without worrying about string references ---
+    # Pass 1: create all objects
     for d in object_defs:
         obj = GameObject(
-            obj_id=d["id"],
-            name=d["name"],
-            location=d["location"],  # keep as-is for now
-            movable=d["movable"],
-            visible=d["visible"],
-            carried=d["carried"],
-            description=d["description"],
-            glueable=d.get("glueable", False),
-            on_read=d.get("on_read", None),
+            d["name"],
+            d["location"],
+            d["movable"],
+            d["visible"],
+            d["carried"],
+            d["description"],
+            d.get("glueable", False),
+            d.get("on_read", None),
         )
         objects[d["id"]] = obj
 
-    # --- Pass 2: resolve string-based locations ---
+        # Map normalized name → canonical id
+        norm_name = normalize(d["name"])
+        name_to_id[norm_name] = d["id"]
+
+    # Pass 2: resolve string-based locations
     for d in object_defs:
         loc = d["location"]
         if isinstance(loc, str):
-            if loc not in objects:
-                raise KeyError(f"Object '{d['id']}' references unknown location '{loc}'")
             objects[d["id"]].location = objects[loc]
-        # If location is None or a real Location enum, leave as-is
 
-    return objects
+    return objects, name_to_id
 
 
 # Optional helper for easier access
