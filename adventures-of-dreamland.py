@@ -214,12 +214,12 @@ def in_inventory(name):
 
 def can_take(name):
     """Check if the player can pick up an object."""
-    obj = get_obj(name)
+    obj = get_obj(name, must_be_visible=False)  # <— FIXED
     return obj is not None and getattr(obj, "movable", False) and not obj.carried
 
 def can_use(name):
     """Check if an object can be used in the current location."""
-    obj = get_obj(name, must_be_in_inventory=True)
+    obj = get_obj(name, must_be_visible=False, must_be_in_inventory=True)  # <— FIXED
     return obj is not None
 
 def serialize_location(loc):
@@ -326,7 +326,7 @@ def perform_go_command(direction):
 
 def perform_get_command(obj_name):
     input = normalize_input(obj_name)
-    obj = get_obj(input)
+    obj = state.get_object(input)
     if not obj or not can_take(input):
         print_to_description("You can't pick that up!")
         return
@@ -336,7 +336,7 @@ def perform_get_command(obj_name):
     state.refresh_objects_visible = True
 
 def perform_put_command(obj_name):
-    obj = get_obj(obj_name, must_be_in_inventory=True)
+    obj = state.get_object(obj_name)
     if not obj:
         print_to_description("You are not carrying one of those!")
         return
