@@ -20,6 +20,7 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "hint #1",
+        "progression_locked": True,
         "on_read": read_text(
             "hint #1:",
             "Bw xcb bpm xchhtm xqmkm qv bpm xchhtm, gwc vmml bw xcb qb qv bpm xchhtm. Gwc uig ias: Pwe lw Q xcb bpm xqmkm qv bpm xchhtm? Zmil pqvb 2 bw nqoczm wcb pwe bw xcb bpm xchhtm xqmkm qv bpm nqzab xchhtm."
@@ -33,6 +34,7 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "clue #1",
+        "progression_locked": True,
         "on_read": read_text(
             "clue #1:",
             "In order to read the hint, you need to know how to decipher it. Your clue is 8 salad."
@@ -46,6 +48,7 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "clue #1.5",
+        "progression_locked": True,
         "on_read": read_text(
             "clue #1.5:",
             "Still having trouble figuring out how to decipher the hint? I don't blame you, it would require some knowledge that only super nerdy people have. Luckily for you, there exists a way to do it for you. Your clue is the word decipher."
@@ -59,6 +62,7 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "clue #2 (ONLY READ ONCE HINT 1 IS SOLVED)",
+        "progression_locked": True,
         "on_read": read_text(
             "clue #2:",
             "Still confused after deciphering the first hint? I don't blame you. To progress, you need to SOLVE the puzzle."

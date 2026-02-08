@@ -20,6 +20,7 @@ def build_objects(object_defs):
             description=d["description"],
             glueable=d.get("glueable", False),
             on_read=d.get("on_read", None),
+            progression_locked=d.get("progression_locked", False)
         )
         objects[d["id"]] = obj
 

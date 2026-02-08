@@ -1,6 +1,6 @@
 class GameObject:
 
-    def __init__(self, obj_id, name, location, movable, visible, carried, description, glueable=False, on_read=None, container=None):
+    def __init__(self, obj_id, name, location, movable, visible, carried, description, glueable=False, on_read=None, container=None, progression_locked=False):
         self.id = obj_id
         self.name  = name
         self.location = location
@@ -11,3 +11,4 @@ class GameObject:
         self.description  = description
         self.glueable = glueable
         self.on_read = on_read
+        self.progression_locked = progression_locked
