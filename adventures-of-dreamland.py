@@ -59,7 +59,7 @@ class GameState:
 
     def get_object_by_name(self, name):
         """Get object by player-typed name (normalized)."""
-        norm_name = normalize(name)
+        norm_name = normalize_input(name)
         obj_id = self.name_to_id.get(norm_name)
         if not obj_id:
             print(f"[WARNING] Object '{name}' not found!")
