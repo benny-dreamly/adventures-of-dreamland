@@ -163,7 +163,9 @@ class GameState:
         ]
 
         if visible_objs:
-            print_to_description("You can see here: " + ", ".join(visible_objs))
+            print_to_description("Benny sees " + ", ".join(visible_objs) + ".")
+        else:
+            print_to_description("Benny sees nothing special.")
 
     def to_dict(self):
         return {
