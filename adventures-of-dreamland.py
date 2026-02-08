@@ -165,6 +165,29 @@ class GameState:
         else:
             print_to_description("Benny sees nothing special.")
 
+    def remove_from_room(self, obj):
+        """
+        Remove an object from the current room (or any room).
+        This does NOT put it in inventory.
+        """
+        if isinstance(obj.location, Location):
+            obj.location = None
+
+    def give_to_player(self, obj):
+        """
+        Move object from the room into the player's inventory.
+        """
+        self.remove_from_room(obj)
+        self.add_to_inventory(obj)
+
+    def remove_object_completely(self, obj):
+        """
+        Remove object from both inventory and room and hide it entirely.
+        """
+        self.remove_from_inventory(obj)
+        self.remove_from_room(obj)
+        obj.visible = False
+
     def to_dict(self):
         return {
             "current_location": int(self.current_location),
@@ -476,16 +499,14 @@ def perform_solve_command(object_name):
     for obj_name in stage.get("remove_objects", []):
         obj = state.get_object(obj_name)
         if obj:
-            state.remove_from_inventory(obj)
-            obj.visible = False
+            state.remove_object_completely(obj)
 
     # Set next puzzle state or handle final action
     next_puzzle_name = stage.get("next_puzzle")
     if next_puzzle_name:
         next_puzzle = state.get_object(next_puzzle_name)
         if next_puzzle:
-            # Instead of carried=True, just make it visible in the room
-            state.add_to_inventory(next_puzzle)
+            state.give_to_player(next_puzzle)
 
     # Set any flags
     if "set_flag" in stage:
