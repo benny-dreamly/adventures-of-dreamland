@@ -714,7 +714,7 @@ def set_current_image():
     if loc == 10:  # Safe room
         safe = state.get_object("safe")
         puzzle2 = state.get_object("puzzle_piece_2")
-        puzzle_inserted = state.get_object("puzzle_with_two_pieces_inserted")
+        puzzle_inserted = state.get_object("puzzle_2")
 
         if state.get_flag("safe_open") and puzzle2.visible:
             image_file = 'safe-open.tiff'
