@@ -1029,20 +1029,29 @@ def load_game(filename):
         if not obj:
             continue
 
-        obj.carried = obj_data["carried"]
-        obj.visible = obj_data["visible"]
+        obj.carried = obj_data.get("carried", False)
+        obj.visible = obj_data.get("visible", False)
         obj.location = None  # temporary
 
-    # --- Pass 2: restore locations (objects + rooms) ---
+    # --- Pass 2: restore locations ---
     for obj_name, obj_data in data["objects"].items():
         obj = state.get_object(obj_name)
         if not obj:
             continue
 
-        obj.location = deserialize_location(obj_data["location"], state)
+        loc_data = obj_data.get("location")
+        if loc_data is not None:
+            try:
+                obj.location = deserialize_location(loc_data, state)
+            except Exception as e:
+                print(f"[WARNING] Failed to restore location for {obj_name}: {e}")
+        else:
+            obj.location = None
 
+    # Refresh UI
     state.refresh_location = True
     state.refresh_objects_visible = True
+    set_current_state()
     print_to_description(f"Game loaded from {filename}")
 
 
