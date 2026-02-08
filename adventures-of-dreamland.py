@@ -855,6 +855,7 @@ def set_current_state():
         set_current_image()
 
     if state.refresh_location or state.refresh_objects_visible:
+        state.update_visibility()
         set_current_image()
         state.describe_visible_objects()
 
