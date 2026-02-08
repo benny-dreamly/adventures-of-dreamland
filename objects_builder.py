@@ -8,7 +8,7 @@ def build_objects(object_defs):
     objects = {}
     name_to_id = {}
 
-    # Pass 1: create all objects
+    # --- Pass 1: create all objects ---
     for d in object_defs:
         obj = GameObject(
             d["name"],
@@ -20,33 +20,27 @@ def build_objects(object_defs):
             d.get("glueable", False),
             d.get("on_read", None),
         )
-
-        # container resolved later
-        obj.container = None
-
         objects[d["id"]] = obj
 
         # Map normalized name → canonical id
         norm_name = normalize(d["name"])
         name_to_id[norm_name] = d["id"]
 
-        # ---------- Pass 2: resolve containers ----------
-        for d in object_defs:
-            container_id = d.get("container")
-            if container_id:
-                if container_id not in objects:
-                    raise KeyError(
-                        f"Object '{d['id']}' references unknown container '{container_id}'"
-                    )
-                objects[d["id"]].container = objects[container_id]
+    # --- Pass 2: resolve string-based locations ---
+    for d in object_defs:
+        # Resolve 'location' if string
+        loc = d["location"]
+        if isinstance(loc, str):
+            if loc not in objects:
+                raise KeyError(f"Object '{d['id']}' references unknown location '{loc}'")
+            objects[d["id"]].location = objects[loc]
 
-        # ---------- Pass 3: sanity-check locations ----------
-        for obj_id, obj in objects.items():
-            if not hasattr(obj.location, "name"):
-                raise TypeError(
-                    f"Object '{obj_id}' has invalid location '{obj.location}'. "
-                    "Expected a Location enum."
-                )
+        # Resolve 'container' if it exists
+        container = d.get("container")
+        if container is not None and isinstance(container, str):
+            if container not in objects:
+                raise KeyError(f"Object '{d['id']}' references unknown container '{container}'")
+            objects[d["id"]].location = objects[container]  # container IS the location
 
     return objects, name_to_id
 
