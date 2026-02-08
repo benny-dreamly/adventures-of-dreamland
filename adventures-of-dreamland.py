@@ -14,6 +14,14 @@ from objects_builder import build_objects
 SAVE_DIR = Path("saves")
 SAVE_DIR.mkdir(exist_ok=True)
 
+def normalize_input(text):
+    """
+    Convert user input into lowercase, replace spaces with underscores,
+    so it matches object IDs like 'puzzle_piece_1'.
+    """
+    return text.strip().lower().replace(" ", "_")
+
+
 class GameState:
     def __init__(self):
         # Location and game flow
@@ -45,13 +53,11 @@ class GameState:
         self.game_objects = list(self.objects.values())
 
     # Helper methods
-    def get_object(self, name):
-        """Return the object by name (case-insensitive)."""
-        name = name.upper()
-        for obj in self.game_objects:
-            if obj.name.upper() == name:
-                return obj
-        return None
+    def get_object(self, obj_id):
+        obj = self.objects.get(obj_id.lower())  # normalize
+        if not obj:
+            print(f"[WARNING] Object '{obj_id}' not found!")
+        return obj
 
     def is_carried(self, obj):
         return getattr(obj, "carried", False)
@@ -75,10 +81,8 @@ class GameState:
             obj.carried = False
             obj.visible = True
 
-    def has_in_inventory(self, obj_or_name):
-        if isinstance(obj_or_name, str):
-            return any(o.name.upper() == obj_or_name.upper() for o in self.inventory)
-        return obj_or_name in self.inventory
+    def has_in_inventory(self, obj_id):
+        return any(item.id.lower() == obj_id.lower() for item in self.inventory)
 
     # --- Object & Puzzle Logic ---
 
@@ -86,7 +90,7 @@ class GameState:
         """Update object visibility based on carried items, puzzle progression, and flags."""
 
         # Puzzle piece chain progression
-        if self.has_in_inventory("PUZZLE_PIECE_1") and self.get_object("puzzle").carried:
+        if self.has_in_inventory("puzzle_piece_1") and self.get_object("puzzle").carried:
             self.get_object("hint1").visible = True
         if self.get_object("hint1").carried:
             self.get_object("clue1").visible = True
@@ -315,8 +319,9 @@ def perform_go_command(direction):
         state.refresh_location = True
 
 def perform_get_command(obj_name):
-    obj = get_obj(obj_name)
-    if not obj or not can_take(obj_name):
+    input = normalize_input(obj_name)
+    obj = get_obj(input)
+    if not obj or not can_take(input):
         print_to_description("You can't pick that up!")
         return
 
