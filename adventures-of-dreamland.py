@@ -95,16 +95,19 @@ class GameState:
 
     def is_visible(self, obj, current_location):
         """Return True if object should be visible in the current room."""
+
         if obj.carried:
             return True
 
         loc = obj.location
-        while isinstance(loc, GameObject):
+        if isinstance(loc, GameObject):
+            # If the container is not carried, obj is invisible
             if not loc.carried:
-                return False  # inside a closed container
-            loc = loc.location
+                return False
+            # Recursively check container visibility
+            return self.is_visible(loc, current_location)
 
-        # now loc is a Location enum
+        # loc is now a Location enum
         return loc == current_location
 
     def update_visibility(self):
