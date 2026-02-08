@@ -86,6 +86,7 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "puzzle",
+        "progression_locked": True,
     },
     {
         "id": "scroll",
@@ -162,29 +163,35 @@ OBJECT_DEFS = [
     *[
         {
             "id": f"hint_fragment_{i}",
-            "name": f"hint {chr(64+i)}",
+            "name": f"hint {chr(64 + i)}",
             "location": getattr(Location, f"HALLWAY_{i}"),
             "movable": True,
-            "visible": i == 1,
+            "visible": i == 1,  # first fragment is visible by default
             "carried": False,
             "description": "a small piece of ripped paper, it looks like it has some writing on it.",
             "glueable": True,
+            "progression_locked": True,  # now we track that this is progression-locked
             "on_read": read_text(
-            {
-                1: "49 6E 20 6F 72 64 65 72 20 74 6F 20 66",
-                2: "69 6E 64 20 77 68 61 74 20 79 6F 75 20",
-                3: "6D 61 79 20 62 65 20 6C 6F 6F 6B 69 6E",
-                4: "67 20 66 6F 72 2C 20 69 74 20 6D 61 79",
-                5: "20 62 65 20 68 69 64 69 6E 67 20 69 6E",
-                6: "20 70 6C 61 69 6E 20 73 69 67 68 74 2E",
-                7: "20 50 65 72 68 61 70 73 20 61 6C 6C 20",
-                8: "74 68 6F 73 65 20 65 6D 70 74 79 20 68",
-                9: "61 6C 6C 77 61 79 73 20 79 6F 75 20 77",
-                10: "65 6E 74 20 70 61 73 74 20 77 65 72 65",
-                11: "6E 27 74 20 73 6F 20 69 6E 73 69 67 6E",
-                12: "69 66 69 63 61 6E 74 20 61 74 20 61 6C",
-                13: "6C 3F"
-            }[i]
+                {
+                    1: "49 6E 20 6F 72 64 65 72 20 74 6F 20 66",
+                    2: "69 6E 64 20 77 68 61 74 20 79 6F 75 20",
+                    3: "6D 61 79 20 62 65 20 6C 6F 6F 6B 69 6E",
+                    4: "67 20 66 6F 72 2C 20 69 74 20 6D 61 79",
+                    5: "20 62 65 20 68 69 64 69 6E 67 20 69 6E",
+                    6: "20 70 6C 61 69 6E 20 73 69 67 68 74 2E",
+                    7: "20 50 65 72 68 61 70 73 20 61 6C 6C 20",
+                    8: "74 68 6F 73 65 20 65 6D 70 74 79 20 68",
+                    9: "61 6C 6C 77 61 79 73 20 79 6F 75 20 77",
+                    10: "65 6E 74 20 70 61 73 74 20 77 65 72 65",
+                    11: "6E 27 74 20 73 6F 20 69 6E 73 69 67 6E",
+                    12: "69 66 69 63 61 6E 74 20 61 74 20 61 6C",
+                    13: "6C 3F"
+                }[i]
+            ),
+            "visibility_condition": (
+                (lambda game, prev=i - 1: game.has_in_inventory(f"hint_fragment_{prev}"))
+                if i > 1 else
+                (lambda game: True)  # first fragment always visible
             )
         }
         for i in range(1, 14)
