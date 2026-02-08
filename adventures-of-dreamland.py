@@ -95,6 +95,11 @@ class GameState:
     def update_visibility(self):
         """Update object visibility based on carried items, puzzle progression, and flags."""
 
+        # Base visibility: objects in current location
+        for obj in self.objects.values():
+            if obj.location == self.current_location and not obj.carried:
+                obj.visible = True
+
         # Puzzle piece chain progression
         if self.has_in_inventory("puzzle_piece_1") and self.get_object("puzzle").carried:
             self.get_object("hint1").visible = True
