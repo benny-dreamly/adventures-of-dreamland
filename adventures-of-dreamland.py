@@ -761,6 +761,16 @@ def describe_current_inventory():
     inventory_widget.insert(1.0, inventory_text)
     inventory_widget.config(state="disabled")
 
+def describe_current_visible_objects():
+    object_count = 0
+    object_list = ""
+
+    for current_object in state.game_objects:
+        if (current_object.location == state.current_location) and current_object.visible and not current_object.carried:
+            object_list = object_list + (" and " if object_count > 0 else "") + current_object.name
+            object_count = object_count + 1
+
+    print_to_description("Benny sees " + (object_list + "." if object_count > 0 else "nothing special."))
 
 def build_interface():
     global command_widget
@@ -868,6 +878,7 @@ def set_current_state():
     if state.refresh_location or state.refresh_objects_visible:
         state.update_visibility()
         set_current_image()
+        describe_current_visible_objects()
         state.describe_visible_objects()
 
     state.handle_special_conditions()
