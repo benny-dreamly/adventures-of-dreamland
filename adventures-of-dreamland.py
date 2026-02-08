@@ -250,32 +250,24 @@ def perform_go_command(direction):
         state.refresh_location = True
 
 def perform_get_command(obj_name):
-    obj = state.get_object(obj_name)
-    if not obj:
-        print_to_description("You don't see one of those here!")
+    obj = get_obj(obj_name)
+    if not obj or not can_take(obj_name):
+        print_to_description("You can't pick that up!")
         return
-    if obj.location != state.current_location or not obj.visible:
-        print_to_description("You don't see one of those here!")
-        return
-    if not getattr(obj, "movable", False):
-        print_to_description("You can't pick it up!")
-        return
-    if obj.carried:
-        print_to_description("You are already carrying it")
-        return
+
     state.add_to_inventory(obj)
+    print_to_description(f"You pick up the {obj.name}.")
     state.refresh_objects_visible = True
 
 def perform_put_command(obj_name):
-    obj = state.get_object(obj_name)
+    obj = get_obj(obj_name, must_be_in_inventory=True)
     if not obj:
         print_to_description("You are not carrying one of those!")
         return
-    if not obj.carried:
-        print_to_description("You are not carrying one of those!")
-        return
+
     state.remove_from_inventory(obj)
     obj.location = state.current_location
+    print_to_description(f"You put down the {obj.name}.")
     state.refresh_objects_visible = True
 
 def perform_look_command(obj_name):
@@ -548,33 +540,34 @@ def perform_fill_command(obj_name):
         print_to_description("You can't fill that here, there isn't any water to fill it.")
 
 def perform_use_command(obj_name):
-    obj = state.get_object(obj_name)
+    obj = get_obj(obj_name, must_be_in_inventory=True)
     if not obj:
-        print_to_description("Invalid Object.")
+        print_to_description("You can't use that!")
         return
 
     if obj.name.upper() == "LIGHTER":
-        if state.current_location == 22:
-            broom = state.get_object("broom")
-            if broom.visible and broom.location == state.current_location:
-                print_to_description("Benny lights the broom with the lighter and watches it burn. If he doesn't extinguish it soon, he could perish!")
-                state.set_flag("fire_lit", True)
-                broom.visible = False
-                state.remove_from_inventory(obj)  # lighter no longer carried
-                state.set_flag("broom_destroyed", True)
-            else:
-                print_to_description("There's nothing to light on fire.")
+        broom = get_obj("broom")
+        if state.current_location == 22 and broom and broom.visible:
+            print_to_description("Benny lights the broom with the lighter and watches it burn!")
+            state.set_flag("fire_lit", True)
+            broom.visible = False
+            state.remove_from_inventory(obj)
+            state.set_flag("broom_destroyed", True)
         else:
-            print_to_description("The fire won't do anything here.")
+            print_to_description("There's nothing to light on fire.")
+
     elif obj.name.upper() == "BUCKET_FILLED":
         if state.current_location == 22 and state.get_flag("fire_lit"):
-            print_to_description("Benny throws the water onto the fire and manages to put it out. A puzzle piece is now revealed!")
+            print_to_description("Benny throws the water onto the fire and manages to put it out!")
             state.set_flag("fire_lit", False)
             state.set_flag("fire_extinguished", True)
             state.remove_from_inventory(obj)
-            state.add_to_inventory(state.get_object("bucket"))
+            bucket = get_obj("bucket")
+            if bucket:
+                state.add_to_inventory(bucket)
         else:
             print_to_description("You can't use that here.")
+
     else:
         print_to_description("You can't use that.")
 
