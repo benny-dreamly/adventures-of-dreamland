@@ -96,34 +96,45 @@ class GameState:
     def is_visible(self, obj, current_location):
         """Return True if object should be visible in the current room."""
 
+        # Always visible if carried
         if obj.carried:
             return True
 
+        # Locked by progression? never visible by location alone
+        if getattr(obj, "progression_locked", False):
+            return False
+
+        # Check if inside a container
         loc = obj.location
         if isinstance(loc, GameObject):
-            # If the container is not carried, obj is invisible
-            if not loc.carried:
+            # If the container is not carried or visible, obj is invisible
+            if not loc.carried and not loc.visible:
                 return False
             # Recursively check container visibility
             return self.is_visible(loc, current_location)
 
-        # loc is now a Location enum
+        # loc is a Location enum
         return loc == current_location
 
     def update_visibility(self):
         """Update object visibility based on carried items, puzzle progression, and flags."""
 
-        # Step 1: set base visibility
+        print("Starting location:", self.current_location)
         for obj in self.objects.values():
-            obj.visible = self.is_visible(obj, self.current_location)
+            print(obj.name, obj.location, type(obj.location), "progression_locked:",
+                  getattr(obj, "progression_locked", False))
 
-        # Step 2: puzzle/item progression rules
+        # --- Step 1: progression / game rules ---
+        # Only these rules can unlock progression-locked items
         if self.has_in_inventory("puzzle_piece_1") and self.get_object("puzzle").carried:
             self.get_object("hint1").visible = True
+
         if self.get_object("hint1").carried:
             self.get_object("clue1").visible = True
+
         if self.get_object("clue1").carried:
             self.get_object("clue11").visible = True
+
         if self.get_object("clue11").carried:
             self.get_object("clue2").visible = True
 
@@ -135,6 +146,7 @@ class GameState:
 
         if self.get_object("hint3").carried:
             self.get_object("magnifying_glass").visible = True
+
         if self.get_object("magnifying_glass").carried:
             self.get_object("trapdoor").visible = True
 
@@ -143,6 +155,12 @@ class GameState:
 
         if self.get_flag("fire_extinguished"):
             self.get_object("puzzle_piece_4").visible = True
+
+        # --- Step 2: base visibility by location ---
+        for obj in self.objects.values():
+            # Only reveal objects by location if they aren't progression locked
+            if not obj.visible:
+                obj.visible = self.is_visible(obj, self.current_location)
 
     def handle_special_conditions(self):
         """Check for game-over conditions or winning."""
