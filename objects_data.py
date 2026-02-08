@@ -223,7 +223,7 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "another puzzle piece woo",
-        "visibility_condition": lambda game: game.get_flag("trapdoor_open") and not game.get_object("puzzle_with_three_pieces_inserted").carried
+        "visibility_condition": lambda game: game.get_flag("trapdoor_open") and not game.get_object("puzzle_3").carried
     },
 
     {
