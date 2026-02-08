@@ -6,6 +6,7 @@ def build_objects(object_defs):
     # --- Pass 1: create all objects without worrying about string references ---
     for d in object_defs:
         obj = GameObject(
+            obj_id=d["id"],
             name=d["name"],
             location=d["location"],  # keep as-is for now
             movable=d["movable"],
