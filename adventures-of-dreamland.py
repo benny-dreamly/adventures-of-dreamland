@@ -648,7 +648,7 @@ def perform_use_command(obj_name):
     # LIGHTER
     if obj.name.upper() == "LIGHTER":
         broom = get_obj("broom")
-        if broom and broom.carried and state.current_location == supply_closet_room_number:
+        if broom and broom.visible and state.current_location == Location.SUPPLY_2:
             print_to_description("Benny lights the broom with the lighter and watches it burn!")
             state.set_flag("fire_lit", True)
         else:
