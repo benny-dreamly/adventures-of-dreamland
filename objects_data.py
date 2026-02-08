@@ -142,7 +142,8 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "clue",
-        "on_read": read_text("Coins, Minerals, Gold, Silver")
+        "on_read": read_text("Coins, Minerals, Gold, Silver"),
+        "visibility_condition": lambda state: state.has_in_inventory("gold_bar"),
     },
     {
         "id": "puzzle_piece_2",
