@@ -547,8 +547,7 @@ def perform_glue_command(object_name):
         # Remove fragments and original object from inventory/visibility
         for item in fragments + [game_object]:
             if item:
-                item.carried = False
-                item.visible = False
+                state.remove_object_completely(item)
 
         # Place the completed hint into inventory
         hint3 = state.get_object("hint3")
