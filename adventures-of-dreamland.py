@@ -1004,30 +1004,45 @@ def play_audio(filename, asynchronous=True, loop=True):
     else:
         print_to_description("unsupported platform")
 
+# --- SAVE GAME ---
 def save_game(filename):
+    """
+    Save the entire game state to a JSON file.
+    """
     data = state.to_dict()
-    with open(filename, "w") as f:
-        json.dump(data, f, indent=4)
-    print_to_description(f"Game saved to {filename}")
+    SAVE_DIR.mkdir(exist_ok=True)
+    filepath = SAVE_DIR / filename
 
+    with open(filepath, "w") as f:
+        json.dump(data, f, indent=4)
+
+    print_to_description(f"Game saved to {filepath}")
+
+
+# --- LOAD GAME ---
 def load_game(filename):
+    """
+    Load game state from a JSON file, restoring locations, inventory, flags, and object states.
+    """
+    filepath = SAVE_DIR / filename
+
     try:
-        with open(filename, "r") as f:
+        with open(filepath, "r") as f:
             data = json.load(f)
     except FileNotFoundError:
         print_to_description("No save file found.")
         return
 
     # --- Core state ---
-    state.current_location = Location(data.get("current_location", 1))
-    state.end_of_game = data.get("end_of_game", False)
-    state.object_flags = data.get("object_flags", {})
+    state.current_location = Location(data["current_location"])
+    state.end_of_game = data["end_of_game"]
+    state.object_flags = data["object_flags"]
 
-    # --- Pass 1: restore simple object state ---
+    # --- Pass 1: restore object carried/visible states ---
     for obj_name, obj_data in data.get("objects", {}).items():
         obj = state.get_object(obj_name)
         if not obj:
-            continue  # silently skip missing objects
+            continue  # skip missing objects
 
         obj.carried = obj_data.get("carried", False)
         obj.visible = obj_data.get("visible", True)
@@ -1040,20 +1055,17 @@ def load_game(filename):
             continue
 
         loc_data = obj_data.get("location")
-        if loc_data is not None:
-            try:
-                obj.location = deserialize_location(loc_data, state)
-            except Exception as e:
-                print(f"[WARNING] Failed to restore location for {obj_name}: {e}")
-        else:
-            obj.location = None
+        obj.location = deserialize_location(loc_data, state)
 
-    # --- Refresh game state ---
+    # --- Rebuild inventory from carried objects ---
+    state.inventory = [obj for obj in state.game_objects if obj.carried]
+
+    # --- Refresh visibility and UI ---
     state.refresh_location = True
     state.refresh_objects_visible = True
-
-    print_to_description(f"Game loaded from {filename}")
     set_current_state()
+
+    print_to_description(f"Game loaded from {filepath}")
 
 
 
