@@ -923,7 +923,7 @@ def return_key_enter(event):
         words = command_string.split(' ', 1)
         verb = words[0]
         noun = (words[1] if (len(words) > 1) else "")
-        perform_command(verb, noun)
+        perform_command(verb.upper(), noun)
 
         set_current_state()
 
