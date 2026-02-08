@@ -155,6 +155,21 @@ class GameState:
         if visible_objs:
             print_to_description("You can see here: " + ", ".join(visible_objs))
 
+    def to_dict(self):
+        return {
+            "current_location": int(self.current_location),
+            "end_of_game": self.end_of_game,
+            "object_flags": self.object_flags,
+            "objects": {
+                obj.name: {
+                    "carried": obj.carried,
+                    "visible": obj.visible,
+                    "location": int(obj.location) if obj.location is not None else None
+                }
+                for obj in self.game_objects
+            }
+        }
+
 # --- Object Interaction Helpers ---
 
 def get_obj(name, must_be_visible=True, must_be_in_inventory=False):
@@ -904,58 +919,36 @@ def play_audio(filename, asynchronous=True, loop=True):
     else:
         print_to_description("unsupported platform")
 
-def save_game(filename="savefile.json"):
-    """
-    Save the current game state to a JSON file.
-    """
-    data = {
-        "current_location": state.current_location,
-        "object_flags": state.object_flags,
-        "inventory": [obj.name for obj in state.inventory],
-        "objects": {
-            obj.name: {
-                "carried": obj.carried,
-                "visible": obj.visible,
-                "location": obj.location
-            } for obj in state.game_objects
-        }
-    }
-    save_path = SAVE_DIR / filename
-    with open(save_path, "w") as f:
+def save_game(filename):
+    data = state.to_dict()
+    with open(filename, "w") as f:
         json.dump(data, f, indent=4)
-    print_to_description(f"Game saved to {save_path}")
+    print_to_description(f"Game saved to {filename}")
 
-def load_game(filename="savefile.json"):
-    """
-    Load a saved game state from a JSON file.
-    """
-    save_path = SAVE_DIR / filename
-    if not save_path.exists():
-        print_to_description("Save file not found!")
+def load_game(filename):
+    try:
+        with open(filename, "r") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        print_to_description("No save file found.")
         return
 
-    with open(save_path, "r") as f:
-        data = json.load(f)
+    state.current_location = Location(data["current_location"])
+    state.end_of_game = data["end_of_game"]
+    state.object_flags = data["object_flags"]
 
-    # Restore basic state
-    state.current_location = data.get("current_location", state.current_location)
-    state.object_flags = data.get("object_flags", state.object_flags)
+    for obj_name, obj_data in data["objects"].items():
+        obj = state.get_object(obj_name)
+        if not obj:
+            continue
+        obj.carried = obj_data["carried"]
+        obj.visible = obj_data["visible"]
+        obj.location = obj_data["location"]
 
-    # Restore objects
-    for obj in state.game_objects:
-        obj_data = data["objects"].get(obj.name, {})
-        obj.carried = obj_data.get("carried", False)
-        obj.visible = obj_data.get("visible", True)
-        obj.location = obj_data.get("location", obj.location)
-
-    # Restore inventory list
-    state.inventory = [state.get_object(name) for name in data.get("inventory", [])]
-
-    # Refresh UI
     state.refresh_location = True
     state.refresh_objects_visible = True
-    set_current_state()
-    print_to_description(f"Game loaded from {save_path}")
+    print_to_description(f"Game loaded from {filename}")
+
 
 
 def main():
