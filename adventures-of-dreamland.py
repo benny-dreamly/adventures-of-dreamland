@@ -645,28 +645,28 @@ def perform_use_command(obj_name):
         print_to_description("You can't use that!")
         return
 
+    # LIGHTER
     if obj.name.upper() == "LIGHTER":
         broom = get_obj("broom")
-        if state.current_location == 22 and broom and broom.visible:
+        if broom and broom.carried and state.current_location == supply_closet_room_number:
             print_to_description("Benny lights the broom with the lighter and watches it burn!")
             state.set_flag("fire_lit", True)
-            state.remove_from_inventory(obj)
-            state.remove_from_inventory(broom)
-            broom.visible = False
-            state.set_flag("broom_destroyed", True)
         else:
             print_to_description("There's nothing to light on fire.")
 
-    elif obj.name.upper() == "BUCKET_FILLED":
-        if state.current_location == 22 and state.get_flag("fire_lit"):
+    # BUCKET / WATER BUCKET
+    elif obj.name.upper() in ["BUCKET", "WATER BUCKET"]:
+        broom = get_obj("broom")
+        if broom and state.get_flag("fire_lit"):
             print_to_description("Benny throws the water onto the fire and manages to put it out!")
             state.set_flag("fire_lit", False)
             state.set_flag("fire_extinguished", True)
-            state.remove_from_inventory(obj)
-
-            bucket = get_obj("bucket")
-            if bucket:
-                state.add_to_inventory(bucket)
+            # Remove the filled bucket if needed, give back empty bucket
+            if obj.name.upper() == "WATER BUCKET":
+                state.remove_from_inventory(obj)
+                empty_bucket = state.get_object("bucket")
+                if empty_bucket:
+                    state.add_to_inventory(empty_bucket)
         else:
             print_to_description("You can't use that here.")
 
