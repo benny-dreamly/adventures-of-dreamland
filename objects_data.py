@@ -11,6 +11,7 @@ OBJECT_DEFS = [
         "visible": True,
         "carried": False,
         "description": "puzzle piece 1",
+        "visibility_condition": lambda game: True,  # always visible
     },
     {
         "id": "hint1",
@@ -24,7 +25,8 @@ OBJECT_DEFS = [
         "on_read": read_text(
             "hint #1:",
             "Bw xcb bpm xchhtm xqmkm qv bpm xchhtm, gwc vmml bw xcb qb qv bpm xchhtm. Gwc uig ias: Pwe lw Q xcb bpm xqmkm qv bpm xchhtm? Zmil pqvb 2 bw nqoczm wcb pwe bw xcb bpm xchhtm xqmkm qv bpm nqzab xchhtm."
-        )
+        ),
+        "visibility_condition": lambda game: game.has_in_inventory("puzzle_piece_1") and game.get_object("puzzle").carried
     },
     {
         "id": "clue1",
@@ -38,7 +40,8 @@ OBJECT_DEFS = [
         "on_read": read_text(
             "clue #1:",
             "In order to read the hint, you need to know how to decipher it. Your clue is 8 salad."
-        )
+        ),
+        "visibility_condition": lambda game: game.get_object("hint1").carried
     },
     {
         "id": "clue11",
@@ -52,7 +55,8 @@ OBJECT_DEFS = [
         "on_read": read_text(
             "clue #1.5:",
             "Still having trouble figuring out how to decipher the hint? I don't blame you, it would require some knowledge that only super nerdy people have. Luckily for you, there exists a way to do it for you. Your clue is the word decipher."
-        )
+        ),
+        "visibility_condition": lambda game: game.get_object("clue1").carried
     },
     {
         "id": "clue2",
@@ -66,7 +70,8 @@ OBJECT_DEFS = [
         "on_read": read_text(
             "clue #2:",
             "Still confused after deciphering the first hint? I don't blame you. To progress, you need to SOLVE the puzzle."
-        )
+        ),
+        "visibility_condition": lambda game: game.get_object("clue11").carried
     },
     {
         "id": "puzzle",
@@ -147,6 +152,7 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "puzzle piece 2",
+        "visibility_condition": lambda game: game.get_flag("safe_open") and not game.get_object("puzzle_with_two_pieces_inserted").carried
     },
     {
         "id": "puzzle_2",
@@ -216,6 +222,7 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "another puzzle piece woo",
+        "visibility_condition": lambda game: game.get_flag("trapdoor_open") and not game.get_object("puzzle_with_three_pieces_inserted").carried
     },
 
     {
@@ -238,6 +245,7 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "a glue stick",
+        "visibility_condition": lambda game: all(game.has_in_inventory(f"hint_fragment_{i}") for i in range(1, 14))
     },
     {
         "id": "hint3",
@@ -276,6 +284,7 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "another puzzle piece...",
+        "visibility_condition": lambda game: game.get_flag("fire_extinguished")
     },
     {
         "id": "key",
@@ -295,6 +304,7 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "a magnifying glass",
+        "visibility_condition": lambda game: game.get_object("hint3").carried
     },
     {
         "id": "broom",
@@ -332,6 +342,7 @@ OBJECT_DEFS = [
         "visible": False,
         "carried": False,
         "description": "a trapdoor",
+        "visibility_condition": lambda game: game.get_object("magnifying_glass").carried
     },
     {
         "id": "water",

@@ -117,49 +117,12 @@ class GameState:
         return loc == current_location
 
     def update_visibility(self):
-        """Update object visibility based on carried items, puzzle progression, and flags."""
-
-        print("Starting location:", self.current_location)
         for obj in self.objects.values():
-            print(obj.name, obj.location, type(obj.location), "progression_locked:",
-                  getattr(obj, "progression_locked", False))
-
-        # --- Step 1: progression / game rules ---
-        # Only these rules can unlock progression-locked items
-        if self.has_in_inventory("puzzle_piece_1") and self.get_object("puzzle").carried:
-            self.get_object("hint1").visible = True
-
-        if self.get_object("hint1").carried:
-            self.get_object("clue1").visible = True
-
-        if self.get_object("clue1").carried:
-            self.get_object("clue11").visible = True
-
-        if self.get_object("clue11").carried:
-            self.get_object("clue2").visible = True
-
-        if self.get_flag("safe_open") and not self.get_object("puzzle_with_two_pieces_inserted").carried:
-            self.get_object("puzzle_piece_2").visible = True
-
-        if all(self.has_in_inventory(f"hint_fragment_{i}") for i in range(1, 14)):
-            self.get_object("glue_stick").visible = True
-
-        if self.get_object("hint3").carried:
-            self.get_object("magnifying_glass").visible = True
-
-        if self.get_object("magnifying_glass").carried:
-            self.get_object("trapdoor").visible = True
-
-        if self.get_flag("trapdoor_open") and not self.get_object("puzzle_with_three_pieces_inserted").carried:
-            self.get_object("puzzle_piece_3").visible = True
-
-        if self.get_flag("fire_extinguished"):
-            self.get_object("puzzle_piece_4").visible = True
-
-        # --- Step 2: base visibility by location ---
-        for obj in self.objects.values():
-            # Only reveal objects by location if they aren't progression locked
-            if not obj.visible:
+            if obj.carried:
+                obj.visible = True
+            elif obj.visibility_condition:
+                obj.visible = obj.visibility_condition(self)
+            else:
                 obj.visible = self.is_visible(obj, self.current_location)
 
     def handle_special_conditions(self):
