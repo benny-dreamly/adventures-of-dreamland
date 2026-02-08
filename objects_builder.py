@@ -11,36 +11,29 @@ def build_objects(object_defs):
     # --- Pass 1: create all objects ---
     for d in object_defs:
         obj = GameObject(
-            d["name"],
-            d["location"],
-            d["movable"],
-            d["visible"],
-            d["carried"],
-            d["description"],
-            d.get("glueable", False),
-            d.get("on_read", None),
+            obj_id=d["id"],
+            name=d["name"],
+            location=d["location"],
+            movable=d["movable"],
+            visible=d["visible"],
+            carried=d["carried"],
+            description=d["description"],
+            glueable=d.get("glueable", False),
+            on_read=d.get("on_read", None),
         )
         objects[d["id"]] = obj
 
         # Map normalized name → canonical id
-        norm_name = normalize(d["name"])
+        norm_name = d["name"].lower().replace(" ", "").replace("_", "")
         name_to_id[norm_name] = d["id"]
 
-    # --- Pass 2: resolve string-based locations ---
+    # --- Pass 2: resolve containers ---
     for d in object_defs:
-        # Resolve 'location' if string
-        loc = d["location"]
-        if isinstance(loc, str):
-            if loc not in objects:
-                raise KeyError(f"Object '{d['id']}' references unknown location '{loc}'")
-            objects[d["id"]].location = objects[loc]
-
-        # Resolve 'container' if it exists
-        container = d.get("container")
-        if container is not None and isinstance(container, str):
-            if container not in objects:
-                raise KeyError(f"Object '{d['id']}' references unknown container '{container}'")
-            objects[d["id"]].location = objects[container]  # container IS the location
+        container_id = d.get("container")
+        if container_id:
+            if container_id not in objects:
+                raise KeyError(f"Object '{d['id']}' references unknown container '{container_id}'")
+            objects[d["id"]].container = objects[container_id]  # do NOT touch location
 
     return objects, name_to_id
 
