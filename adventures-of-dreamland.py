@@ -6,6 +6,7 @@ from tkinter import simpledialog
 from PIL import ImageTk, Image
 from pathlib import Path
 import services
+from GameObject import GameObject
 from location_ids import Location
 from locations_data import LOCATIONS
 from objects_data import OBJECT_DEFS
@@ -95,12 +96,30 @@ class GameState:
     def update_visibility(self):
         """Update object visibility based on carried items, puzzle progression, and flags."""
 
-        # Base visibility: objects in current location
+        # Step 1: reset all non-carried objects to invisible
         for obj in self.objects.values():
-            if obj.location == self.current_location and not obj.carried:
-                obj.visible = True
+            if not obj.carried:
+                obj.visible = False
 
-        # Puzzle piece chain progression
+        # Step 2: show base objects in current location (not inside other objects)
+        for obj in self.objects.values():
+            if obj.carried:
+                continue  # carried objects are visible in inventory
+            # If object's location is the current room, or it's inside a carried/open container, show it
+            loc = obj.location
+            while isinstance(loc, GameObject):
+                # If inside a container, check if container is carried
+                if not loc.carried:
+                    break  # inside a closed container, stay invisible
+                loc = loc.location
+            else:
+                # reached a Location without breaking → visible
+                if loc == self.current_location:
+                    obj.visible = True
+
+        # Step 3: puzzle/item progression rules
+
+        # Puzzle piece chain
         if self.has_in_inventory("puzzle_piece_1") and self.get_object("puzzle").carried:
             self.get_object("hint1").visible = True
         if self.get_object("hint1").carried:
@@ -110,7 +129,7 @@ class GameState:
         if self.get_object("clue11").carried:
             self.get_object("clue2").visible = True
 
-        # Safe logic: second puzzle piece appears after opening safe
+        # Safe logic
         if self.get_flag("safe_open") and not self.get_object("puzzle_with_two_pieces_inserted").carried:
             self.get_object("puzzle_piece_2").visible = True
 
@@ -118,19 +137,23 @@ class GameState:
         if all(self.has_in_inventory(f"hint_fragment_{i}") for i in range(1, 14)):
             self.get_object("glue_stick").visible = True
 
-        # Magnifying glass reveals trapdoor
+        # Magnifying glass → trapdoor
         if self.get_object("hint3").carried:
             self.get_object("magnifying_glass").visible = True
         if self.get_object("magnifying_glass").carried:
             self.get_object("trapdoor").visible = True
 
-        # Trapdoor puzzle piece
+        # Trapdoor puzzle
         if self.get_flag("trapdoor_open") and not self.get_object("puzzle_with_three_pieces_inserted").carried:
             self.get_object("puzzle_piece_3").visible = True
 
-        # Fire extinguished unlocks final piece
+        # Fire puzzle
         if self.get_flag("fire_extinguished"):
             self.get_object("puzzle_piece_4").visible = True
+
+        # Step 4: debug print (optional)
+        for obj in self.objects.values():
+            print(f"{obj.name}: loc={obj.location}, carried={obj.carried}, visible={obj.visible}")
 
     def handle_special_conditions(self):
         """Check for game-over conditions or winning."""
