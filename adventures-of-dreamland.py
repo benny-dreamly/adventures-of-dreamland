@@ -164,7 +164,7 @@ class GameState:
                 obj.name: {
                     "carried": obj.carried,
                     "visible": obj.visible,
-                    "location": int(obj.location) if obj.location is not None else None
+                    "location": serialize_location(obj.location)
                 }
                 for obj in self.game_objects
             }
@@ -211,6 +211,39 @@ def can_use(name):
     """Check if an object can be used in the current location."""
     obj = get_obj(name, must_be_in_inventory=True)
     return obj is not None
+
+def serialize_location(loc):
+    if loc is None:
+        return None
+
+    if isinstance(loc, Location):
+        return {
+            "type": "location",
+            "id": int(loc)
+        }
+
+    # GameObject location
+    if hasattr(loc, "name"):
+        return {
+            "type": "object",
+            "id": loc.name
+        }
+
+    raise TypeError(f"Invalid location type: {type(loc)}")
+
+
+def deserialize_location(loc_data, state):
+    if loc_data is None:
+        return None
+
+    if loc_data["type"] == "location":
+        return Location(loc_data["id"])
+
+    if loc_data["type"] == "object":
+        return state.get_object(loc_data["id"])
+
+    raise ValueError(f"Unknown location reference: {loc_data}")
+
 
 PORTRAIT_LAYOUT = True
 
@@ -933,17 +966,28 @@ def load_game(filename):
         print_to_description("No save file found.")
         return
 
+    # --- Core state ---
     state.current_location = Location(data["current_location"])
     state.end_of_game = data["end_of_game"]
     state.object_flags = data["object_flags"]
 
+    # --- Pass 1: restore simple object state ---
     for obj_name, obj_data in data["objects"].items():
         obj = state.get_object(obj_name)
         if not obj:
             continue
+
         obj.carried = obj_data["carried"]
         obj.visible = obj_data["visible"]
-        obj.location = obj_data["location"]
+        obj.location = None  # temporary
+
+    # --- Pass 2: restore locations (objects + rooms) ---
+    for obj_name, obj_data in data["objects"].items():
+        obj = state.get_object(obj_name)
+        if not obj:
+            continue
+
+        obj.location = deserialize_location(obj_data["location"], state)
 
     state.refresh_location = True
     state.refresh_objects_visible = True
