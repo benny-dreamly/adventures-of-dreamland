@@ -194,7 +194,7 @@ def get_obj(name, must_be_visible=True, must_be_in_inventory=False):
     Returns:
         Object or None
     """
-    obj = state.get_object(name)
+    obj = state.get_object_by_name(name)
     if not obj:
         return None
     if must_be_visible and not obj.visible:
