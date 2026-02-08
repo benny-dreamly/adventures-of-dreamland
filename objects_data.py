@@ -310,7 +310,7 @@ OBJECT_DEFS = [
     {
         "id": "broom",
         "name": "broom",
-        "location": Location.SUPPLY_2,
+        "location": Location.SUPPLY_1,
         "movable": True,
         "visible": True,
         "carried": False,
@@ -319,7 +319,7 @@ OBJECT_DEFS = [
     {
         "id": "bucket",
         "name": "bucket",
-        "location": Location.SUPPLY_2,
+        "location": Location.SUPPLY_1,
         "movable": True,
         "visible": True,
         "carried": False,
@@ -357,7 +357,7 @@ OBJECT_DEFS = [
     {
         "id": "lighter",
         "name": "lighter",
-        "location": Location.SUPPLY_2,
+        "location": Location.SUPPLY_1,
         "movable": True,
         "visible": True,
         "carried": False,
