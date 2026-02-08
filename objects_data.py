@@ -290,7 +290,7 @@ OBJECT_DEFS = [
     {
         "id": "key",
         "name": "key",
-        "location": Location.HALLWAY_13,
+        "location": Location.STAIRWELL,
         "container": "finished_puzzle",
         "movable": True,
         "visible": False,
