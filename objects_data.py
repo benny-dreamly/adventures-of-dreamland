@@ -76,7 +76,8 @@ OBJECT_DEFS = [
     {
         "id": "puzzle_1",
         "name": "puzzle (1/4)",
-        "location": "puzzle",
+        "location": Location.CELL_3,
+        "container": "puzzle",
         "movable": True,
         "visible": False,
         "carried": False,
@@ -145,7 +146,8 @@ OBJECT_DEFS = [
     {
         "id": "puzzle_2",
         "name": "puzzle (2/4)",
-        "location": "puzzle_1",
+        "location": Location.VAULT_3,
+        "container": "puzzle_1",
         "movable": True,
         "visible": False,
         "carried": False,
@@ -208,7 +210,8 @@ OBJECT_DEFS = [
     {
         "id": "puzzle_3",
         "name": "puzzle (3/4)",
-        "location": "puzzle_2",
+        "location": Location.HALLWAY_10,
+        "container": "puzzle_2",
         "movable": True,
         "visible": False,
         "carried": False,
@@ -247,7 +250,8 @@ OBJECT_DEFS = [
     {
         "id": "finished_puzzle",
         "name": "puzzle (4/4)",
-        "location": "puzzle_3",
+        "location": Location.HALLWAY_13,
+        "container": "puzzle_3",
         "movable": True,
         "visible": False,
         "carried": False,
@@ -265,7 +269,8 @@ OBJECT_DEFS = [
     {
         "id": "key",
         "name": "key",
-        "location": "finished_puzzle",
+        "location": Location.HALLWAY_13,
+        "container": "finished_puzzle",
         "movable": True,
         "visible": False,
         "carried": False,
@@ -301,7 +306,8 @@ OBJECT_DEFS = [
     {
         "id": "bucket_filled",
         "name": "water bucket",
-        "location": "bucket",
+        "location": Location.SUPPLY_2,
+        "container": "bucket",
         "movable": True,
         "visible": False,
         "carried": False,
