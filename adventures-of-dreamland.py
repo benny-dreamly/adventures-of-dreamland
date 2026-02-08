@@ -485,8 +485,7 @@ def perform_solve_command(object_name):
         next_puzzle = state.get_object(next_puzzle_name)
         if next_puzzle:
             # Instead of carried=True, just make it visible in the room
-            next_puzzle.carried = False
-            next_puzzle.visible = True
+            state.add_to_inventory(next_puzzle)
 
     # Set any flags
     if "set_flag" in stage:
