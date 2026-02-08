@@ -401,32 +401,32 @@ PUZZLE_STAGES = [
     {
         "puzzle": "puzzle",
         "piece": "puzzle_piece_1",
-        "next_puzzle": "puzzle_with_one_piece_inserted",
+        "next_puzzle": "puzzle_1",
         "remove_objects": ["puzzle_piece_1", "hint1", "clue1", "clue11", "clue2", "puzzle"],
         "slot": 1,
         "next_commands": ["DECIPHER", "SOLVE"]
     },
     {
-        "puzzle": "puzzle_with_one_piece_inserted",
+        "puzzle": "puzzle_1",
         "piece": "puzzle_piece_2",
         "next_puzzle": "puzzle_with_two_pieces_inserted",
-        "remove_objects": ["puzzle_piece_2", "puzzle_with_one_piece_inserted", "gold_bar", "bar_clue"],
+        "remove_objects": ["puzzle_piece_2", "puzzle_1", "gold_bar", "bar_clue"],
         "slot": 2,
         "next_commands": ["UNLOCK"]
     },
     {
-        "puzzle": "puzzle_with_two_pieces_inserted",
+        "puzzle": "puzzle_2",
         "piece": "puzzle_piece_3",
         "next_puzzle": "puzzle_with_three_pieces_inserted",
-        "remove_objects": ["puzzle_with_two_pieces_inserted", "puzzle_piece_3", "hint3", "fragment_clue", "magnifying_glass"],
+        "remove_objects": ["puzzle_2", "puzzle_piece_3", "hint3", "fragment_clue", "magnifying_glass"],
         "slot": 3,
         "set_flag": ("three_pieces_solved", True)
     },
     {
-        "puzzle": "puzzle_with_three_pieces_inserted",
+        "puzzle": "puzzle_3",
         "piece": "puzzle_piece_4",
         "next_puzzle": None,
-        "remove_objects": ["puzzle_with_three_pieces_inserted", "puzzle_piece_4", "bucket_filled", "lighter"],
+        "remove_objects": ["puzzle_3", "puzzle_piece_4", "bucket_filled", "lighter"],
         "slot": 4,
         "final_action": lambda: (
             print_to_description("Benny watches as the puzzle transforms into a key. He can finally escape!!!"),
