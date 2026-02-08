@@ -552,7 +552,7 @@ def perform_glue_command(object_name):
         # Place the completed hint into inventory
         hint3 = state.get_object("hint3")
         if hint3:
-            hint3.carried = True
+            state.add_to_inventory(hint3)
         state.refresh_objects_visible = True
     else:
         print_to_description("You don't have all the pieces or this can't be glued.")
@@ -629,10 +629,9 @@ def perform_fill_command(obj_name):
 
     if obj == bucket and state.current_location == 22:
         print_to_description("Benny dips the bucket into the water and fills it.")
-        bucket.carried = False
-        bucket.visible = False
-        water.visible = False
-        bucket_filled.carried = True
+        state.remove_object_completely(bucket)
+        state.remove_object_completely(water)
+        state.add_to_inventory(bucket_filled)
     else:
         print_to_description("You can't fill that here, there isn't any water to fill it.")
 
