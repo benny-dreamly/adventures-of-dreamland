@@ -497,7 +497,7 @@ def perform_solve_command(object_name):
 
     # Add next commands if any
     for cmd in stage.get("next_commands", []):
-        state.list_of_commands.append(cmd + "\n")
+        list_of_commands.append(cmd + "\n")
 
     state.refresh_objects_visible = True
 
