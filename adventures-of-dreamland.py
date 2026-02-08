@@ -241,8 +241,22 @@ def perform_command(verb, noun):
         perform_use_command(noun)
     elif verb == "FILL":
         perform_fill_command(noun)
+    elif verb == "SAVE":
+        perform_save_command(noun)
+    elif verb == "LOAD":
+        perform_load_command(noun)
     else:
         print_to_description("unknown command")
+
+def perform_save_command(slot):
+    slot = slot.strip()
+    filename = f"save_{slot}.json" if slot else "save.json"
+    save_game(filename)
+
+def perform_load_command(slot):
+    slot = slot.strip()
+    filename = f"save_{slot}.json" if slot else "save.json"
+    load_game(filename)
 
 def perform_go_command(direction):
     new_location = get_location(direction, state.current_location)
