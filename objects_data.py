@@ -158,7 +158,7 @@ OBJECT_DEFS = [
     {
         "id": "puzzle_2",
         "name": "puzzle (2/4)",
-        "location": Location.VAULT_3,
+        "location": Location.STAIRWELL,
         "container": "puzzle_1",
         "movable": True,
         "visible": False,
@@ -229,7 +229,7 @@ OBJECT_DEFS = [
     {
         "id": "puzzle_3",
         "name": "puzzle (3/4)",
-        "location": Location.HALLWAY_10,
+        "location": Location.STAIRWELL,
         "container": "puzzle_2",
         "movable": True,
         "visible": False,
@@ -270,7 +270,7 @@ OBJECT_DEFS = [
     {
         "id": "finished_puzzle",
         "name": "puzzle (4/4)",
-        "location": Location.HALLWAY_13,
+        "location": Location.STAIRWELL,
         "container": "puzzle_3",
         "movable": True,
         "visible": False,
