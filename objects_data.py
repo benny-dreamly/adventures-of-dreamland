@@ -231,7 +231,7 @@ OBJECT_DEFS = [
     {
         "id": "hint3",
         "name": "hint 3",
-        "location": None,
+        "location": Location.STAIRWELL,
         "movable": True,
         "visible": False,
         "carried": False,
