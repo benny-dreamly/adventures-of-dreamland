@@ -1026,17 +1026,21 @@ def load_game(filename):
     # --- Pass 1: restore simple object state ---
     for obj_name, obj_data in data["objects"].items():
         obj = state.get_object(obj_name)
-        if not obj:
+
+        # Skip destroyed or missing objects
+        if not obj or obj_data.get("destroyed", False):
             continue
 
         obj.carried = obj_data.get("carried", False)
-        obj.visible = obj_data.get("visible", False)
-        obj.location = None  # temporary
+        obj.visible = obj_data.get("visible", True)
+        obj.location = None  # temporary, will set in pass 2
 
     # --- Pass 2: restore locations ---
     for obj_name, obj_data in data["objects"].items():
         obj = state.get_object(obj_name)
-        if not obj:
+
+        # Skip destroyed/missing objects
+        if not obj or obj_data.get("destroyed", False):
             continue
 
         loc_data = obj_data.get("location")
@@ -1048,10 +1052,9 @@ def load_game(filename):
         else:
             obj.location = None
 
-    # Refresh UI
+    # Refresh state
     state.refresh_location = True
     state.refresh_objects_visible = True
-    set_current_state()
     print_to_description(f"Game loaded from {filename}")
 
 
