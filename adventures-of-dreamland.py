@@ -336,7 +336,7 @@ def perform_get_command(obj_name):
     state.refresh_objects_visible = True
 
 def perform_put_command(obj_name):
-    obj = state.get_object(obj_name)
+    obj = state.get_object_by_name(obj_name)
     if not obj:
         print_to_description("You are not carrying one of those!")
         return
@@ -347,14 +347,14 @@ def perform_put_command(obj_name):
     state.refresh_objects_visible = True
 
 def perform_look_command(obj_name):
-    obj = state.get_object(obj_name)
+    obj = state.get_object_by_name(obj_name)
     if obj and (obj.carried or (obj.visible and obj.location == state.current_location)):
         print_to_description(obj.description)
     else:
         print_to_description("You can't see one of those!")
 
 def perform_read_command(object_name):
-    game_object = state.get_object(object_name)
+    game_object = state.get_object_by_name(object_name)
 
     if game_object is None:
         print_to_description(f"I am not sure which {object_name} you are referring to")
@@ -371,7 +371,7 @@ def perform_read_command(object_name):
 
 
 def perform_open_command(object_name):
-    game_object = state.get_object(object_name)
+    game_object = state.get_object_by_name(object_name)
 
     if not (game_object is None):
         safe = state.get_object("safe")
@@ -438,7 +438,7 @@ PUZZLE_STAGES = [
 
 def perform_solve_command(object_name):
     """Handles inserting puzzle pieces into the puzzle dynamically."""
-    game_object = state.get_object(object_name)
+    game_object = state.get_object_by_name(object_name)
     if not game_object:
         print_to_description("You can't do that.")
         return
@@ -503,7 +503,7 @@ def perform_solve_command(object_name):
 
 def perform_glue_command(object_name):
     """Glue fragments together if the player has the glue stick and all pieces."""
-    game_object = state.get_object(object_name)
+    game_object = state.get_object_by_name(object_name)
 
     if game_object is None:
         print_to_description("You can't do that.")
@@ -538,7 +538,7 @@ def perform_glue_command(object_name):
 
 def perform_unlock_command(object_name):
     """Handle unlocking safes or doors using state-driven logic."""
-    game_object = state.get_object(object_name)
+    game_object = state.get_object_by_name(object_name)
 
     if game_object is None:
         print_to_description("There's nothing to unlock.")
@@ -597,7 +597,7 @@ def perform_decipher_command(message):
     print_to_description(deciphered_message)
 
 def perform_fill_command(obj_name):
-    obj = state.get_object(obj_name)
+    obj = state.get_object_by_name(obj_name)
     if not obj:
         print_to_description("You can't fill that!")
         return
